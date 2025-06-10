@@ -3,3 +3,16 @@
 @use './assets/layout/layout.scss';
 @use 'primeicons/primeicons.css';
 @use './assets/demo/demo.scss';
+
+
+body, .p-component {
+    margin: 0;
+    font-family: Tajawal-Bold !important;
+  }
+  
+  @font-face {
+    font-family: Tajawal-Bold;
+    src: local("Tajawal-Bold"), url(./assets/fonts/Tajawal-Bold/Tajawal-Bold.ttf) format("truetype");
+  }
+
+
