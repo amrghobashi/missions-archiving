@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Mission } from '../../../models/mission';
 import { Zone } from '../../../models/zone';
 import { Purpose } from '../../../models/purpose';
@@ -11,6 +11,9 @@ import { environment } from '../../../../../../environments/environment';
 })
 export class MissionService {
   private API_URL = environment.API_URL;
+  // mission: Mission | undefined;
+  // selectedMission = new BehaviorSubject<Mission | undefined>(this.mission);
+  selectedMission: Subject<Mission> = new Subject<Mission>();
 
   constructor(private http: HttpClient) { }
 

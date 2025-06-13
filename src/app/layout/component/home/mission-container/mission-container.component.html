@@ -3,6 +3,10 @@
     <p-tablist>
       <p-tab value="0">Mission</p-tab>
       <p-tab value="1">Details</p-tab>
+      <div style="margin: auto; font-size: large;">
+        <p *ngIf="mission">{{tabsHeader}}</p>
+        <p *ngIf="!mission" style="color: #10b981;"> قم بإختيار مهمة لعرض التفاصيل</p>
+      </div>
     </p-tablist>
     <p-tabpanels>
       <p-tabpanel value="0">

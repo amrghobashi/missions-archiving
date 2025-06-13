@@ -5,6 +5,7 @@
 <p-table [value]="missions" dataKey="id" editable="true" class="p-datatable-sm"
          [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]"
          [selection]="selectedMission" (selectionChange)="onSelectMission($event)"
+         (onRowUnselect)="onUnselectMission()"
          selectionMode="single">
   <ng-template pTemplate="header">
     <tr>

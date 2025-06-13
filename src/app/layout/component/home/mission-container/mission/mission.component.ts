@@ -34,7 +34,7 @@ export class MissionComponent {
   
   missions: Mission[] = [];
 
-  selectedMission: Mission[] = [];
+  selectedMission!: Mission;
   displayAddDialog = false;
   rangeDates: Date[] = [];
   newMission: Mission = {
@@ -45,7 +45,7 @@ export class MissionComponent {
     purpose_id: 0,
     destination_city: ''
   };
-
+  emptyMission!: Mission;
   zoneOptions: Zone[] = [];
   purposeOptions: Purpose[] = [];
 
@@ -97,8 +97,15 @@ export class MissionComponent {
   }
 
   onSelectMission(event: any) {
-    console.log('Selected mission:', event);
+    console.log('Selected mission:', event.id);
     this.selectedMission = event;
+    this.missionService.selectedMission.next(event);
+  }
+
+  onUnselectMission() {
+    // console.log('Unselected mission:', event.id);
+    this.selectedMission = this.emptyMission;
+    this.missionService.selectedMission.next(this.emptyMission);
   }
 
   onEditMission(mission: Mission) {
