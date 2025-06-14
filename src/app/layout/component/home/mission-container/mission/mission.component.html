@@ -1,5 +1,5 @@
 <div class="flex justify-end mb-3">
-  <button pButton type="button" label="Add New Mission" icon="pi pi-plus" (click)="onAddMission()"></button>
+  <button pButton type="button" label="إضافة مهمة جديدة" icon="pi pi-plus" (click)="onAddMission()"></button>
 </div>
 
 <p-table [value]="missions" dataKey="id" editable="true" class="p-datatable-sm"
@@ -9,59 +9,63 @@
          selectionMode="single">
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
-      <th pSortableColumn="zone_id">Zone ID <p-sortIcon field="zone_id"></p-sortIcon></th>
-      <th pSortableColumn="start_date">Start Date <p-sortIcon field="start_date"></p-sortIcon></th>
-      <th pSortableColumn="end_date">End Date <p-sortIcon field="end_date"></p-sortIcon></th>
-      <th pSortableColumn="purpose_id">Purpose ID <p-sortIcon field="purpose_id"></p-sortIcon></th>
-      <th pSortableColumn="destination_city">Destination City <p-sortIcon field="destination_city"></p-sortIcon></th>
-      <th>Actions</th>
+      <th pSortableColumn="id" [style]="{'text-align': 'center'}">رقم المهمة <p-sortIcon field="id"></p-sortIcon></th>
+      <th pSortableColumn="zone_id" [style]="{'text-align': 'center'}">المنطقة <p-sortIcon field="zone_id"></p-sortIcon></th>
+      <th pSortableColumn="start_date" [style]="{'text-align': 'center'}">تاريخ البداية <p-sortIcon field="start_date"></p-sortIcon></th>
+      <th pSortableColumn="end_date" [style]="{'text-align': 'center'}">تاريخ النهاية <p-sortIcon field="end_date"></p-sortIcon></th>
+      <th pSortableColumn="purpose_id" [style]="{'text-align': 'center'}">الغرض <p-sortIcon field="purpose_id"></p-sortIcon></th>
+      <th pSortableColumn="destination_city" [style]="{'text-align': 'center'}">المدينة المستهدفة <p-sortIcon field="destination_city"></p-sortIcon></th>
+      <th></th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-mission let-editing="editing">
     <tr [pSelectableRow]="mission">
-      <td>{{ mission.id }}</td>
-      <td>{{ mission.zone_name }}</td>
-      <td>{{ mission.start_date }}</td>
-      <td>{{ mission.end_date }}</td>
-      <td>{{ mission.purpose_name }}</td>
-      <td>{{ mission.destination_city }}</td>
+      <td [style]="{'text-align': 'center'}">{{ mission.id }}</td>
+      <td [style]="{'text-align': 'center'}">{{ mission.zone_name }}</td>
+      <td [style]="{'text-align': 'center'}">{{ mission.start_date }}</td>
+      <td [style]="{'text-align': 'center'}">{{ mission.end_date }}</td>
+      <td [style]="{'text-align': 'center'}">{{ mission.purpose_name }}</td>
+      <td [style]="{'text-align': 'center'}">{{ mission.destination_city }}</td>
       <td>
         <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditMission(mission)"></button>
-        <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="onDeleteMission(mission)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteMission(mission)"></button>
       </td>
     </tr>
   </ng-template>
 </p-table>
 
-<p-dialog header="Add New Mission" [(visible)]="displayAddDialog" [modal]="true" [closable]="true" [style]="{width: '400px', height: '450px'}" >
+<p-dialog [header]="isEditMode ? 'تعديل المهمة' : 'إضافة مهمة جديدة'" [(visible)]="displayAddDialog" [modal]="true" [closable]="true" [style]="{width: '400px', height: '450px'}" dir="rtl">
   <form (ngSubmit)="saveNewMission()" #missionForm="ngForm">
     <div class="flex flex-col gap-3">
       <div>
-        <label class="block mb-1">Date</label>
-        <p-datepicker fluid="true" (onSelect)="onPickDate($event)" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" name="rangeDates" />
+        <label class="block mb-1">الفترة من - إلى</label>
+        <p-datepicker dateFormat="yy/mm/dd" [style]="{direction: 'rtl'}" fluid="true" (onSelect)="onPickDate($event)" [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" name="rangeDates" />
       </div>
       <div>
-        <label class="block mb-1">Purpose</label>
+        <label class="block mb-1">الغرض</label>
         <span class="p-float-label w-full">
           <p-select [(ngModel)]="newMission.purpose_id" [filter]="true" filterBy="name" [options]="purposeOptions" optionLabel="name" optionValue="id" name="purpose_id" inputId="purpose_id" class="w-full" required></p-select>
         </span>
       </div>
       <div>
-        <label class="block mb-1">Zone</label>
+        <label class="block mb-1">المنطقة</label>
         <span class="p-float-label w-full">
           <p-select [(ngModel)]="newMission.zone_id" [filter]="true" filterBy="name" [options]="zoneOptions" optionLabel="name" optionValue="id" name="zone_id" inputId="zone_id" class="w-full" required></p-select>
         </span>
       </div>
       <div>
-        <label class="block mb-1">Destination City</label>
+        <label class="block mb-1">المدينة المستهدفة</label>
         <input type="text" pInputText [(ngModel)]="newMission.destination_city" name="destination_city" required class="w-full"/>
       </div>
     </div>
     <br><br>
     <div class="flex justify-end gap-2 mt-4">
-      <button pButton type="button" label="Cancel" class="p-button-text" (click)="cancelAddMission()"></button>
-      <button pButton type="submit" label="Save" [disabled]="!missionForm.form.valid" autofocus></button>
+      <button pButton type="button" label="إلغاء" class="p-button-text" (click)="cancelAddMission()"></button>
+      <button pButton type="submit" [label]="isEditMode ? 'تعديل' : 'حفظ'" [disabled]="!missionForm.form.valid" autofocus></button>
     </div>
   </form>
 </p-dialog>
+
+<p-toast></p-toast>
+
+<p-confirmDialog [style]="{direction: 'rtl'}"></p-confirmDialog>

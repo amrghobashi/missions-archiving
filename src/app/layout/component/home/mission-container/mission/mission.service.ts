@@ -32,4 +32,12 @@ export class MissionService {
   addMission(mission: Mission): Observable<Mission> {
     return this.http.post<Mission>(this.API_URL + 'missions', mission);
   }
+
+  updateMission(mission: Mission) {
+    return this.http.put<Mission>(this.API_URL + 'missions/' + mission.id, mission);
+  }
+
+  deleteMission(id: string) {
+    return this.http.delete(this.API_URL + 'missions/' + id);
+  }
 }

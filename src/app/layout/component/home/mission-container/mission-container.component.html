@@ -1,11 +1,15 @@
 <div class="card" dir="rtl">
-  <p-tabs value="0">
+  <p-tabs [(value)]="activeTabValue">
     <p-tablist>
-      <p-tab value="0">Mission</p-tab>
-      <p-tab value="1">Details</p-tab>
+      <p-tab value="0">
+        <i class="pi pi-flag-fill" style="transform: scalex(-1);"></i>المهمات
+      </p-tab>
+      <p-tab value="1" [disabled]="!mission">
+        <i class="pi pi-list" style="transform: scalex(-1);"></i>التفاصيل
+      </p-tab>
       <div style="margin: auto; font-size: large;">
-        <p *ngIf="mission">{{tabsHeader}}</p>
-        <p *ngIf="!mission" style="color: #10b981;"> قم بإختيار مهمة لعرض التفاصيل</p>
+        <p *ngIf="mission" style="color: #10b981;">{{tabsHeader}}</p>
+        <p *ngIf="!mission"> قم بإختيار مهمة لعرض التفاصيل</p>
       </div>
     </p-tablist>
     <p-tabpanels>

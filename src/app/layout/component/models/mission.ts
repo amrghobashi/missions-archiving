@@ -1,5 +1,5 @@
 export interface Mission {
-  id: number;
+  id: string;
   zone_id: number;
   zone_name?: string;
   start_date: string;

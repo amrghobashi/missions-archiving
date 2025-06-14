@@ -11,18 +11,24 @@ import { MissionService } from './mission.service';
 import { Subscription } from 'rxjs';
 import { Zone } from '../../../models/zone';
 import { Purpose } from '../../../models/purpose';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-mission',
   standalone: true,
   imports: [TableModule, ButtonModule, DialogModule, FormsModule, SelectModule, DatePickerModule,
-    InputTextModule
+    InputTextModule, ConfirmDialogModule, ToastModule
   ],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './mission.component.html',
   styleUrl: './mission.component.scss'
 })
 export class MissionComponent {
-  constructor(private missionService: MissionService ) { }
+  constructor(private missionService: MissionService, private confirmationService: ConfirmationService,
+    private messageService: MessageService
+  ) { }
 
   ngOnInit() {
     this.getMissions();
@@ -38,7 +44,7 @@ export class MissionComponent {
   displayAddDialog = false;
   rangeDates: Date[] = [];
   newMission: Mission = {
-    id: 0,
+    id: '',
     zone_id: 0,
     start_date: '',
     end_date: '',
@@ -48,6 +54,8 @@ export class MissionComponent {
   emptyMission!: Mission;
   zoneOptions: Zone[] = [];
   purposeOptions: Purpose[] = [];
+
+  isEditMode = false;
 
   getMissions() {
     this.subscription = this.missionService.getMissions().subscribe(
@@ -109,33 +117,93 @@ export class MissionComponent {
   }
 
   onEditMission(mission: Mission) {
-    // Implement edit logic here
-    alert('Edit mission: ' + mission.id);
-  }
-
-  onDeleteMission(mission: Mission) {
-    // Implement delete logic here
-    this.missions = this.missions.filter(m => m.id !== mission.id);
+    this.isEditMode = true;
+    this.displayAddDialog = true;
+    // Deep copy to avoid mutating the table row directly
+    this.newMission = { ...mission };
+    // Set date range for datepicker
+    if (mission.start_date && mission.end_date) {
+      this.rangeDates = [new Date(mission.start_date), new Date(mission.end_date)];
+    } else {
+      this.rangeDates = [];
+    }
   }
 
   onAddMission() {
+    this.isEditMode = false;
     this.displayAddDialog = true;
     this.newMission = {
-      id: 0,
+      id: '',
       zone_id: 0,
       start_date: '',
       end_date: '',
       purpose_id: 0,
       destination_city: ''
     };
+    this.rangeDates = [];
   }
 
   saveNewMission() {
-    this.subscription = this.missionService.addMission(this.newMission).subscribe(
-      (data: any) => {
-        console.log('New mission added:', data);
-        this.getMissions();
-        this.displayAddDialog = false;
+    if (this.isEditMode) {
+      this.subscription = this.missionService.updateMission(this.newMission).subscribe(
+        (data: any) => {
+          console.log('Mission updated:', data);
+          this.getMissions();
+          this.displayAddDialog = false;
+          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل المهمة بنجاح' });
+        },
+        (error: any) => {
+          console.error('Error updating mission:', error);
+        }
+      );
+    } else {
+      this.subscription = this.missionService.addMission(this.newMission).subscribe(
+        (data: any) => {
+          console.log('New mission added:', data);
+          this.getMissions();
+          this.displayAddDialog = false;
+          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة المهمة بنجاح' });
+        }
+      );
+    }
+  }
+
+  confirmDeleteMission(mission: Mission) {
+    this.confirmationService.confirm({
+            // target: event.target as EventTarget,
+            message: 'هل أنت متأكد أنك تريد حذف هذه المهمة؟',
+            header: 'تأكيد الحذف',
+            icon: 'pi pi-info-circle',
+            rejectLabel: 'إلغاء',
+            rejectButtonProps: {
+                label: 'إلغاء',
+                severity: 'secondary',
+                outlined: true,
+            },
+            acceptButtonProps: {
+                label: 'حذف',
+                severity: 'danger',
+            },
+
+            accept: () => {
+                this.onDeleteMission(mission.id);
+            },
+            reject: () => {
+            },
+        });
+  }
+
+  onDeleteMission(id: string) {
+    this.subscription = this.missionService.deleteMission(id).subscribe(
+      () => {
+        console.log('Mission deleted:', id);
+        this.missions = this.missions.filter(m => m.id !== id);
+        this.selectedMission = this.emptyMission;
+        this.missionService.selectedMission.next(this.emptyMission);
+        this.messageService.add({ severity: 'info', summary: 'تم', detail: 'تم حذف المهمة' });
+      },
+      (error: any) => {
+        console.error('Error deleting mission:', error);
       }
     );
   }
