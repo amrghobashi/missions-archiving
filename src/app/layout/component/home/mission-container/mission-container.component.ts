@@ -5,11 +5,15 @@ import { MissionService } from './mission/mission.service';
 import { Mission } from '../../models/mission';
 import { CommonModule } from '@angular/common';
 import { MissionStaffComponent } from "./mission-staff/mission-staff.component";
+import { MissionCarComponent } from "./mission-car/mission-car.component";
+import { MissionVisitComponent } from './mission-visit/mission-visit.component';
+import { MissionBattelionComponent } from './mission-battelion/mission-battelion.component';
 
 @Component({
   selector: 'app-mission-container',
   standalone: true,
-  imports: [TabsModule, MissionComponent, CommonModule, MissionStaffComponent],
+  imports: [TabsModule, MissionComponent, CommonModule, MissionStaffComponent,
+    MissionCarComponent, MissionBattelionComponent, MissionVisitComponent],
   templateUrl: './mission-container.component.html',
   styleUrl: './mission-container.component.scss'
 })

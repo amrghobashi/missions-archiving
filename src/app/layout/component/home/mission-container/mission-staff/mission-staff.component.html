@@ -1,4 +1,5 @@
-<div class="flex justify-end mb-3">
+<div style="justify-content: space-between; display: flex;">
+  <h5 style="margin: 0;">طاقم العمل</h5>
   <button pButton type="button" label="إضافة موظف" icon="pi pi-plus" (click)="onAddStaff()"></button>
 </div>
 
@@ -7,7 +8,7 @@
   <ng-template pTemplate="header">
     <tr>
       <th [style]="{'text-align': 'center','width': '50px'}">م</th>
-      <th pSortableColumn="arabic_name" [style]="{'text-align': 'center'}">الإسم  <p-sortIcon field="arabic_name"></p-sortIcon></th>
+      <th pSortableColumn="arabic_name" [style]="{'text-align': 'center', 'width': '80%'}">الإسم  <p-sortIcon field="arabic_name"></p-sortIcon></th>
       <th></th>
     </tr>
   </ng-template>
