@@ -8,7 +8,7 @@
         <i class="pi pi-list" style="transform: scalex(-1);"></i>التفاصيل
       </p-tab>
       <div style="margin: auto; font-size: large;">
-        <p *ngIf="mission" style="color: #10b981;">{{tabsHeader}}</p>
+        <p *ngIf="mission" style="color: #008861;">{{tabsHeader}}</p>
         <p *ngIf="!mission"> قم بإختيار مهمة لعرض التفاصيل</p>
       </div>
     </p-tablist>
@@ -17,7 +17,7 @@
         <app-mission></app-mission>
       </p-tabpanel>
       <p-tabpanel value="1">
-        <p>Details tab content goes here.</p>
+        <app-mission-staff *ngIf="mission?.id" [missionId]="mission?.id"></app-mission-staff>
       </p-tabpanel>
     </p-tabpanels>
   </p-tabs>
