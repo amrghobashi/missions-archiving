@@ -24,7 +24,7 @@
               <app-mission-staff *ngIf="mission?.id" [missionId]="mission?.id"></app-mission-staff>
             </div>
             <div class="card" dir="rtl" style="width: 48%; margin: auto;">
-              <app-mission-car ></app-mission-car>
+              <app-mission-car *ngIf="mission?.id" [missionId]="mission?.id"></app-mission-car>
             </div>
           </div>
           

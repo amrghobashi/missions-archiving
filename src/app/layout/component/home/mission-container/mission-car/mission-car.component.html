@@ -1,1 +1,63 @@
-<p>mission-car works!</p>
+<div style="justify-content: space-between; display: flex;">
+  <h5 style="margin: 0;">السيارات</h5>
+  <button pButton type="button" label="إضافة سيارة" icon="pi pi-plus" (click)="onAddCar()"></button>
+</div>
+
+<p-table [value]="carList" dataKey="id" editable="true" class="p-datatable-sm"
+         [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]">
+  <ng-template pTemplate="header">
+    <tr>
+      <th [style]="{'text-align': 'center','width': '50px'}">م</th>
+      <th pSortableColumn="car_id" [style]="{'text-align': 'center'}"> السيارة <p-sortIcon field="car_id"></p-sortIcon></th>
+      <th pSortableColumn="km_before" [style]="{'text-align': 'center'}">كم قبل <p-sortIcon field="km_before"></p-sortIcon></th>
+      <!-- <th pSortableColumn="km_after" [style]="{'text-align': 'center'}">كم بعد <p-sortIcon field="km_after"></p-sortIcon></th> -->
+      <th pSortableColumn="distance" [style]="{'text-align': 'center'}">المسافة <p-sortIcon field="distance"></p-sortIcon></th>
+      <th></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-car let-rowIndex="rowIndex">
+    <tr>
+      <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
+      <td [style]="{'text-align': 'center'}">{{ car.car_name }} ( {{ car.car_id }} )</td>
+      <td [style]="{'text-align': 'center'}">{{ car.km_before }}</td>
+      <!-- <td [style]="{'text-align': 'center'}">{{ car.km_after }}</td> -->
+      <td [style]="{'text-align': 'center'}">{{ car.distance }}</td>
+      <td>
+        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditCar(car)"></button>
+        <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteCar(car)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog [header]="isEditMode ? 'تعديل السيارة' : 'إضافة سيارة'" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{width: '350px'}" dir="rtl">
+  <form (ngSubmit)="saveCar()" #carForm="ngForm">
+    <div class="flex flex-col gap-3">
+      <div class="p-field">
+        <label for="carId" class="block mb-1"> السيارة</label>
+          <p-select [(ngModel)]="newCar.car_id" [filter]="true" filterBy="label" [options]="carOptions" optionLabel="label" optionValue="id" name="car_id" inputId="car_id" class="w-full" required></p-select>
+        <!-- <input pInputText [(ngModel)]="newCar.car_id" name="car_id" id="carId" class="w-full" required /> -->
+      </div>
+      <div class="p-field">
+        <label for="kmBefore" class="block mb-1">كم قبل</label>
+        <input pInputText type="number" [(ngModel)]="newCar.km_before" name="km_before" id="kmBefore" class="w-full"  />
+      </div>
+      <div class="p-field">
+        <label for="kmAfter" class="block mb-1">كم بعد</label>
+        <input pInputText type="number" [(ngModel)]="newCar.km_after" name="km_after" id="kmAfter" class="w-full"  />
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-4">
+      <button pButton type="button" label="إلغاء" class="p-button-text" (click)="cancelDialog()"></button>
+      <button pButton type="submit" [label]="isEditMode ? 'تعديل' : 'حفظ'" [disabled]="!carForm.form.valid" autofocus></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{direction: 'rtl'}"></p-confirmDialog>

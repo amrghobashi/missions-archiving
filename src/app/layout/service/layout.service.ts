@@ -35,7 +35,7 @@ export class LayoutService {
     };
 
     _state: LayoutState = {
-        staticMenuDesktopInactive: false,
+        staticMenuDesktopInactive: true, // Sidebar closed by default
         overlayMenuActive: false,
         configSidebarVisible: false,
         staticMenuMobileActive: false,

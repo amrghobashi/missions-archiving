@@ -21,6 +21,11 @@
       </td>
     </tr>
   </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="3" style="text-align: center; color: #888;">لا توجد بيانات</td>
+    </tr>
+  </ng-template>
 </p-table>
 
 <p-dialog [header]="isEditMode ? 'تعديل الموظف' : 'إضافة موظف'" [(visible)]="displayDialog"

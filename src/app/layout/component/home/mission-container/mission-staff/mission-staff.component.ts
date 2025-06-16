@@ -61,11 +61,11 @@ export class MissionStaffComponent implements OnChanges {
     this.missionStaffService.getStaff(id).subscribe(
       (data) => {
         this.groupedStaffOptions = data;
-        setTimeout(() => {
-          this.multiSelectRef.show();
-          console.log('MultiSelect component initialized and shown');
-        }, 300);
-        console.log('Staff options fetched:', this.groupedStaffOptions);
+        this.multiSelectRef.show();
+        // setTimeout(() => {
+        //   console.log('MultiSelect component initialized and shown');
+        // }, 300);
+        // console.log('Staff options fetched:', this.groupedStaffOptions);
       },
       (error) => { console.error('Error fetching staff options:', error); }
     );
@@ -112,7 +112,7 @@ export class MissionStaffComponent implements OnChanges {
     this.missionStaffService.deleteStaff(id).subscribe(
       () => {
         this.getStaff();
-        this.messageService.add({ severity: 'info', summary: 'تم', detail: 'تم حذف الموظف' });
+        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الموظف' });
       },
       (error) => { console.error('Error deleting staff:', error); }
     );

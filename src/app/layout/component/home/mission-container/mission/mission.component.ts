@@ -200,7 +200,7 @@ export class MissionComponent {
         this.missions = this.missions.filter(m => m.id !== id);
         this.selectedMission = this.emptyMission;
         this.missionService.selectedMission.next(this.emptyMission);
-        this.messageService.add({ severity: 'info', summary: 'تم', detail: 'تم حذف المهمة' });
+        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف المهمة' });
       },
       (error: any) => {
         console.error('Error deleting mission:', error);
