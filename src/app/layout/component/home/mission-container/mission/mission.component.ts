@@ -14,12 +14,14 @@ import { Purpose } from '../../../models/purpose';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @Component({
   selector: 'app-mission',
   standalone: true,
   imports: [TableModule, ButtonModule, DialogModule, FormsModule, SelectModule, DatePickerModule,
-    InputTextModule, ConfirmDialogModule, ToastModule
+    InputTextModule, ConfirmDialogModule, ToastModule, NgxSpinnerModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './mission.component.html',
@@ -27,10 +29,11 @@ import { ToastModule } from 'primeng/toast';
 })
 export class MissionComponent {
   constructor(private missionService: MissionService, private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService, private spinner: NgxSpinnerService
   ) { }
 
   ngOnInit() {
+    this.spinner.show();
     this.getMissions();
     this.getZones();
     this.getPurposes();
@@ -58,36 +61,45 @@ export class MissionComponent {
   isEditMode = false;
 
   getMissions() {
+    this.spinner.show();
     this.subscription = this.missionService.getMissions().subscribe(
       (data: any) => {
         this.missions = data;
+        this.spinner.hide();
         console.log('Missions fetched successfully:', this.missions);
       },
       (error: any) => {
+        this.spinner.hide();
         console.error('Error fetching missions:', error);
       }
     );
   }
 
   getZones() {
+    this.spinner.show();
     this.subscription = this.missionService.getZones().subscribe(
       (data: any) => {
         this.zoneOptions = data;
+        this.spinner.hide();
         console.log('Zones fetched successfully:', this.zoneOptions);
       },
       (error: any) => {
+        this.spinner.hide();
         console.error('Error fetching zones:', error);
       }
     );
   }
 
   getPurposes() {
+    this.spinner.show();
     this.subscription = this.missionService.getPurposes().subscribe(
       (data: any) => {
         this.purposeOptions = data;
+        this.spinner.hide();
         console.log('Purposes fetched successfully:', this.purposeOptions);
       },
       (error: any) => {
+        this.spinner.hide();
         console.error('Error fetching purposes:', error);
       }
     );

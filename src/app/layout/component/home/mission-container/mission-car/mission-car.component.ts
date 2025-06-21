@@ -11,12 +11,14 @@ import { Subscription } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @Component({
   selector: 'app-mission-car',
   standalone: true,
   imports: [TableModule, ButtonModule, DialogModule, FormsModule, InputTextModule,
-    SelectModule, ConfirmDialogModule, ToastModule
+    SelectModule, ConfirmDialogModule, ToastModule, NgxSpinnerModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './mission-car.component.html',
@@ -32,7 +34,7 @@ export class MissionCarComponent implements OnChanges {
   subscription: Subscription = new Subscription;
   carOptions: { id: number; name: string; label: string }[] = [];
 
-  constructor(private carService: MissionCarService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
+  constructor(private carService: MissionCarService, private confirmationService: ConfirmationService, private messageService: MessageService, private spinner: NgxSpinnerService) {}
 
   ngOnInit() {
     // Initial load of car options
@@ -41,6 +43,7 @@ export class MissionCarComponent implements OnChanges {
   
   ngOnChanges(changes: SimpleChanges) {
     if (changes['missionId'] && this.missionId) {
+      this.spinner.show();
       this.loadCarsForMission(this.missionId);
     } else if (changes['missionId'] && !this.missionId) {
       this.carList = [];
@@ -48,36 +51,44 @@ export class MissionCarComponent implements OnChanges {
   }
 
   loadCarsForMission(missionId: string) {
+    this.spinner.show();
     this.carService.getCarsByMissionId(missionId).subscribe(
       (data: MissionCar[]) => { 
         this.carList = data; 
+        this.spinner.hide();
         console.log('Cars for mission loaded:', data);
       },
-      (error: any) => { console.error('Error fetching cars for mission:', error); }
+      (error: any) => { this.spinner.hide(); console.error('Error fetching cars for mission:', error); }
     );
   }
 
   getCarList() {
+    this.spinner.show();
     this.subscription = this.carService.getCars().subscribe((cars: Car[]) => {
       this.carOptions = cars.map(car => ({
         id: car.id,
         name: car.name,
         label: car.name + ' (' + car.id + ')'
       }));
+      this.spinner.hide();
       console.log('Cars fetched successfully:', this.carOptions);
     }, (error: any) => {
+      this.spinner.hide();
       console.error('Error fetching cars:', error);
     });
   }
 
   getCarOptions() {
-    // Use getCars() if that's the available method
+    this.spinner.show();
     this.subscription = this.carService.getCars(this.missionId).subscribe((cars: Car[]) => {
       this.carOptions = cars.map(car => ({
         id: car.id,
         name: car.name,
         label: car.name + ' (' + car.id + ')'
       }));
+      this.spinner.hide();
+    }, (error: any) => {
+      this.spinner.hide();
     });
   }
 

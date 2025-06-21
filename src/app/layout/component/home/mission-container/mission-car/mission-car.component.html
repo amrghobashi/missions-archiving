@@ -2,38 +2,43 @@
   <h5 style="margin: 0;">السيارات</h5>
   <button pButton type="button" label="إضافة سيارة" icon="pi pi-plus" (click)="onAddCar()"></button>
 </div>
-
-<p-table [value]="carList" dataKey="id" editable="true" class="p-datatable-sm"
-         [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]">
-  <ng-template pTemplate="header">
-    <tr>
-      <th [style]="{'text-align': 'center','width': '50px'}">م</th>
-      <th pSortableColumn="car_id" [style]="{'text-align': 'center'}"> السيارة <p-sortIcon field="car_id"></p-sortIcon></th>
-      <th pSortableColumn="km_before" [style]="{'text-align': 'center'}">كم قبل <p-sortIcon field="km_before"></p-sortIcon></th>
-      <!-- <th pSortableColumn="km_after" [style]="{'text-align': 'center'}">كم بعد <p-sortIcon field="km_after"></p-sortIcon></th> -->
-      <th pSortableColumn="distance" [style]="{'text-align': 'center'}">المسافة <p-sortIcon field="distance"></p-sortIcon></th>
-      <th></th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-car let-rowIndex="rowIndex">
-    <tr>
-      <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
-      <td [style]="{'text-align': 'center'}">{{ car.car_name }} ( {{ car.car_id }} )</td>
-      <td [style]="{'text-align': 'center'}">{{ car.km_before }}</td>
-      <!-- <td [style]="{'text-align': 'center'}">{{ car.km_after }}</td> -->
-      <td [style]="{'text-align': 'center'}">{{ car.distance }}</td>
-      <td>
-        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditCar(car)"></button>
-        <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteCar(car)"></button>
-      </td>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات</td>
-    </tr>
-  </ng-template>
-</p-table>
+<div style="position: relative;">
+    <p-table [value]="carList" dataKey="id" editable="true" class="p-datatable-sm"
+             [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]">
+      <ng-template pTemplate="header">
+        <tr>
+          <th [style]="{'text-align': 'center','width': '50px'}">م</th>
+          <th pSortableColumn="car_id" [style]="{'text-align': 'center'}"> السيارة <p-sortIcon field="car_id"></p-sortIcon></th>
+          <th pSortableColumn="km_before" [style]="{'text-align': 'center'}">كم قبل <p-sortIcon field="km_before"></p-sortIcon></th>
+          <!-- <th pSortableColumn="km_after" [style]="{'text-align': 'center'}">كم بعد <p-sortIcon field="km_after"></p-sortIcon></th> -->
+          <th pSortableColumn="distance" [style]="{'text-align': 'center'}">المسافة <p-sortIcon field="distance"></p-sortIcon></th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-car let-rowIndex="rowIndex">
+        <tr>
+          <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
+          <td [style]="{'text-align': 'center'}">{{ car.car_name }} ( {{ car.car_id }} )</td>
+          <td [style]="{'text-align': 'center'}">{{ car.km_before }}</td>
+          <!-- <td [style]="{'text-align': 'center'}">{{ car.km_after }}</td> -->
+          <td [style]="{'text-align': 'center'}">{{ car.distance }}</td>
+          <td>
+            <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditCar(car)"></button>
+            <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteCar(car)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    
+    <ngx-spinner bdColor="rgb(51 51 51 / 45%)" size="medium" color="#fff" 
+        type="ball-scale-multiple" [fullScreen]="false">
+    </ngx-spinner>
+</div>
 
 <p-dialog [header]="isEditMode ? 'تعديل السيارة' : 'إضافة سيارة'" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{width: '350px'}" dir="rtl">
   <form (ngSubmit)="saveCar()" #carForm="ngForm">

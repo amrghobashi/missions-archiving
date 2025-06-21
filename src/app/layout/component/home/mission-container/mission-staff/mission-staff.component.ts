@@ -10,12 +10,13 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { MissionStaffService } from './mission-staff.service';
 import { Staff } from '../../../models/staff';
 import { MultiSelect, MultiSelectModule } from 'primeng/multiselect';
+import { NgxSpinnerService, NgxSpinnerModule } from 'ngx-spinner';
 
 @Component({
   selector: 'app-mission-staff',
   standalone: true,
   imports: [TableModule, ButtonModule, DialogModule, FormsModule, InputTextModule, ConfirmDialogModule,
-    ToastModule, MultiSelectModule],
+    ToastModule, MultiSelectModule, NgxSpinnerModule],
   providers: [ConfirmationService, MessageService],
   templateUrl: './mission-staff.component.html',
   styleUrl: './mission-staff.component.scss'
@@ -24,7 +25,7 @@ export class MissionStaffComponent implements OnChanges {
   @Input() missionId: string | undefined;
   @ViewChild('multiSelectRef') multiSelectRef!: MultiSelect;
   
-  constructor(private missionStaffService: MissionStaffService, private confirmationService: ConfirmationService, private messageService: MessageService) {}
+  constructor(private missionStaffService: MissionStaffService, private confirmationService: ConfirmationService, private messageService: MessageService, private spinner: NgxSpinnerService) {}
 
   staffList: Staff[] = [];
   displayDialog = false;
@@ -36,7 +37,7 @@ export class MissionStaffComponent implements OnChanges {
   selectedStaffs!: number[];
 
   ngOnInit() {
-    // Initial load of staff options
+    this.spinner.show();
     this.getStaffOptions();
   }
 
@@ -51,6 +52,7 @@ export class MissionStaffComponent implements OnChanges {
   getStaff() {
     // Only used for CRUD actions, always reload by missionId
     if (this.missionId) {
+      this.spinner.show();
       this.loadStaffForMission(this.missionId);
     } else {
       this.staffList = [];
@@ -58,16 +60,14 @@ export class MissionStaffComponent implements OnChanges {
   }
 
   getStaffOptions(id: string | undefined = undefined) {
+    this.spinner.show();
     this.missionStaffService.getStaff(id).subscribe(
       (data) => {
         this.groupedStaffOptions = data;
         this.multiSelectRef.show();
-        // setTimeout(() => {
-        //   console.log('MultiSelect component initialized and shown');
-        // }, 300);
-        // console.log('Staff options fetched:', this.groupedStaffOptions);
+        this.spinner.hide();
       },
-      (error) => { console.error('Error fetching staff options:', error); }
+      (error) => { this.spinner.hide(); console.error('Error fetching staff options:', error); }
     );
   }
 
@@ -124,9 +124,10 @@ export class MissionStaffComponent implements OnChanges {
 
   // Add this method to be called from the parent (mission component)
   loadStaffForMission(missionId: string) {
+    this.spinner.show();
     this.missionStaffService.getStaffByMissionId(missionId).subscribe(
-      (data) => { this.staffList = data; },
-      (error) => { console.error('Error fetching staff for mission:', error); }
+      (data) => { this.staffList = data; this.spinner.hide(); },
+      (error) => { this.spinner.hide(); console.error('Error fetching staff for mission:', error); }
     );
   }
 }

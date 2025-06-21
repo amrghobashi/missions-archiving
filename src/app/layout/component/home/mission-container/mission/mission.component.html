@@ -1,43 +1,48 @@
 <div class="flex justify-end mb-3">
   <button pButton type="button" label="إضافة مهمة جديدة" icon="pi pi-plus" (click)="onAddMission()"></button>
 </div>
-
-<p-table [value]="missions" dataKey="id" editable="true" class="p-datatable-sm"
-         [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]"
-         [selection]="selectedMission" (selectionChange)="onSelectMission($event)"
-         (onRowUnselect)="onUnselectMission()"
-         selectionMode="single">
-  <ng-template pTemplate="header">
-    <tr>
-      <th pSortableColumn="id" [style]="{'text-align': 'center'}">رقم المهمة <p-sortIcon field="id"></p-sortIcon></th>
-      <th pSortableColumn="zone_id" [style]="{'text-align': 'center'}">المنطقة <p-sortIcon field="zone_id"></p-sortIcon></th>
-      <th pSortableColumn="start_date" [style]="{'text-align': 'center'}">تاريخ البداية <p-sortIcon field="start_date"></p-sortIcon></th>
-      <th pSortableColumn="end_date" [style]="{'text-align': 'center'}">تاريخ النهاية <p-sortIcon field="end_date"></p-sortIcon></th>
-      <th pSortableColumn="purpose_id" [style]="{'text-align': 'center'}">الغرض <p-sortIcon field="purpose_id"></p-sortIcon></th>
-      <th pSortableColumn="destination_city" [style]="{'text-align': 'center'}">المدينة المستهدفة <p-sortIcon field="destination_city"></p-sortIcon></th>
-      <th></th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-mission let-editing="editing">
-    <tr [pSelectableRow]="mission">
-      <td [style]="{'text-align': 'center'}">{{ mission.id }}</td>
-      <td [style]="{'text-align': 'center'}">{{ mission.zone_name }}</td>
-      <td [style]="{'text-align': 'center'}">{{ mission.start_date }}</td>
-      <td [style]="{'text-align': 'center'}">{{ mission.end_date }}</td>
-      <td [style]="{'text-align': 'center'}">{{ mission.purpose_name }}</td>
-      <td [style]="{'text-align': 'center'}">{{ mission.destination_city }}</td>
-      <td>
-        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditMission(mission)"></button>
-        <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteMission(mission)"></button>
-      </td>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="7" style="text-align: center; color: #888;">لا توجد بيانات</td>
-    </tr>
-  </ng-template>
-</p-table>
+<div style="position: relative;">
+  <p-table [value]="missions" dataKey="id" editable="true" class="p-datatable-sm"
+           [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]"
+           [selection]="selectedMission" (selectionChange)="onSelectMission($event)"
+           (onRowUnselect)="onUnselectMission()"
+           selectionMode="single">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id" [style]="{'text-align': 'center'}">رقم المهمة <p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="zone_id" [style]="{'text-align': 'center'}">المنطقة <p-sortIcon field="zone_id"></p-sortIcon></th>
+        <th pSortableColumn="start_date" [style]="{'text-align': 'center'}">تاريخ البداية <p-sortIcon field="start_date"></p-sortIcon></th>
+        <th pSortableColumn="end_date" [style]="{'text-align': 'center'}">تاريخ النهاية <p-sortIcon field="end_date"></p-sortIcon></th>
+        <th pSortableColumn="purpose_id" [style]="{'text-align': 'center'}">الغرض <p-sortIcon field="purpose_id"></p-sortIcon></th>
+        <th pSortableColumn="destination_city" [style]="{'text-align': 'center'}">المدينة المستهدفة <p-sortIcon field="destination_city"></p-sortIcon></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-mission let-editing="editing">
+      <tr [pSelectableRow]="mission">
+        <td [style]="{'text-align': 'center'}">{{ mission.id }}</td>
+        <td [style]="{'text-align': 'center'}">{{ mission.zone_name }}</td>
+        <td [style]="{'text-align': 'center'}">{{ mission.start_date }}</td>
+        <td [style]="{'text-align': 'center'}">{{ mission.end_date }}</td>
+        <td [style]="{'text-align': 'center'}">{{ mission.purpose_name }}</td>
+        <td [style]="{'text-align': 'center'}">{{ mission.destination_city }}</td>
+        <td>
+          <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditMission(mission)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteMission(mission)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="7" style="text-align: center; color: #888;">لا توجد بيانات</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  
+  <ngx-spinner bdColor="rgb(51 51 51 / 45%)" size="medium" color="#fff" 
+      type="ball-scale-multiple" [fullScreen]="false">
+  </ngx-spinner>
+</div>
 
 <p-dialog [header]="isEditMode ? 'تعديل المهمة' : 'إضافة مهمة جديدة'" [(visible)]="displayAddDialog" [modal]="true" [closable]="true" [style]="{width: '400px', height: '450px'}" dir="rtl">
   <form (ngSubmit)="saveNewMission()" #missionForm="ngForm">

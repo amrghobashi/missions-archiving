@@ -2,31 +2,36 @@
   <h5 style="margin: 0;">طاقم العمل</h5>
   <button pButton type="button" label="إضافة موظف" icon="pi pi-plus" (click)="onAddStaff()"></button>
 </div>
-
-<p-table [value]="staffList" dataKey="id" editable="true" class="p-datatable-sm"
-         [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]">
-  <ng-template pTemplate="header">
-    <tr>
-      <th [style]="{'text-align': 'center','width': '50px'}">م</th>
-      <th pSortableColumn="arabic_name" [style]="{'text-align': 'center', 'width': '80%'}">الإسم  <p-sortIcon field="arabic_name"></p-sortIcon></th>
-      <th></th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-staff let-rowIndex="rowIndex">
-    <tr>
-      <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
-      <td [style]="{'text-align': 'center'}">{{ staff.arabic_name }}</td>
-      <td>
-        <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteStaff(staff)"></button>
-      </td>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="emptymessage">
-    <tr>
-      <td colspan="3" style="text-align: center; color: #888;">لا توجد بيانات</td>
-    </tr>
-  </ng-template>
-</p-table>
+<div style="position: relative;">
+    <p-table [value]="staffList" dataKey="id" editable="true" class="p-datatable-sm"
+             [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]">
+      <ng-template pTemplate="header">
+        <tr>
+          <th [style]="{'text-align': 'center','width': '50px'}">م</th>
+          <th pSortableColumn="arabic_name" [style]="{'text-align': 'center', 'width': '80%'}">الإسم  <p-sortIcon field="arabic_name"></p-sortIcon></th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-staff let-rowIndex="rowIndex">
+        <tr>
+          <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
+          <td [style]="{'text-align': 'center'}">{{ staff.arabic_name }}</td>
+          <td>
+            <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteStaff(staff)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3" style="text-align: center; color: #888;">لا توجد بيانات</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    
+    <ngx-spinner bdColor="rgb(51 51 51 / 45%)" size="medium" color="#fff" 
+        type="ball-scale-multiple" [fullScreen]="false">
+    </ngx-spinner>
+</div>
 
 <p-dialog [header]="isEditMode ? 'تعديل الموظف' : 'إضافة موظف'" [(visible)]="displayDialog"
     [modal]="true" [closable]="true" [style]="{width: '350px', height: '500px'}"
