@@ -50,7 +50,7 @@ export class MissionBattelionComponent implements OnChanges {
   }
 
   getBattelionOptions() {
-    this.spinner.show();
+    // this.spinner.show();
     this.battelionService.getBattelions().subscribe((battelions: Battelion[]) => {
       this.battelionOptions = battelions.map(bat => ({
         id: bat.id,
@@ -58,7 +58,7 @@ export class MissionBattelionComponent implements OnChanges {
         label: bat.name + ' (' + bat.id + ')'
       }));
       this.selectRef.show();
-      this.spinner.hide();
+      // this.spinner.hide();
     }, (error: any) => { this.spinner.hide(); });
   }
 

@@ -60,12 +60,12 @@ export class MissionStaffComponent implements OnChanges {
   }
 
   getStaffOptions(id: string | undefined = undefined) {
-    this.spinner.show();
+    // this.spinner.show();
     this.missionStaffService.getStaff(id).subscribe(
       (data) => {
         this.groupedStaffOptions = data;
         this.multiSelectRef.show();
-        this.spinner.hide();
+        // this.spinner.hide();
       },
       (error) => { this.spinner.hide(); console.error('Error fetching staff options:', error); }
     );

@@ -54,6 +54,8 @@ export class MissionVisitComponent implements OnChanges {
   API_URL = environment.API_URL + 'upload-report';
   API_FILES = environment.API_FILES;
   safePreviewUrl: SafeResourceUrl | null = null;
+  first = 0;
+  rows = 5;
   hasImage = {
     'width': '90%',
     'height': '90%'

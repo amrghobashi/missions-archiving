@@ -5,6 +5,7 @@ import { Documentation } from './app/pages/documentation/documentation';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { MissionContainerComponent } from './app/layout/component/home/mission-container/mission-container.component';
+import { StaffComponent } from './app/layout/component/home/staff/staff.component';
 
 export const appRoutes: Routes = [
     {
@@ -12,7 +13,8 @@ export const appRoutes: Routes = [
         component: AppLayout,
         children: [
             { path: '', component: MissionContainerComponent },
-            { path: 'mission', component: MissionContainerComponent }
+            { path: 'mission', component: MissionContainerComponent },
+            { path: 'staff', component: StaffComponent }
         ]
     },
     { path: 'landing', component: Landing },

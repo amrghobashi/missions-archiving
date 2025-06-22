@@ -57,9 +57,10 @@ export class MissionComponent {
   emptyMission!: Mission;
   zoneOptions: Zone[] = [];
   purposeOptions: Purpose[] = [];
-
   isEditMode = false;
-
+  first = 0;
+  rows = 10;
+  
   getMissions() {
     this.spinner.show();
     this.subscription = this.missionService.getMissions().subscribe(

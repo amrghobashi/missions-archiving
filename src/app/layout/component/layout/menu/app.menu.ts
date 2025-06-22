@@ -16,10 +16,11 @@ export class AppMenu {
     ngOnInit() {
         this.model = [
             {
-                label: 'Home',
+                label: 'القائمة الرئيسية',
+                icon: 'pi pi-fw pi-home',
                 items: [
                     { label: 'المهمات', icon: 'pi pi-fw pi-flag', routerLink: ['/'] },
-                    { label: 'المهمات', icon: 'pi pi-fw pi-flag', routerLink: ['/'] }]
+                    { label: 'الموظفين', icon: 'pi pi-fw pi-users', routerLink: ['/staff'] }]
             },
             // {
             //     label: 'UI Components',

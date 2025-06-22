@@ -79,14 +79,14 @@ export class MissionCarComponent implements OnChanges {
   }
 
   getCarOptions() {
-    this.spinner.show();
+    // this.spinner.show();
     this.subscription = this.carService.getCars(this.missionId).subscribe((cars: Car[]) => {
       this.carOptions = cars.map(car => ({
         id: car.id,
         name: car.name,
         label: car.name + ' (' + car.id + ')'
       }));
-      this.spinner.hide();
+      // this.spinner.hide();
     }, (error: any) => {
       this.spinner.hide();
     });

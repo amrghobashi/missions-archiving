@@ -5,7 +5,12 @@
 <div style="position: relative;">
 <p-table [value]="visitList" dataKey="id"
     editable="true" class="p-datatable-sm"
-    [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]">
+    [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]"
+    [first]="first"
+    [showCurrentPageReport]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} زيارة"
+    >
   <ng-template pTemplate="header">
     <tr>
       <th [style]="{'text-align': 'center','width': '50px'}">م</th>

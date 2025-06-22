@@ -1,1 +1,144 @@
-<p>staff works!</p>
+<!-- <p-toggleswitch [(ngModel)]="checked" /> -->
+
+<div class="card" dir="rtl" style="margin: 0.5rem; margin-bottom: 1rem;">
+
+    <!-- <div class="flex justify-end mb-3">
+        <button pButton type="button" label="إضافة موظف جديد" icon="pi pi-plus" (click)="onAddStaff()"></button>
+    </div> -->
+    <div style="position: relative;">
+        <p-table #staffs [value]="staffList" dataKey="id" editable="true"
+            class="p-datatable-sm" [paginator]="true" [rows]="10"
+            [globalFilterFields]="['arabic_name', 'english_name', 'job_title', 'staff_type_name', 'phase_name']"
+            [rowsPerPageOptions]="[5,10,20]"
+            [first]="first"
+            [showCurrentPageReport]="true"
+            [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} موظف"
+    >
+            <ng-template #caption>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" (input)="staffs.filterGlobal($any($event.target).value, 'contains')"
+                        placeholder="البحث عن موظف" />
+                </p-iconfield>
+            </div>
+            <div class="flex justify-end mb-3">
+                <button pButton type="button" label="إضافة موظف جديد" icon="pi pi-plus" (click)="onAddStaff()"></button>
+            </div>
+        </div>
+    </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="arabic_name" [style]="{'text-align': 'center'}">الاسم بالعربية <p-sortIcon
+                            field="arabic_name"></p-sortIcon></th>
+                    <th pSortableColumn="english_name" [style]="{'text-align': 'center'}">الاسم بالإنجليزية <p-sortIcon
+                            field="english_name"></p-sortIcon></th>
+                    <th pSortableColumn="job_title" [style]="{'text-align': 'center'}">المسمى الوظيفي <p-sortIcon
+                            field="job_title"></p-sortIcon></th>
+                    <th pSortableColumn="staff_type_id" [style]="{'text-align': 'center'}">نوع الموظف <p-sortIcon
+                            field="staff_type_id"></p-sortIcon></th>
+                    <th pSortableColumn="phase_id" [style]="{'text-align': 'center'}">المرحلة <p-sortIcon
+                            field="phase_id"></p-sortIcon></th>
+                    <!-- <th pSortableColumn="staff_desc" [style]="{'text-align': 'center'}">الوصف <p-sortIcon
+                            field="staff_desc"></p-sortIcon></th> -->
+                    <th pSortableColumn="active" [style]="{'text-align': 'center'}">نشط <p-sortIcon
+                            field="active"></p-sortIcon></th>
+                    <th pSortableColumn="start_date" [style]="{'text-align': 'center'}">تاريخ البداية <p-sortIcon
+                            field="start_date"></p-sortIcon></th>
+                    <th pSortableColumn="end_date" [style]="{'text-align': 'center'}">تاريخ النهاية <p-sortIcon
+                            field="end_date"></p-sortIcon></th>
+                    <th></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-staff let-rowIndex="rowIndex">
+                <tr>
+                    <td [style]="{'text-align': 'center'}">{{ staff.arabic_name }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ staff.english_name }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ staff.job_title }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ staff.staff_type_name }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ staff.phase_name }}</td>
+                    <!-- <td [style]="{'text-align': 'center'}">{{ staff.staff_desc }}</td> -->
+                    <td [style]="{'text-align': 'center'}">
+                        <!-- {{ staff.active === 1 ? 'نعم' : 'لا' }} -->
+                        <p-togglebutton [(ngModel)]="staff.active" offLabel="لا"
+                            onLabel="نعم" [style]="{'text-align': 'center'}" 
+                             (onChange)="updateActiveFlag($event, staff.id)"
+                            styleClass="w-full sm:w-20" aria-label="Confirmation" />
+                    </td>
+                    <td [style]="{'text-align': 'center'}">{{ staff.start_date }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ staff.end_date }}</td>
+                    <td>
+                        <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm"
+                            (click)="onEditStaff(staff)"></button>
+                        <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger"
+                            (click)="confirmDeleteStaff(staff)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="10" style="text-align: center; color: #888;">لا توجد بيانات</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <ngx-spinner bdColor="rgb(51 51 51 / 45%)" size="medium" color="#fff" type="ball-scale-multiple"
+            [fullScreen]="false">
+        </ngx-spinner>
+    </div>
+</div>
+<p-dialog [header]="isEditMode ? 'تعديل الموظف' : 'إضافة موظف جديد'" [(visible)]="displayDialog" [modal]="true"
+    [closable]="true" [style]="{width: '450px', height: 'auto', 'min-height': '520px'}" dir="rtl">
+    <form (ngSubmit)="saveStaff()" #staffForm="ngForm">
+        <div class="flex flex-col gap-3">
+            <div class="p-field">
+                <label class="block mb-1">الاسم بالعربية</label>
+                <input pInputText [(ngModel)]="newStaff.arabic_name" name="arabic_name" required class="w-full" />
+            </div>
+            <div class="p-field">
+                <label class="block mb-1">الاسم بالإنجليزية</label>
+                <input pInputText [(ngModel)]="newStaff.english_name" name="english_name" class="w-full" />
+            </div>
+            <div class="p-field">
+                <label class="block mb-1">تاريخ بداية التوظيف</label>
+                <p-datepicker [(ngModel)]="newStaff.start_date" [style]="{'width': '100%'}" name="start_date" inputId="startDate" dateFormat="yy/mm/dd" class="w-full"></p-datepicker>
+            </div>
+            <div class="p-field">
+                <label class="block mb-1">تاريخ نهاية التوظيف</label>
+                <p-datepicker [(ngModel)]="newStaff.end_date" [style]="{'width': '100%'}" name="end_date" inputId="endDate" dateFormat="yy/mm/dd" class="w-full"></p-datepicker>
+            </div>
+            <div class="p-field">
+                <label class="block mb-1">المسمى الوظيفي</label>
+                <input pInputText [(ngModel)]="newStaff.job_title" name="job_title" class="w-full" />
+            </div>
+            <div class="p-field">
+                <label class="block mb-1">نوع الموظف</label>
+                <span class="p-float-label w-full">
+                    <p-select [(ngModel)]="newStaff.staff_type_id" [filter]="true" filterBy="name" [options]="staffTypes" optionLabel="name" optionValue="id" name="staff_type_id" inputId="staff_type_id" class="w-full" required></p-select>
+                </span>
+            </div>
+            <div class="p-field">
+                <label class="block mb-1">المرحلة</label>
+                <span class="p-float-label w-full">
+                    <p-select [(ngModel)]="newStaff.phase_id" [filter]="true" filterBy="name" [options]="phases" optionLabel="name" optionValue="id" name="phase_id" inputId="phase_id" class="w-full"></p-select>
+                </span>
+            </div>
+            <div class="p-field">
+                <label class="block mb-1">الوصف</label>
+                <input pInputText [(ngModel)]="newStaff.staff_desc" name="staff_desc" class="w-full" />
+            </div>
+            
+        </div>
+        <div class="flex justify-end gap-2 mt-4" style="margin-top: 2rem;">
+            <button pButton type="button" label="إلغاء" class="p-button-text" (click)="cancelDialog()"></button>
+            <button pButton type="submit" [label]="isEditMode ? 'تعديل' : 'حفظ'" [disabled]="!staffForm.form.valid"
+                autofocus></button>
+        </div>
+    </form>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{direction: 'rtl'}"></p-confirmDialog>
