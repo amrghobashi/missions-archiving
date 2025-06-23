@@ -6,6 +6,7 @@ import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { MissionContainerComponent } from './app/layout/component/home/mission-container/mission-container.component';
 import { StaffComponent } from './app/layout/component/home/staff/staff.component';
+import { UnitComponent } from './app/layout/component/home/unit/unit.component';
 
 export const appRoutes: Routes = [
     {
@@ -14,7 +15,8 @@ export const appRoutes: Routes = [
         children: [
             { path: '', component: MissionContainerComponent },
             { path: 'mission', component: MissionContainerComponent },
-            { path: 'staff', component: StaffComponent }
+            { path: 'staff', component: StaffComponent },
+            { path: 'unit', component: UnitComponent }
         ]
     },
     { path: 'landing', component: Landing },

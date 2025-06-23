@@ -6,31 +6,30 @@
         <button pButton type="button" label="إضافة موظف جديد" icon="pi pi-plus" (click)="onAddStaff()"></button>
     </div> -->
     <div style="position: relative;">
-        <p-table #staffs [value]="staffList" dataKey="id" editable="true"
-            class="p-datatable-sm" [paginator]="true" [rows]="10"
+        <p-table #staffs [value]="staffList" dataKey="id" editable="true" class="p-datatable-sm" [paginator]="true"
+            [rows]="10"
             [globalFilterFields]="['arabic_name', 'english_name', 'job_title', 'staff_type_name', 'phase_name']"
-            [rowsPerPageOptions]="[5,10,20]"
-            [first]="first"
-            [showCurrentPageReport]="true"
+            [rowsPerPageOptions]="[5,10,20]" [first]="first" [showCurrentPageReport]="true"
             [tableStyle]="{ 'min-width': '50rem' }"
-            currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} موظف"
-    >
+            currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} موظف">
             <ng-template #caption>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <p-iconfield iconPosition="left" class="ml-auto">
-                    <p-inputicon>
-                        <i class="pi pi-search"></i>
-                    </p-inputicon>
-                    <input pInputText type="text" (input)="staffs.filterGlobal($any($event.target).value, 'contains')"
-                        placeholder="البحث عن موظف" />
-                </p-iconfield>
-            </div>
-            <div class="flex justify-end mb-3">
-                <button pButton type="button" label="إضافة موظف جديد" icon="pi pi-plus" (click)="onAddStaff()"></button>
-            </div>
-        </div>
-    </ng-template>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p-iconfield iconPosition="left" class="ml-auto">
+                            <p-inputicon>
+                                <i class="pi pi-search"></i>
+                            </p-inputicon>
+                            <input pInputText type="text"
+                                (input)="staffs.filterGlobal($any($event.target).value, 'contains')"
+                                placeholder="البحث عن موظف" />
+                        </p-iconfield>
+                    </div>
+                    <div class="flex justify-end mb-3">
+                        <button pButton type="button" label="إضافة موظف جديد" icon="pi pi-plus"
+                            (click)="onAddStaff()"></button>
+                    </div>
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th pSortableColumn="arabic_name" [style]="{'text-align': 'center'}">الاسم بالعربية <p-sortIcon
@@ -64,9 +63,8 @@
                     <!-- <td [style]="{'text-align': 'center'}">{{ staff.staff_desc }}</td> -->
                     <td [style]="{'text-align': 'center'}">
                         <!-- {{ staff.active === 1 ? 'نعم' : 'لا' }} -->
-                        <p-togglebutton [(ngModel)]="staff.active" offLabel="لا"
-                            onLabel="نعم" [style]="{'text-align': 'center'}" 
-                             (onChange)="updateActiveFlag($event, staff.id)"
+                        <p-togglebutton [(ngModel)]="staff.active" offLabel="لا" onLabel="نعم"
+                            [style]="{'text-align': 'center'}" (onChange)="updateActiveFlag($event, staff.id)"
                             styleClass="w-full sm:w-20" aria-label="Confirmation" />
                     </td>
                     <td [style]="{'text-align': 'center'}">{{ staff.start_date }}</td>
@@ -104,11 +102,13 @@
             </div>
             <div class="p-field">
                 <label class="block mb-1">تاريخ بداية التوظيف</label>
-                <p-datepicker [(ngModel)]="newStaff.start_date" [style]="{'width': '100%'}" name="start_date" inputId="startDate" dateFormat="yy/mm/dd" class="w-full"></p-datepicker>
+                <p-datepicker [(ngModel)]="newStaff.start_date" [style]="{'width': '100%'}" name="start_date"
+                    inputId="startDate" dateFormat="yy/mm/dd" class="w-full"></p-datepicker>
             </div>
             <div class="p-field">
                 <label class="block mb-1">تاريخ نهاية التوظيف</label>
-                <p-datepicker [(ngModel)]="newStaff.end_date" [style]="{'width': '100%'}" name="end_date" inputId="endDate" dateFormat="yy/mm/dd" class="w-full"></p-datepicker>
+                <p-datepicker [(ngModel)]="newStaff.end_date" [style]="{'width': '100%'}" name="end_date"
+                    inputId="endDate" dateFormat="yy/mm/dd" class="w-full"></p-datepicker>
             </div>
             <div class="p-field">
                 <label class="block mb-1">المسمى الوظيفي</label>
@@ -117,20 +117,24 @@
             <div class="p-field">
                 <label class="block mb-1">نوع الموظف</label>
                 <span class="p-float-label w-full">
-                    <p-select [(ngModel)]="newStaff.staff_type_id" [filter]="true" filterBy="name" [options]="staffTypes" optionLabel="name" optionValue="id" name="staff_type_id" inputId="staff_type_id" class="w-full" required></p-select>
+                    <p-select [(ngModel)]="newStaff.staff_type_id" [filter]="true" filterBy="name"
+                        [options]="staffTypes" optionLabel="name" optionValue="id" name="staff_type_id"
+                        inputId="staff_type_id" class="w-full" required></p-select>
                 </span>
             </div>
             <div class="p-field">
                 <label class="block mb-1">المرحلة</label>
                 <span class="p-float-label w-full">
-                    <p-select [(ngModel)]="newStaff.phase_id" [filter]="true" filterBy="name" [options]="phases" optionLabel="name" optionValue="id" name="phase_id" inputId="phase_id" class="w-full"></p-select>
+                    <p-select [(ngModel)]="newStaff.phase_id" [filter]="true" filterBy="name" [options]="phases"
+                        optionLabel="name" optionValue="id" name="phase_id" inputId="phase_id"
+                        class="w-full"></p-select>
                 </span>
             </div>
             <div class="p-field">
                 <label class="block mb-1">الوصف</label>
                 <input pInputText [(ngModel)]="newStaff.staff_desc" name="staff_desc" class="w-full" />
             </div>
-            
+
         </div>
         <div class="flex justify-end gap-2 mt-4" style="margin-top: 2rem;">
             <button pButton type="button" label="إلغاء" class="p-button-text" (click)="cancelDialog()"></button>

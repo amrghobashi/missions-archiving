@@ -26,7 +26,15 @@ export class MissionContainerComponent {
         this.missionService.selectedMission.subscribe((mission) => {
           if(mission) {
             this.mission = mission;
-            this.tabsHeader = 'مهمة رقم ' + mission.id + ' في ' + mission.zone_name + ' في الفترة من ' + mission.start_date + ' إلى ' + mission.end_date;
+            const formatDate = (dateStr: string) => {
+              if (!dateStr) return '';
+              const d = new Date(dateStr);
+              const day = String(d.getDate()).padStart(2, '0');
+              const month = String(d.getMonth() + 1).padStart(2, '0');
+              const year = String(d.getFullYear()).slice(-2);
+              return `${day}-${month}-${year}`;
+            };
+            this.tabsHeader = 'مهمة رقم ' + mission.id + ' في ' + mission.zone_name + ' في الفترة من ' + formatDate(mission.start_date) + ' إلى ' + formatDate(mission.end_date);
             setTimeout(() => {
               this.activeTabValue = '1'; // Set the active tab to the first tab
             }, 100);
