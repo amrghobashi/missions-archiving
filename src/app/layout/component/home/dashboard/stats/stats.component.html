@@ -1,0 +1,125 @@
+<div class="grid grid-cols-12 gap-8" style="direction: rtl;">
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <span class="block text-muted-color font-medium mb-4">المهمات</span>
+                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                        {{ stats?.missions  }}
+                    </div>
+                </div>
+                <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border"
+                    style="width: 2.5rem; height: 2.5rem">
+                    <i class="pi pi-flag text-blue-500 !text-xl"></i>
+                </div>
+            </div>
+            <!-- <span class="text-primary font-medium">24 new </span>
+            <span class="text-muted-color">since last visit</span> -->
+        </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <span class="block text-muted-color font-medium mb-4">الزيارات</span>
+                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                        {{ stats?.visits  }}
+                    </div>
+                </div>
+                <div class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-border"
+                    style="width: 2.5rem; height: 2.5rem">
+                    <i class="pi pi-book text-orange-500 !text-xl"></i>
+                </div>
+            </div>
+            <!-- <span class="text-primary font-medium">%52+ </span>
+            <span class="text-muted-color">since last week</span> -->
+        </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <span class="block text-muted-color font-medium mb-4">الموظفين</span>
+                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                        {{ stats?.staffs  }}
+                    </div>
+                </div>
+                <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border"
+                    style="width: 2.5rem; height: 2.5rem">
+                    <i class="pi pi-users text-cyan-500 !text-xl"></i>
+                </div>
+            </div>
+            <!-- <span class="text-primary font-medium">520 </span>
+            <span class="text-muted-color">newly registered</span> -->
+        </div>
+    </div>
+    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+        <div class="card mb-0">
+            <div class="flex justify-between mb-4">
+                <div>
+                    <span class="block text-muted-color font-medium mb-4">الوحدات</span>
+                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                        {{ stats?.units  }}
+                    </div>
+                </div>
+                <div class="flex items-center justify-center bg-purple-100 dark:bg-purple-400/10 rounded-border"
+                    style="width: 2.5rem; height: 2.5rem">
+                    <i class="pi pi-map text-purple-500 !text-xl"></i>
+                </div>
+            </div>
+            <!-- <span class="text-primary font-medium">85 </span>
+            <span class="text-muted-color">responded</span> -->
+        </div>
+    </div>
+
+</div>
+<br>
+
+
+
+
+<div class="grid grid-cols-12 gap-8" style="direction: rtl;">
+    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-8" style="direction: ltr;">
+        <div class="card mb-0">
+            <span class="block text-muted-color font-medium mb-4" style="direction: rtl;">المهمات طبقا للغرض</span>
+            <div class="flex justify-center mb-4">
+                <div>
+                    <ngx-charts-pie-grid
+                        [view]="purposeView"
+                        [scheme]="colorScheme"
+                        [results]="purposeStats"
+                        label="الإجمالي"
+                        >
+                    </ngx-charts-pie-grid>
+                </div>
+            </div>
+            <!-- <span class="text-primary font-medium">24 new </span>
+            <span class="text-muted-color">since last visit</span> -->
+        </div>
+    </div>
+    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-4" style="direction: ltr;">
+        <div class="card mb-0">
+            <span class="block text-muted-color font-medium mb-4" style="direction: rtl;">المهمات طبقا للمنطقة</span>
+            <div class="flex justify-center mb-4">
+                <div>
+                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
+                        
+                        <ngx-charts-advanced-pie-chart
+                            [view]="zoneView"
+                            [scheme]="colorScheme"
+                            [results]="zoneStats"
+                            [gradient]="gradient"
+                            label="الإجمالي"
+
+                            >
+                        </ngx-charts-advanced-pie-chart>
+                    </div>
+                </div>
+            </div>
+            <!-- <span class="text-primary font-medium">%52+ </span>
+            <span class="text-muted-color">since last week</span> -->
+        </div>
+    </div>
+
+</div>
+<br>

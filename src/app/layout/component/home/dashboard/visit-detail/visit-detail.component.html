@@ -1,0 +1,56 @@
+<div style="justify-content: space-between; display: flex; direction: rtl;">
+  <h5 *ngIf="!date" style="margin: 0;"> {{ selectedUnit? 'زيارات ' + selectedUnit.name + ' / ' + selectedUnit.parent : 'إختر وحدة لعرض التفاصيل' }}</h5>
+  <h5 *ngIf="date" style="margin: 0;"> {{ selectedUnit? 'زيارات ' + selectedUnit.name + ' / ' + selectedUnit.parent + ' خلال الفترة (' + arabicDate + ')' : 'إختر وحدة لعرض التفاصيل' }}</h5>
+</div>
+<div style="position: relative; direction: rtl;">
+  <p-table [value]="visitList" dataKey="id" class="p-datatable-sm"
+    [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]"
+    [showCurrentPageReport]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} زيارة"
+    [loading]="loading">
+    <ng-template pTemplate="header">
+      <tr>
+        <th [style]="{'text-align': 'center','width': '50px'}">م</th>
+        <th pSortableColumn="mission_id" [style]="{'text-align': 'center'}">رقم المهمة <p-sortIcon field="mission_id"></p-sortIcon></th>
+        <th pSortableColumn="visit_date" [style]="{'text-align': 'center'}">التاريخ  <p-sortIcon field="visit_date"></p-sortIcon></th>
+        <th pSortableColumn="from_time" [style]="{'text-align': 'center'}">بداية الزيارة  <p-sortIcon field="from_time"></p-sortIcon></th>
+        <th pSortableColumn="to_time" [style]="{'text-align': 'center'}">نهاية الزيارة<p-sortIcon field="to_time"></p-sortIcon></th>
+        <th [style]="{'text-align': 'center'}">التقرير</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-visit let-rowIndex="rowIndex">
+      <tr>
+        <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
+        <td [style]="{'text-align': 'center'}">{{ visit.mission_id }}</td>
+        <td [style]="{'text-align': 'center'}">{{ visit.visit_date | date:'yyyy/MM/dd' }}</td>
+        <td [style]="{'text-align': 'center'}">{{ visit.from_time.slice(0,5) }}</td>
+        <td [style]="{'text-align': 'center'}">{{ visit.to_time.slice(0,5) }}</td>
+        <td [style]="{'text-align': 'center'}">
+          <button pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path, visit.id)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="معاينة التقرير" [(visible)]="previewDialog" [modal]="true" [closable]="true"
+    [style]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : {}"
+    [ngStyle]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (previewUrl ? hasImage : noImage)" dir="rtl">
+  <div>
+    <div *ngIf="previewUrl">
+      <img *ngIf="isImage(previewUrl)" [src]="previewUrl" alt="تقرير الزيارة" style="max-width: 100%; border:1px solid #ccc;" />
+      <a *ngIf="isPdf(previewUrl)" [href]="previewUrl" target="_blank">عرض PDF</a>
+      <iframe *ngIf="isPdf(previewUrl) && safePreviewUrl"
+          [src]="safePreviewUrl"
+          frameborder="0"
+          width="100%"
+          style="height: 67vh; border:1px solid #ccc; display: block; margin: 0 auto;"></iframe>
+    </div>
+  </div>
+</p-dialog>

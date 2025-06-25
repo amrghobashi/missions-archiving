@@ -22,6 +22,7 @@ export class AppMenu {
                     { label: 'المهمات', icon: 'pi pi-fw pi-flag', routerLink: ['/'] },
                     { label: 'الموظفين', icon: 'pi pi-fw pi-users', routerLink: ['/staff'] },
                     { label: 'الوحدات', icon: 'pi pi-fw pi-map', routerLink: ['/unit'] },
+                    { label: 'الإحصائيات', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/dashboard'] },
                 ]
             },
             // {
