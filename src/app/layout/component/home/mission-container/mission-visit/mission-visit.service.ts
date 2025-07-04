@@ -22,8 +22,8 @@ export class MissionVisitService {
     return this.http.get<Battelion[]>(this.API_URL + 'battelion-list');
   }
 
-  getUnits(): Observable<Unit[]> {
-    return this.http.get<Unit[]>(this.API_URL + 'units');
+  getUnits(missionId: string | undefined): Observable<Unit[]> {
+    return this.http.get<Unit[]>(this.API_URL + 'units-from-battelions?mission_id=' + missionId);
   }
 
   addVisit(visit: Visit): Observable<any> {

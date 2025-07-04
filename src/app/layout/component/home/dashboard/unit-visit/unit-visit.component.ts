@@ -16,45 +16,46 @@ import { PurposeStats } from '../../../models/dashboard';
 export class UnitVisitComponent {
   subscription: Subscription = new Subscription();
   selectedUnit: string | null = null;
-  visits: PurposeStats[] = [{
-        "name": "September 2025",
-        "value": 10
-    },{
-        "name": "September 2024",
-        "value": 12
-    },{
-        "name": "September 2023",
-        "value": 17
-    },{
-        "name": "September 2022",
-        "value": 5
-    },{
-        "name": "September 2021",
-        "value": 3
-    },{
-        "name": "September 2020",
-        "value": 10
-    },{
-        "name": "September 2019",
-        "value": 1
-    },{
-        "name": "September 2018",
-        "value": 6
-    },{
-        "name": "September 2017",
-        "value": 1
-    },{
-        "name": "September 2016",
-        "value": 3
-    },{
-        "name": "September 2015",
-        "value": 1
-    }];
+  visits: PurposeStats[] = [];
+  // visits: PurposeStats[] = [{
+  //       "name": "September 2025",
+  //       "value": 10
+  //   },{
+  //       "name": "September 2024",
+  //       "value": 12
+  //   },{
+  //       "name": "September 2023",
+  //       "value": 17
+  //   },{
+  //       "name": "September 2022",
+  //       "value": 5
+  //   },{
+  //       "name": "September 2021",
+  //       "value": 3
+  //   },{
+  //       "name": "September 2020",
+  //       "value": 10
+  //   },{
+  //       "name": "September 2019",
+  //       "value": 1
+  //   },{
+  //       "name": "September 2018",
+  //       "value": 6
+  //   },{
+  //       "name": "September 2017",
+  //       "value": 1
+  //   },{
+  //       "name": "September 2016",
+  //       "value": 3
+  //   },{
+  //       "name": "September 2015",
+  //       "value": 1
+  //   }];
   colorScheme = {
     name: 'customScheme',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#5AA454', '#C7B42C', '#AAAAAA']
+    domain: ['#b7e4c7', '#95d5b2', '#74c69d', '#2d6a4f', '#081c15', '#1b4332', '#52b788', '#40916c', '#d8f3dc']
   };
   // view: [number,number] = [1000, 400];
 

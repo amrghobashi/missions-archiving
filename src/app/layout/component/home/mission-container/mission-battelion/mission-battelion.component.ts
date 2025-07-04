@@ -51,7 +51,7 @@ export class MissionBattelionComponent implements OnChanges {
 
   getBattelionOptions() {
     // this.spinner.show();
-    this.battelionService.getBattelions().subscribe((battelions: Battelion[]) => {
+    this.battelionService.getBattelions(this.missionId).subscribe((battelions: Battelion[]) => {
       this.battelionOptions = battelions.map(bat => ({
         id: bat.id,
         name: bat.name,

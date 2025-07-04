@@ -15,81 +15,81 @@ import { Stats } from '../../../models/dashboard';
 })
 export class BattelionUnitComponent {
   subscription: Subscription = new Subscription();
-  // visits = [];
-  visits = [{
-        "name": "ك 11 حرس حدود بري",
-        "series": [
-            {
-                "name": "الحيز البحري - (L0-03)",
-                "value": 5
-            },
-            {
-                "name": "الحيز البحري - (L0-01)",
-                "value": 3
-            }
-        ]
-    },
-    {
-        "name": "ك 12 حرس حدود بري",
-        "series": [
-            {
-                "name": "ك 100 (الشهيد درويش) - (L0-05)",
-                "value": 3
-            },
-            {
-                "name": "تل المخروطي - (L0-01)",
-                "value": 19
-            }
-        ]
-    },
-    {
-        "name": "ك 13 حرس حدود بري",
-        "series": [
-            {
-                "name": "ك 100 (الشهيد درويش) - (L0-05)",
-                "value": 3
-            },
-            {
-                "name": "تل المخروطي - (L0-01)",
-                "value": 4
-            }
-        ]
-    },
-    {
-        "name": "ك 14 حرس حدود بري",
-        "series": [
-            {
-                "name": "ك 100 (الشهيد درويش) - (L0-05)",
-                "value": 2
-            },
-            {
-                "name": "تل المخروطي - (L0-01)",
-                "value": 8
-            },
-            {
-                "name": "ك 100 (الشهيد درويش) - (L0-05)",
-                "value": 5
-            },
-            {
-                "name": "تل المخروطي - (L0-01)",
-                "value": 4
-            }
-        ]
-    },
-    {
-        "name": "ك 15 حرس حدود بري",
-        "series": [
-            {
-                "name": "ك 100 (الشهيد درويش) - (L0-05)",
-                "value": 12
-            },
-            {
-                "name": "تل المخروطي - (L0-01)",
-                "value": 4
-            }
-        ]
-    }
-  ];
+  visits = [];
+  // visits = [{
+  //       "name": "ك 11 حرس حدود بري",
+  //       "series": [
+  //           {
+  //               "name": "الحيز البحري - (L0-03)",
+  //               "value": 5
+  //           },
+  //           {
+  //               "name": "الحيز البحري - (L0-01)",
+  //               "value": 3
+  //           }
+  //       ]
+  //   },
+  //   {
+  //       "name": "ك 12 حرس حدود بري",
+  //       "series": [
+  //           {
+  //               "name": "ك 100 (الشهيد درويش) - (L0-05)",
+  //               "value": 3
+  //           },
+  //           {
+  //               "name": "تل المخروطي - (L0-01)",
+  //               "value": 19
+  //           }
+  //       ]
+  //   },
+  //   {
+  //       "name": "ك 13 حرس حدود بري",
+  //       "series": [
+  //           {
+  //               "name": "ك 100 (الشهيد درويش) - (L0-05)",
+  //               "value": 3
+  //           },
+  //           {
+  //               "name": "تل المخروطي - (L0-01)",
+  //               "value": 4
+  //           }
+  //       ]
+  //   },
+  //   {
+  //       "name": "ك 14 حرس حدود بري",
+  //       "series": [
+  //           {
+  //               "name": "ك 100 (الشهيد درويش) - (L0-05)",
+  //               "value": 2
+  //           },
+  //           {
+  //               "name": "تل المخروطي - (L0-01)",
+  //               "value": 8
+  //           },
+  //           {
+  //               "name": "ك 100 (الشهيد درويش) - (L0-05)",
+  //               "value": 5
+  //           },
+  //           {
+  //               "name": "تل المخروطي - (L0-01)",
+  //               "value": 4
+  //           }
+  //       ]
+  //   },
+  //   {
+  //       "name": "ك 15 حرس حدود بري",
+  //       "series": [
+  //           {
+  //               "name": "ك 100 (الشهيد درويش) - (L0-05)",
+  //               "value": 12
+  //           },
+  //           {
+  //               "name": "تل المخروطي - (L0-01)",
+  //               "value": 4
+  //           }
+  //       ]
+  //   }
+  // ];
   view: [number,number] = [550, 360];
 
   // options
@@ -108,7 +108,7 @@ export class BattelionUnitComponent {
     name: 'customScheme',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#5AA454', '#C7B42C', '#AAAAAA']
+    domain: ['#b7e4c7', '#95d5b2', '#74c69d', '#2d6a4f', '#081c15', '#1b4332', '#52b788', '#40916c', '#d8f3dc']
   };
 
   constructor(private dashboardService: DashboardService) {}
@@ -142,7 +142,7 @@ export class BattelionUnitComponent {
   getBatUnitVisits() {
     this.subscription = this.dashboardService.getBatUnitVisit().subscribe(
       (data: any) => {
-        // this.visits = data;
+        this.visits = data;
         console.log('Bat Unit Visits:', this.visits);
       },
       (error: any) => {

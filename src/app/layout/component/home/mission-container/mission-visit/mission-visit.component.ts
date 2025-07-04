@@ -43,7 +43,7 @@ export class MissionVisitComponent implements OnChanges {
   newVisit: Visit = { id: 0 };
   visitId: number | null = null;
   battelionOptions: { id: number; name: string; label: string }[] = [];
-  unitOptions: { id: string; name: string; label: string }[] = [];
+  unitOptions: any[] = [];
   previewImage: string | null = null;
   previewDialog = false;
   uploadUrl = '';
@@ -63,6 +63,7 @@ export class MissionVisitComponent implements OnChanges {
   noImage = {
     'width': '500px'
   };
+  selectedUnit = "L0-03";
 
   constructor(private visitService: MissionVisitService, private confirmationService: ConfirmationService,
     private messageService: MessageService, private sanitizer: DomSanitizer,
@@ -71,8 +72,8 @@ export class MissionVisitComponent implements OnChanges {
   ngOnInit() {
     // Initial load of battelion and unit options
     this.spinner.show();
-    this.loadVisitsForMission();
-    this.getBattelionOptions();
+    // this.loadVisitsForMission();
+    // this.getBattelionOptions();
     this.getUnitOptions();
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -105,12 +106,14 @@ export class MissionVisitComponent implements OnChanges {
   }
 
   getUnitOptions() {
-    this.visitService.getUnits().subscribe((units: Unit[]) => {
-      this.unitOptions = units.map(unit => ({
-        id: unit.id,
-        name: unit.name || '',
-        label: (unit.name || '') + ' (' + unit.id + ')'
-      }));
+    this.visitService.getUnits(this.missionId).subscribe((units: Unit[]) => {
+      this.unitOptions = units;
+      console.log(this.unitOptions);
+      // this.unitOptions = units.map(unit => ({
+      //   id: unit.id,
+      //   name: unit.name || '',
+      //   label: (unit.name || '') + ' (' + unit.id + ')'
+      // }));
     });
   }
 
@@ -123,10 +126,13 @@ export class MissionVisitComponent implements OnChanges {
   }
 
   onEditVisit(visit: Visit) {
+    this.getUnitOptions();
     this.isEditMode = true;
     this.displayDialog = true;
     // Clone and convert date/time strings to Date objects for the form
     this.newVisit = { ...visit };
+    this.newVisit.unit_id = visit.unit_id;
+    console.log(this.newVisit);
     if (this.newVisit.visit_date && typeof this.newVisit.visit_date === 'string') {
       this.newVisit.visit_date = new Date(this.newVisit.visit_date);
     }
@@ -143,8 +149,7 @@ export class MissionVisitComponent implements OnChanges {
       d.setHours(Number(h), Number(m), Number(s || 0), 0);
       this.newVisit.to_time = d;
     }
-    this.getBattelionOptions();
-    this.getUnitOptions();
+    // this.getBattelionOptions();
   }
 
   saveVisit() {

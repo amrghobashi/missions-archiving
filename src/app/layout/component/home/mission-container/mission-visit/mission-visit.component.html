@@ -27,7 +27,7 @@
       <!-- <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td> -->
       <td [style]="{'text-align': 'center'}">{{ visit.visit_seq }}</td>
       <td [style]="{'text-align': 'center'}">{{ visit.battelion_name }}</td>
-      <td [style]="{'text-align': 'center'}">{{ getUnitName(visit.unit_id) }}</td>
+      <td [style]="{'text-align': 'center'}">({{ visit.unit_id }}) {{ visit.unit_name }}</td>
       <td [style]="{'text-align': 'center'}">{{ visit.visit_date | date:'yyyy/MM/dd' }}</td>
       <td [style]="{'text-align': 'center'}">
         <button pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path, visit.id)"></button>
@@ -55,13 +55,25 @@
 <p-dialog [header]="isEditMode ? 'تعديل الزيارة' : 'إضافة زيارة'" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{width: '450px', height: 'auto', 'min-height': '520px'}" dir="rtl">
   <form (ngSubmit)="saveVisit()" #visitForm="ngForm">
     <div class="flex flex-col gap-3">
-      <div class="p-field">
+      <!-- <div class="p-field">
         <label for="battelionId" class="block mb-1">الكتيبة</label>
         <p-select [(ngModel)]="newVisit.battelion_id" [filter]="true" filterBy="label" [options]="battelionOptions" optionLabel="label" optionValue="id" name="battelion_id" inputId="battelion_id" class="w-full" required></p-select>
-      </div>
+      </div> -->
       <div class="p-field">
         <label for="unitId" class="block mb-1">الوحدة</label>
-        <p-select [(ngModel)]="newVisit.unit_id" [filter]="true" filterBy="label" [options]="unitOptions" optionLabel="label" optionValue="id" name="unit_id" inputId="unit_id" class="w-full" required></p-select>
+        <p-select
+          [options]="unitOptions"
+          [(ngModel)]="newVisit.unit_id"
+          [group]="true"
+          [filter]="true"
+          filterBy="label"
+          class="w-full"
+          name="unit_id"
+          inputId="unit_id"
+          optionLabel="label"
+          optionValue="value"
+          required>
+        </p-select>
       </div>
       <div class="p-field">
         <label for="visitDate" class="block mb-1">تاريخ الزيارة</label>

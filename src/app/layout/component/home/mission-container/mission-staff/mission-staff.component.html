@@ -15,7 +15,7 @@
       <ng-template pTemplate="body" let-staff let-rowIndex="rowIndex">
         <tr>
           <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
-          <td [style]="{'text-align': 'center'}">{{ staff.arabic_name }}</td>
+          <td [style]="{'text-align': 'center'}"> {{ staff.staff_desc }} / {{ staff.arabic_name }}</td>
           <td>
             <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteStaff(staff)"></button>
           </td>

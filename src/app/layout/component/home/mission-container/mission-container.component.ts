@@ -37,7 +37,7 @@ export class MissionContainerComponent {
             this.tabsHeader = 'مهمة رقم ' + mission.id + ' في ' + mission.zone_name + ' في الفترة من ' + formatDate(mission.start_date) + ' إلى ' + formatDate(mission.end_date);
             setTimeout(() => {
               this.activeTabValue = '1'; // Set the active tab to the first tab
-            }, 100);
+            }, 1000);
           } else {
             this.mission = undefined
             this.tabsHeader = '';

@@ -16,8 +16,8 @@ export class MissionBattelionService {
     return this.http.get<MissionBattelion[]>(this.API_URL + 'mission-battelions?mission_id=' + missionId);
   }
 
-  getBattelions(): Observable<Battelion[]> {
-    return this.http.get<Battelion[]>(this.API_URL + 'battelion-list');
+  getBattelions(missionId: string | undefined): Observable<Battelion[]> {
+    return this.http.get<Battelion[]>(this.API_URL + 'battelion-list?mission_id=' + missionId);
   }
 
   addBattelion(battelion: MissionBattelion): Observable<any> {

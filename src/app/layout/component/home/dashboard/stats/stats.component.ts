@@ -27,11 +27,11 @@ export class StatsComponent {
   isDoughnut: boolean = false;
 
   colorScheme = {
-      name: 'customScheme',
-      selectable: true,
-      group: ScaleType.Ordinal,
-      domain: ['#5AA454', '#E44D25', '#CFC0BB', '#7aa3e5', '#a8385d', '#aae3f5']
-    };
+    name: 'customScheme',
+    selectable: true,
+    group: ScaleType.Ordinal,
+    domain: ['#b7e4c7', '#95d5b2', '#74c69d', '#2d6a4f', '#081c15', '#1b4332', '#52b788', '#40916c', '#d8f3dc']
+  };
 
   constructor(private dashboardService: DashboardService) { }
 
