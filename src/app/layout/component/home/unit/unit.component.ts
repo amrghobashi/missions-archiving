@@ -15,13 +15,14 @@ import { DatePipe } from '@angular/common';
 import { SelectModule } from 'primeng/select';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
   selector: 'app-unit',
   standalone: true,
   imports: [TableModule, ButtonModule, DialogModule, FormsModule, InputTextModule,
     ConfirmDialogModule, ToastModule, NgxSpinnerModule, SelectModule,
-    IconFieldModule, InputIconModule],
+    IconFieldModule, InputIconModule, DatePickerModule],
   providers: [ConfirmationService, MessageService, DatePipe],
   templateUrl: './unit.component.html',
   styleUrl: './unit.component.scss'
@@ -86,8 +87,8 @@ export class UnitComponent {
     return {
       id: '',
       name: '',
-      unit_lat: '',
-      unit_long: '',
+      warranty_start_date: '',
+      warranty_end_date: '',
       secret_no: '',
       battelion_id: undefined,
       battelion_name: '',
@@ -110,6 +111,20 @@ export class UnitComponent {
   }
 
   saveUnit() {
+    if (this.newUnit.warranty_start_date) {
+      const dateObj = new Date(this.newUnit.warranty_start_date);
+      const year = dateObj.getFullYear();
+      const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+      const day = dateObj.getDate().toString().padStart(2, '0');
+      this.newUnit.warranty_start_date = `${year}-${month}-${day}`;
+    }
+    if (this.newUnit.warranty_end_date) {
+      const dateObj = new Date(this.newUnit.warranty_end_date);
+      const year = dateObj.getFullYear();
+      const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+      const day = dateObj.getDate().toString().padStart(2, '0');
+      this.newUnit.warranty_end_date = `${year}-${month}-${day}`;
+    }
     if (this.isEditMode) {
       // this.spinner.show();
       this.unitService.updateUnit(this.newUnit).subscribe(

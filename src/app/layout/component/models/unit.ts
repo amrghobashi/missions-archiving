@@ -1,8 +1,8 @@
 export interface Unit {
   id: string;
   name?: string;
-  unit_lat?: string;
-  unit_long?: string;
+  warranty_start_date?: string;
+  warranty_end_date?: string;
   secret_no?: string;
   battelion_id?: number;
   battelion_name?: string;

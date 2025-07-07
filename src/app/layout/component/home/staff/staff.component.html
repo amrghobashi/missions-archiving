@@ -46,9 +46,9 @@
                             field="staff_desc"></p-sortIcon></th> -->
                     <th pSortableColumn="active" [style]="{'text-align': 'center'}">نشط <p-sortIcon
                             field="active"></p-sortIcon></th>
-                    <th pSortableColumn="start_date" [style]="{'text-align': 'center'}">تاريخ البداية <p-sortIcon
+                    <th pSortableColumn="start_date" [style]="{'text-align': 'center'}">بداية التعيين <p-sortIcon
                             field="start_date"></p-sortIcon></th>
-                    <th pSortableColumn="end_date" [style]="{'text-align': 'center'}">تاريخ النهاية <p-sortIcon
+                    <th pSortableColumn="end_date" [style]="{'text-align': 'center'}">نهاية التعيين <p-sortIcon
                             field="end_date"></p-sortIcon></th>
                     <th></th>
                 </tr>
@@ -101,12 +101,12 @@
                 <input pInputText [(ngModel)]="newStaff.english_name" name="english_name" class="w-full" />
             </div>
             <div class="p-field">
-                <label class="block mb-1">تاريخ بداية التوظيف</label>
+                <label class="block mb-1">بداية التعيين</label>
                 <p-datepicker [(ngModel)]="newStaff.start_date" [style]="{'width': '100%'}" name="start_date"
                     inputId="startDate" dateFormat="yy/mm/dd" class="w-full"></p-datepicker>
             </div>
             <div class="p-field">
-                <label class="block mb-1">تاريخ نهاية التوظيف</label>
+                <label class="block mb-1">نهاية التعيين</label>
                 <p-datepicker [(ngModel)]="newStaff.end_date" [style]="{'width': '100%'}" name="end_date"
                     inputId="endDate" dateFormat="yy/mm/dd" class="w-full"></p-datepicker>
             </div>

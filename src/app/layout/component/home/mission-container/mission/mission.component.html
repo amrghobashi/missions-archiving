@@ -28,7 +28,7 @@
             field="end_date"></p-sortIcon></th>
         <th pSortableColumn="purpose_id" [style]="{'text-align': 'center'}">الغرض <p-sortIcon
             field="purpose_id"></p-sortIcon></th>
-        <th pSortableColumn="destination_city" [style]="{'text-align': 'center'}">المدينة المستهدفة <p-sortIcon
+        <th pSortableColumn="destination_city" [style]="{'text-align': 'center'}">المدينة <p-sortIcon
             field="destination_city"></p-sortIcon></th>
         <th></th>
       </tr>
@@ -86,7 +86,7 @@
         </span>
       </div>
       <div>
-        <label class="block mb-1">المدينة المستهدفة</label>
+        <label class="block mb-1">المدينة</label>
         <input type="text" pInputText [(ngModel)]="newMission.destination_city" name="destination_city" required
           class="w-full" />
       </div>

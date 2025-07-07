@@ -30,7 +30,8 @@
       <td [style]="{'text-align': 'center'}">({{ visit.unit_id }}) {{ visit.unit_name }}</td>
       <td [style]="{'text-align': 'center'}">{{ visit.visit_date | date:'yyyy/MM/dd' }}</td>
       <td [style]="{'text-align': 'center'}">
-        <button pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path, visit.id)"></button>
+        <button *ngIf="visit.report_path" pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path, visit.id)"></button>
+        <button *ngIf="!visit.report_path" pButton icon="pi pi-upload" class="p-button-text p-button-sm p-button-danger" (click)="previewReport(visit.report_path, visit.id)"></button>
       </td>
       <td>
         <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditVisit(visit)"></button>

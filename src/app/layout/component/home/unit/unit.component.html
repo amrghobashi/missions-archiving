@@ -1,10 +1,8 @@
 <div class="card" dir="rtl" style="margin: 0.5rem; margin-bottom: 1rem;">
     <div style="position: relative;">
         <p-table #units [value]="unitList" dataKey="id" class="p-datatable-sm" [paginator]="true" [rows]="10"
-            [globalFilterFields]="['id','name', 'unit_lat', 'unit_long', 'secret_no', 'battelion_name', 'unit_type_name']"
-            [rowsPerPageOptions]="[5,10,20]"
-            [showCurrentPageReport]="true"
-            [tableStyle]="{ 'min-width': '50rem' }"
+            [globalFilterFields]="['id','name', 'warranty_start_date', 'warranty_end_date', 'secret_no', 'battelion_name', 'unit_type_name']"
+            [rowsPerPageOptions]="[5,10,20]" [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
             currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} وحدة">
             <ng-template #caption>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -26,56 +24,50 @@
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th pSortableColumn="id" [style]="{'text-align': 'center'}">كود الوحدة <p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="name" [style]="{'text-align': 'center'}">اسم الوحدة <p-sortIcon field="name"></p-sortIcon></th>
-                    <th pSortableColumn="unit_type_id" [style]="{'text-align': 'center'}">نوع الوحدة <p-sortIcon field="unit_type_id"></p-sortIcon></th>
-                    <!-- <th pSortableColumn="battelion_id" [style]="{'text-align': 'center'}">الكتيبة <p-sortIcon field="battelion_id"></p-sortIcon></th> -->
-<!-- <div style="display: flex;"> -->
+                    <th pSortableColumn="id" [style]="{'text-align': 'center'}">كود الوحدة <p-sortIcon
+                        field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name" [style]="{'text-align': 'center'}">اسم الوحدة <p-sortIcon
+                            field="name"></p-sortIcon></th>
+                            
+                            <th pSortableColumn="battelion_id" [style]="{'text-align': 'center', 'align-items': 'center'}">
+                                <div class="flex items-center" style="justify-content: center;">
+                                    الكتيبة
+                                    <p-columnFilter [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                                        field="battelion_id" matchMode="equals" display="menu">
+                                        <ng-template #filter let-value let-filter="filterCallback">
+                                            <p-select optionLabel="name" optionValue="id" [ngModel]="value"
+                                                [options]="battelions" (onChange)="filter($event.value)"
+                                                placeholder="إختر كتيبة" styleClass="w-full">
+                                                <ng-template let-option #item>
+                                                    <span>{{ option.name }}</span>
+                                                </ng-template>
+                                            </p-select>
+                                        </ng-template>
+                                    </p-columnFilter>
+                                </div>
+                            </th>
+                            <th pSortableColumn="secret_no" [style]="{'text-align': 'center'}">السرية</th>
 
-    <th pSortableColumn="battelion_id" [style]="{'text-align': 'center', 'align-items': 'center'}">
-<!-- <p-sortIcon field="battelion_id" ></p-sortIcon> -->
-<div class="flex items-center" style="justify-content: center;">
-الكتيبة
-<p-columnFilter [showMatchModes]="false" [showOperator]="false" [showAddButton]="false" field="battelion_id"
-matchMode="equals" display="menu">
-<ng-template #filter let-value let-filter="filterCallback">
-<p-select optionLabel="name" optionValue="id" [ngModel]="value" [options]="battelions"
-    (onChange)="filter($event.value)" placeholder="إختر كتيبة" styleClass="w-full">
-    <ng-template let-option #item>
-        <span>{{ option.name }}</span>
-    </ng-template>
-</p-select>
-</ng-template>
-</p-columnFilter>
-</div>
-</th>
-<!-- </div> -->
-
-                    <!-- <th pSortableColumn="phase_id" [style]="{'text-align': 'center'}">المرحلة <p-sortIcon field="phase_id"></p-sortIcon></th> -->
-
-                    
-<th pSortableColumn="phase_id" [style]="{'text-align': 'center', 'align-items': 'center'}">
-    <!-- <p-sortIcon field="phase_id" [style]="{'margin': 'auto'}"></p-sortIcon> -->
-    <div class="flex items-center" style="justify-content: center;">
-        المرحلة
-        <p-columnFilter [showMatchModes]="false" [showOperator]="false" [showAddButton]="false" field="phase_id"
-            matchMode="equals" display="menu">
-            <ng-template #filter let-value let-filter="filterCallback">
-                <p-select optionLabel="name" optionValue="id" [ngModel]="value" [options]="phases"
-                    (onChange)="filter($event.value)" placeholder="إختر مرحلة" styleClass="w-full">
-                    <ng-template let-option #item>
-                        <span>{{ option.name }}</span>
-                    </ng-template>
-                </p-select>
-            </ng-template>
-        </p-columnFilter>
-    </div>
-</th>
-
-                    
-                    <th pSortableColumn="unit_lat" [style]="{'text-align': 'center'}">خط العرض</th>
-                    <th pSortableColumn="unit_long" [style]="{'text-align': 'center'}">خط الطول</th>
-                    <th pSortableColumn="secret_no" [style]="{'text-align': 'center'}">المكان</th>
+                    <th pSortableColumn="unit_type_id" [style]="{'text-align': 'center'}">نوع الوحدة <p-sortIcon
+                            field="unit_type_id"></p-sortIcon></th>
+                    <th pSortableColumn="phase_id" [style]="{'text-align': 'center', 'align-items': 'center'}">
+                        <div class="flex items-center" style="justify-content: center;">
+                            المرحلة
+                            <p-columnFilter [showMatchModes]="false" [showOperator]="false" [showAddButton]="false"
+                                field="phase_id" matchMode="equals" display="menu">
+                                <ng-template #filter let-value let-filter="filterCallback">
+                                    <p-select optionLabel="name" optionValue="id" [ngModel]="value" [options]="phases"
+                                        (onChange)="filter($event.value)" placeholder="إختر مرحلة" styleClass="w-full">
+                                        <ng-template let-option #item>
+                                            <span>{{ option.name }}</span>
+                                        </ng-template>
+                                    </p-select>
+                                </ng-template>
+                            </p-columnFilter>
+                        </div>
+                    </th>
+                    <th pSortableColumn="warranty_start_date" [style]="{'text-align': 'center'}">بداية الضمان</th>
+                    <th pSortableColumn="warranty_end_date" [style]="{'text-align': 'center'}">نهاية الضمان</th>
                     <th></th>
                 </tr>
             </ng-template>
@@ -83,15 +75,18 @@ matchMode="equals" display="menu">
                 <tr>
                     <td [style]="{'text-align': 'center'}">{{ unit.id }}</td>
                     <td [style]="{'text-align': 'center'}">{{ unit.name }}</td>
-                    <td [style]="{'text-align': 'center'}">{{ unit.unit_type_name }}</td>
                     <td [style]="{'text-align': 'center'}">{{ unit.battelion_name }}</td>
-                    <td [style]="{'text-align': 'center'}">{{ unit.phase_name }}</td>
-                    <td [style]="{'text-align': 'center'}">{{ unit.unit_lat }}</td>
-                    <td [style]="{'text-align': 'center'}">{{ unit.unit_long }}</td>
                     <td [style]="{'text-align': 'center'}">{{ unit.secret_no }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ unit.unit_type_name }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ unit.phase_name }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ unit.warranty_start_date }}</td>
+                    <td [style]="{'text-align': 'center'}">{{ unit.warranty_end_date }}</td>
                     <td style="text-align: center;">
-                        <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditUnit(unit)"></button>
-                        <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteUnit(unit)"></button>
+                        <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-button-sm"
+                            (click)="onEditUnit(unit)"></button>
+                        <button pButton type="button" icon="pi pi-trash"
+                            class="p-button-text p-button-sm p-button-danger"
+                            (click)="confirmDeleteUnit(unit)"></button>
                     </td>
                 </tr>
             </ng-template>
@@ -101,7 +96,8 @@ matchMode="equals" display="menu">
                 </tr>
             </ng-template>
         </p-table>
-        <ngx-spinner bdColor="rgb(51 51 51 / 45%)" size="medium" color="#fff" type="ball-scale-multiple" [fullScreen]="false">
+        <ngx-spinner bdColor="rgb(51 51 51 / 45%)" size="medium" color="#fff" type="ball-scale-multiple"
+            [fullScreen]="false">
         </ngx-spinner>
     </div>
 </div>
@@ -120,32 +116,44 @@ matchMode="equals" display="menu">
             </div>
             <div class="p-field">
                 <label class="block mb-1">نوع الوحدة</label>
-                <p-select [options]="unitTypes" optionLabel="name" optionValue="id" [(ngModel)]="newUnit.unit_type_id" name="unit_type_id" placeholder="اختر نوع الوحدة" required class="w-full"></p-select>
+                <p-select [options]="unitTypes" optionLabel="name" optionValue="id" [(ngModel)]="newUnit.unit_type_id"
+                    name="unit_type_id" placeholder="اختر نوع الوحدة" required class="w-full"></p-select>
             </div>
             <div class="p-field">
                 <label class="block mb-1">الكتيبة</label>
-                <p-select [options]="battelions" optionLabel="name" optionValue="id" [(ngModel)]="newUnit.battelion_id" name="battelion_id" placeholder="اختر الكتيبة" required class="w-full"></p-select>
+                <p-select [options]="battelions" optionLabel="name" optionValue="id" [(ngModel)]="newUnit.battelion_id"
+                    name="battelion_id" placeholder="اختر الكتيبة" required class="w-full"></p-select>
             </div>
             <div class="p-field">
                 <label class="block mb-1">المرحلة</label>
-                <p-select [options]="phases" optionLabel="name" optionValue="id" [(ngModel)]="newUnit.phase_id" name="phase_id" placeholder="اختر المرحلة" required class="w-full"></p-select>
+                <p-select [options]="phases" optionLabel="name" optionValue="id" [(ngModel)]="newUnit.phase_id"
+                    name="phase_id" placeholder="اختر المرحلة" required class="w-full"></p-select>
             </div>
             <div class="p-field">
-                <label class="block mb-1">خط العرض</label>
-                <input pInputText [(ngModel)]="newUnit.unit_lat" name="unit_lat" class="w-full" />
+                <label class="block mb-1">بداية الضمان</label>
+                <!-- <input pInputText [(ngModel)]="newUnit.warranty_start_date" name="warranty_start_date" class="w-full" /> -->
+                <p-datepicker [(ngModel)]="newUnit.warranty_start_date" [style]="{'width': '100%'}"
+                    name="warranty_start_date" inputId="warranty_start_date" dateFormat="yy/mm/dd" class="w-full"
+                    required>
+                </p-datepicker>
             </div>
             <div class="p-field">
-                <label class="block mb-1">خط الطول</label>
-                <input pInputText [(ngModel)]="newUnit.unit_long" name="unit_long" class="w-full" />
+                <label class="block mb-1">نهاية الضمان</label>
+                <!-- <input pInputText [(ngModel)]="newUnit.warranty_end_date" name="warranty_end_date" class="w-full" /> -->
+                <p-datepicker [(ngModel)]="newUnit.warranty_end_date" [style]="{'width': '100%'}"
+                    name="warranty_end_date" inputId="warranty_end_date" dateFormat="yy/mm/dd" class="w-full"
+                    required>
+                </p-datepicker>
             </div>
             <div class="p-field">
-                <label class="block mb-1">رقم السرية </label>
+                <label class="block mb-1"> السرية </label>
                 <input pInputText [(ngModel)]="newUnit.secret_no" name="secret_no" class="w-full" />
             </div>
         </div>
         <div class="flex justify-end gap-2 mt-4" style="margin-top: 2rem;">
             <button pButton type="button" label="إلغاء" class="p-button-text" (click)="cancelDialog()"></button>
-            <button pButton type="submit" [label]="isEditMode ? 'تعديل' : 'حفظ'" [disabled]="!unitForm.form.valid"></button>
+            <button pButton type="submit" [label]="isEditMode ? 'تعديل' : 'حفظ'"
+                [disabled]="!unitForm.form.valid"></button>
         </div>
     </form>
 </p-dialog>
