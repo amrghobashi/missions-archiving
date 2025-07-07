@@ -2,14 +2,14 @@
   <p-tabs [(value)]="activeTabValue">
     <p-tablist>
       <p-tab value="0">
-        <i class="pi pi-flag-fill" style="transform: scalex(-1);"></i>المهمات
+        <i class="pi pi-flag-fill" style="transform: scalex(-1);"></i>المأموريات
       </p-tab>
       <p-tab value="1" [disabled]="!mission">
         <i class="pi pi-list" style="transform: scalex(-1);"></i>التفاصيل
       </p-tab>
       <div style="margin: auto; font-size: large;">
         <p *ngIf="mission" style="color: #008861;">{{tabsHeader}}</p>
-        <p *ngIf="!mission"> قم بإختيار مهمة لعرض التفاصيل</p>
+        <p *ngIf="!mission"> قم بإختيار مأمورية لعرض التفاصيل</p>
       </div>
     </p-tablist>
     <p-tabpanels>
@@ -34,7 +34,7 @@
               <app-mission-car *ngIf="mission?.id" [missionId]="mission?.id"></app-mission-car>
             </div>
             <div class="card" dir="rtl" style="margin: 0.5rem; margin-bottom: 1rem;">
-              <app-mission-visit *ngIf="mission?.id" [missionId]="mission?.id"></app-mission-visit>              
+              <app-mission-visit *ngIf="mission?.id" [missionId]="mission?.id" [mission]="mission"></app-mission-visit>              
             </div>
           </div>
         </div>

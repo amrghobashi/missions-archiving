@@ -13,11 +13,11 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { FileUploadModule, FileUpload, FileUploadEvent, FileBeforeUploadEvent } from 'primeng/fileupload';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Visit } from '../../../models/visit';
-import { Battelion } from '../../../models/battelion';
 import { Unit } from '../../../models/unit';
 import { environment } from '../../../../../../environments/environment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { Mission } from '../../../models/mission';
 
 interface UploadEvent {
     originalEvent: Event;
@@ -36,13 +36,13 @@ interface UploadEvent {
 })
 export class MissionVisitComponent implements OnChanges {
   @Input() missionId: string | undefined;
+  @Input() mission: Mission | undefined;
 
   visitList: Visit[] = [];
   displayDialog = false;
   isEditMode = false;
   newVisit: Visit = { id: 0 };
   visitId: number | null = null;
-  battelionOptions: { id: number; name: string; label: string }[] = [];
   unitOptions: any[] = [];
   previewImage: string | null = null;
   previewDialog = false;
@@ -63,8 +63,9 @@ export class MissionVisitComponent implements OnChanges {
   noImage = {
     'width': '500px'
   };
-  selectedUnit = "L0-03";
-
+  minDate = new Date();
+  maxDate = new Date();
+  
   constructor(private visitService: MissionVisitService, private confirmationService: ConfirmationService,
     private messageService: MessageService, private sanitizer: DomSanitizer,
     private spinner: NgxSpinnerService) {}
@@ -75,6 +76,8 @@ export class MissionVisitComponent implements OnChanges {
     // this.loadVisitsForMission();
     // this.getBattelionOptions();
     this.getUnitOptions();
+    this.minDate = new Date(this.mission?.start_date || new Date());
+    this.maxDate = new Date(this.mission?.end_date || new Date());
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['missionId'] && this.missionId) {
@@ -95,15 +98,15 @@ export class MissionVisitComponent implements OnChanges {
     );
   }
 
-  getBattelionOptions() {
-    this.visitService.getBattelions().subscribe((battelions: Battelion[]) => {
-      this.battelionOptions = battelions.map(bat => ({
-        id: bat.id,
-        name: bat.name,
-        label: bat.name
-      }));
-    });
-  }
+  // getBattelionOptions() {
+  //   this.visitService.getBattelions().subscribe((battelions: Battelion[]) => {
+  //     this.battelionOptions = battelions.map(bat => ({
+  //       id: bat.id,
+  //       name: bat.name,
+  //       label: bat.name
+  //     }));
+  //   });
+  // }
 
   getUnitOptions() {
     this.visitService.getUnits(this.missionId).subscribe((units: Unit[]) => {
@@ -121,7 +124,6 @@ export class MissionVisitComponent implements OnChanges {
     this.isEditMode = false;
     this.displayDialog = true;
     this.newVisit = { id: 0, mission_id: this.missionId };
-    this.getBattelionOptions();
     this.getUnitOptions();
   }
 

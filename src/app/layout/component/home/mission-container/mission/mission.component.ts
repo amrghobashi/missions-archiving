@@ -110,11 +110,26 @@ export class MissionComponent {
     const startDate = this.rangeDates?.[0];
     const endDate = this.rangeDates?.[1];
 
-    this.newMission.start_date = startDate ? startDate.toISOString().split('T')[0] : '';
-    this.newMission.end_date = endDate ? endDate.toISOString().split('T')[0] : '';
+    if (startDate) {
+      const year = startDate.getFullYear();
+      const month = (startDate.getMonth() + 1).toString().padStart(2, '0');
+      const day = startDate.getDate().toString().padStart(2, '0');
+      this.newMission.start_date = `${year}-${month}-${day}`;
+    } else {
+      this.newMission.start_date = '';
+    }
+
+    if (endDate) {
+      const year = endDate.getFullYear();
+      const month = (endDate.getMonth() + 1).toString().padStart(2, '0');
+      const day = endDate.getDate().toString().padStart(2, '0');
+      this.newMission.end_date = `${year}-${month}-${day}`;
+    } else {
+      this.newMission.end_date = '';
+    }
 
     console.log('Start Date:', this.newMission.start_date);
-    console.log('End Date:', endDate);
+    console.log('End Date:', this.newMission.end_date);
   }
 
   onSelectMission(event: any) {
@@ -163,7 +178,7 @@ export class MissionComponent {
           console.log('Mission updated:', data);
           this.getMissions();
           this.displayAddDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل المهمة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل المأمورية بنجاح' });
         },
         (error: any) => {
           console.error('Error updating mission:', error);
@@ -175,7 +190,7 @@ export class MissionComponent {
           console.log('New mission added:', data);
           this.getMissions();
           this.displayAddDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة المهمة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة المأمورية بنجاح' });
         }
       );
     }
@@ -184,7 +199,7 @@ export class MissionComponent {
   confirmDeleteMission(mission: Mission) {
     this.confirmationService.confirm({
             // target: event.target as EventTarget,
-            message: 'هل أنت متأكد أنك تريد حذف هذه المهمة؟',
+            message: 'هل أنت متأكد أنك تريد حذف هذه المأمورية؟',
             header: 'تأكيد الحذف',
             icon: 'pi pi-info-circle',
             rejectLabel: 'إلغاء',
@@ -213,7 +228,7 @@ export class MissionComponent {
         this.missions = this.missions.filter(m => m.id !== id);
         this.selectedMission = this.emptyMission;
         this.missionService.selectedMission.next(this.emptyMission);
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف المهمة' });
+        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف المأمورية' });
       },
       (error: any) => {
         console.error('Error deleting mission:', error);

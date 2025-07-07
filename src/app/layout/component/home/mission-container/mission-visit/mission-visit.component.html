@@ -77,7 +77,10 @@
       </div>
       <div class="p-field">
         <label for="visitDate" class="block mb-1">تاريخ الزيارة</label>
-        <p-datepicker [(ngModel)]="newVisit.visit_date" [style]="{'width': '100%'}" name="visit_date" inputId="visitDate" dateFormat="yy/mm/dd" class="w-full" required></p-datepicker>
+        <p-datepicker [(ngModel)]="newVisit.visit_date" [style]="{'width': '100%'}"
+          name="visit_date" inputId="visitDate" dateFormat="yy/mm/dd" class="w-full"
+          required [minDate]="minDate" [maxDate]="maxDate" [defaultDate]="minDate">
+        </p-datepicker>
       </div>
       <br>
       <div class="p-field flex gap-2">

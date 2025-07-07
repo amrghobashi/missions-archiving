@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   //local----------------------
-  API_URL: 'http://localhost:8000/api/',
-  API_FILES: 'http://localhost:8000/storage/',
+  API_URL: 'http://localhost/atscApi/public/api/',
+  API_FILES: 'http://localhost/atscApi/public/storage/',
   //production---------------------
   // API_URL: 'http://analysis/test_app/public/api/',
   // API_FILES: 'http://analysis/test_app/public/images/',

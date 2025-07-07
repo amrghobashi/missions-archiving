@@ -19,10 +19,10 @@ export class AppMenu {
                 label: 'القائمة الرئيسية',
                 icon: 'pi pi-fw pi-home',
                 items: [
-                    { label: 'المهمات', icon: 'pi pi-fw pi-flag', routerLink: ['/'] },
-                    { label: 'الموظفين', icon: 'pi pi-fw pi-users', routerLink: ['/staff'] },
-                    { label: 'الوحدات', icon: 'pi pi-fw pi-map', routerLink: ['/unit'] },
                     { label: 'الإحصائيات', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/dashboard'] },
+                    { label: 'المأموريات', icon: 'pi pi-fw pi-flag', routerLink: ['/mission'] },
+                    { label: 'FSR', icon: 'pi pi-fw pi-users', routerLink: ['/staff'] },
+                    { label: 'الوحدات', icon: 'pi pi-fw pi-map', routerLink: ['/unit'] },
                 ]
             },
             // {
@@ -148,7 +148,7 @@ export class AppMenu {
             //         {
             //             label: 'View Source',
             //             icon: 'pi pi-fw pi-github',
-            //             url: 'https://github.com/primefaces/sakai-ng',
+            //             url: 'https://github.com/primefaces/missions',
             //             target: '_blank'
             //         }
             //     ]
