@@ -89,7 +89,7 @@ export class MissionStaffComponent implements OnChanges {
       (data) => {
         this.getStaff();
         this.displayDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة عدد ' + this.selectedStaffs.length + ' موظف بنجاح' });
+        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة عدد ' + this.selectedStaffs.length + ' FSR بنجاح' });
       },
       (error) => { console.error('Error adding staff:', error); }
     );
@@ -97,7 +97,7 @@ export class MissionStaffComponent implements OnChanges {
 
   confirmDeleteStaff(staff: Staff) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذا الموظف؟',
+      message: 'هل أنت متأكد أنك تريد حذف هذا الFSR؟',
       header: 'تأكيد الحذف',
       icon: 'pi pi-info-circle',
       rejectLabel: 'إلغاء',
@@ -112,7 +112,7 @@ export class MissionStaffComponent implements OnChanges {
     this.missionStaffService.deleteStaff(id).subscribe(
       () => {
         this.getStaff();
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الموظف' });
+        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الFSR' });
       },
       (error) => { console.error('Error deleting staff:', error); }
     );

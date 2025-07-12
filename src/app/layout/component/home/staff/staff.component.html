@@ -3,7 +3,7 @@
 <div class="card" dir="rtl" style="margin: 0.5rem; margin-bottom: 1rem;">
 
     <!-- <div class="flex justify-end mb-3">
-        <button pButton type="button" label="إضافة موظف جديد" icon="pi pi-plus" (click)="onAddStaff()"></button>
+        <button pButton type="button" label="إضافة FSR جديد" icon="pi pi-plus" (click)="onAddStaff()"></button>
     </div> -->
     <div style="position: relative;">
         <p-table #staffs [value]="staffList" dataKey="id" editable="true" class="p-datatable-sm" [paginator]="true"
@@ -11,7 +11,7 @@
             [globalFilterFields]="['arabic_name', 'english_name', 'job_title', 'staff_type_name', 'phase_name']"
             [rowsPerPageOptions]="[5,10,20]" [first]="first" [showCurrentPageReport]="true"
             [tableStyle]="{ 'min-width': '50rem' }"
-            currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} موظف">
+            currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} FSR">
             <ng-template #caption>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
@@ -21,11 +21,11 @@
                             </p-inputicon>
                             <input pInputText type="text"
                                 (input)="staffs.filterGlobal($any($event.target).value, 'contains')"
-                                placeholder="البحث عن موظف" />
+                                placeholder="البحث عن FSR" />
                         </p-iconfield>
                     </div>
                     <div class="flex justify-end mb-3">
-                        <button pButton type="button" label="إضافة موظف جديد" icon="pi pi-plus"
+                        <button pButton type="button" label="إضافة FSR جديد" icon="pi pi-plus"
                             (click)="onAddStaff()"></button>
                     </div>
                 </div>
@@ -38,7 +38,7 @@
                             field="english_name"></p-sortIcon></th>
                     <th pSortableColumn="job_title" [style]="{'text-align': 'center'}">المسمى الوظيفي <p-sortIcon
                             field="job_title"></p-sortIcon></th>
-                    <th pSortableColumn="staff_type_id" [style]="{'text-align': 'center'}">نوع الموظف <p-sortIcon
+                    <th pSortableColumn="staff_type_id" [style]="{'text-align': 'center'}">نوع الFSR <p-sortIcon
                             field="staff_type_id"></p-sortIcon></th>
                     <th pSortableColumn="phase_id" [style]="{'text-align': 'center'}">المرحلة <p-sortIcon
                             field="phase_id"></p-sortIcon></th>
@@ -88,7 +88,7 @@
         </ngx-spinner>
     </div>
 </div>
-<p-dialog [header]="isEditMode ? 'تعديل الموظف' : 'إضافة موظف جديد'" [(visible)]="displayDialog" [modal]="true"
+<p-dialog [header]="isEditMode ? 'تعديل الFSR' : 'إضافة FSR جديد'" [(visible)]="displayDialog" [modal]="true"
     [closable]="true" [style]="{width: '450px', height: 'auto', 'min-height': '520px'}" dir="rtl">
     <form (ngSubmit)="saveStaff()" #staffForm="ngForm">
         <div class="flex flex-col gap-3">
@@ -115,7 +115,7 @@
                 <input pInputText [(ngModel)]="newStaff.job_title" name="job_title" class="w-full" />
             </div>
             <div class="p-field">
-                <label class="block mb-1">نوع الموظف</label>
+                <label class="block mb-1">نوع الFSR</label>
                 <span class="p-float-label w-full">
                     <p-select [(ngModel)]="newStaff.staff_type_id" [filter]="true" filterBy="name"
                         [options]="staffTypes" optionLabel="name" optionValue="id" name="staff_type_id"

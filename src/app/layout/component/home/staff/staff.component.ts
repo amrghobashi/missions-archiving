@@ -132,12 +132,12 @@ export class StaffComponent {
           this.displayDialog = false;
           // this.spinner.show();
           this.loadStaff();
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل بيانات الموظف بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل بيانات الFSR بنجاح' });
           // this.spinner.hide();
         },
         (error: any) => {
           this.spinner.hide();
-          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تعديل بيانات الموظف' });
+          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تعديل بيانات الFSR' });
         }
       );
     } else {
@@ -147,11 +147,11 @@ export class StaffComponent {
           this.loadStaff();
           this.displayDialog = false;
           // this.spinner.hide();
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة الموظف بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة الFSR بنجاح' });
         },
         (error: any) => {
           this.spinner.hide();
-          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل إضافة الموظف' });
+          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل إضافة الFSR' });
         }
       );
     }
@@ -175,7 +175,7 @@ export class StaffComponent {
 
   confirmDeleteStaff(staff: Staff) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذا الموظف؟',
+      message: 'هل أنت متأكد أنك تريد حذف هذا الFSR؟',
       header: 'تأكيد الحذف',
       icon: 'pi pi-info-circle',
       rejectLabel: 'إلغاء',
@@ -192,11 +192,11 @@ export class StaffComponent {
       () => {
         this.loadStaff();
         this.spinner.hide();
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الموظف' });
+        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الFSR' });
       },
       (error: any) => {
         this.spinner.hide();
-        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل حذف الموظف' });
+        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل حذف الFSR' });
       }
     );
   }
