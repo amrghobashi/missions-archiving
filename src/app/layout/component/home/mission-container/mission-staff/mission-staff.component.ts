@@ -97,7 +97,7 @@ export class MissionStaffComponent implements OnChanges {
 
   confirmDeleteStaff(staff: Staff) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذا الFSR؟',
+      message: 'هل أنت متأكد أنك تريد حذف هذا ال FSR؟',
       header: 'تأكيد الحذف',
       icon: 'pi pi-info-circle',
       rejectLabel: 'إلغاء',
@@ -112,7 +112,7 @@ export class MissionStaffComponent implements OnChanges {
     this.missionStaffService.deleteStaff(id).subscribe(
       () => {
         this.getStaff();
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الFSR' });
+        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف ال FSR' });
       },
       (error) => { console.error('Error deleting staff:', error); }
     );

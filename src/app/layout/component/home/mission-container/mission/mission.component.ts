@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -16,12 +17,16 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '../../../../../../environments/environment';
+import { FileUploadModule, FileUpload, FileUploadEvent, FileBeforeUploadEvent } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-mission',
   standalone: true,
   imports: [TableModule, ButtonModule, DialogModule, FormsModule, SelectModule, DatePickerModule,
-    InputTextModule, ConfirmDialogModule, ToastModule, NgxSpinnerModule
+    InputTextModule, ConfirmDialogModule, ToastModule, NgxSpinnerModule,
+    FileUploadModule, FileUpload, CommonModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './mission.component.html',
@@ -29,7 +34,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 })
 export class MissionComponent {
   constructor(private missionService: MissionService, private confirmationService: ConfirmationService,
-    private messageService: MessageService, private spinner: NgxSpinnerService
+    private messageService: MessageService, private spinner: NgxSpinnerService,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
@@ -60,6 +66,15 @@ export class MissionComponent {
   isEditMode = false;
   first = 0;
   rows = 10;
+  previewMissionReportDialog = false;
+  missionPreviewUrl: string | null = null;
+  safeMissionPreviewUrl: SafeResourceUrl | null = null;
+  API_MISSION_REPORT_URL = environment.API_URL + 'upload-mission-report'; // Adjust endpoint as needed
+  API_MISSION_FILES = environment.API_FILES; // Adjust as needed for file serving
+  hasImage = { 'width': '90%', 'height': '90%' };
+  noImage = { 'width': '500px' };
+  selectedMissionForReport: Mission | null = null;
+
   
   getMissions() {
     this.spinner.show();
@@ -238,5 +253,36 @@ export class MissionComponent {
 
   cancelAddMission() {
     this.displayAddDialog = false;
+  }
+
+  previewMissionReport(mission: Mission) {
+    this.selectedMissionForReport = mission;
+    this.missionPreviewUrl = mission.report_path ? this.API_MISSION_FILES + mission.report_path : null;
+    this.previewMissionReportDialog = true;
+    if (this.missionPreviewUrl && this.isPdf(this.missionPreviewUrl)) {
+      this.safeMissionPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.missionPreviewUrl);
+    } else {
+      this.safeMissionPreviewUrl = null;
+    }
+  }
+
+  isImage(path: string | null): boolean {
+    return !!path && (path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png') || path.endsWith('.gif'));
+  }
+
+  isPdf(path: string | null): boolean {
+    return !!path && path.endsWith('.pdf');
+  }
+
+  onBeforeMissionReportUpload(event: any) {
+    if (this.selectedMissionForReport) {
+      event.formData.append('mission_id', this.selectedMissionForReport.id);
+    }
+  }
+
+  onMissionReportUpload(event: any) {
+    this.previewMissionReportDialog = false;
+    this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم رفع التقرير بنجاح' });
+    this.getMissions();
   }
 }

@@ -30,3 +30,9 @@ body, .p-component {
 // .p-tabpanel { /* Or a container class around your p-tabs if you have one */
 //   --p-tabs-tabpanel-transition-duration: 5000ms;
 // }
+
+.p-select-option-group {
+    background: #858585 !important;
+    color: white !important;
+    border-radius: 7px !important;
+}

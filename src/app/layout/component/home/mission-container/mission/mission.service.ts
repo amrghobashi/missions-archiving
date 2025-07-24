@@ -40,4 +40,8 @@ export class MissionService {
   deleteMission(id: string) {
     return this.http.delete(this.API_URL + 'missions/' + id);
   }
+
+  uploadMissionReport(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.API_URL + 'upload-mission-report', formData);
+  }
 }

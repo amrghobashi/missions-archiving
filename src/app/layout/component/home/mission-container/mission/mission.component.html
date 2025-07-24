@@ -22,14 +22,15 @@
         </th>
         <th pSortableColumn="zone_id" [style]="{'text-align': 'center'}">المنطقة <p-sortIcon
             field="zone_id"></p-sortIcon></th>
-        <th pSortableColumn="start_date" [style]="{'text-align': 'center'}">تاريخ البداية <p-sortIcon
+        <th pSortableColumn="start_date" [style]="{'text-align': 'center'}">بداية المأمورية<p-sortIcon
             field="start_date"></p-sortIcon></th>
-        <th pSortableColumn="end_date" [style]="{'text-align': 'center'}">تاريخ النهاية <p-sortIcon
+        <th pSortableColumn="end_date" [style]="{'text-align': 'center'}">نهاية المأمورية<p-sortIcon
             field="end_date"></p-sortIcon></th>
         <th pSortableColumn="purpose_id" [style]="{'text-align': 'center'}">الغرض <p-sortIcon
             field="purpose_id"></p-sortIcon></th>
         <th pSortableColumn="destination_city" [style]="{'text-align': 'center'}">المدينة <p-sortIcon
             field="destination_city"></p-sortIcon></th>
+        <th [style]="{'text-align': 'center'}">التقرير</th>
         <th></th>
       </tr>
     </ng-template>
@@ -42,6 +43,10 @@
         <td [style]="{'text-align': 'center'}">{{ mission.end_date }}</td>
         <td [style]="{'text-align': 'center'}">{{ mission.purpose_name }}</td>
         <td [style]="{'text-align': 'center'}">{{ mission.destination_city }}</td>
+        <td [style]="{'text-align': 'center'}">
+          <button *ngIf="mission.report_path" pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewMissionReport(mission)"></button>
+          <button *ngIf="!mission.report_path" pButton icon="pi pi-upload" class="p-button-text p-button-sm p-button-danger" (click)="previewMissionReport(mission)"></button>
+        </td>
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm"
             (click)="onEditMission(mission)"></button>
@@ -52,7 +57,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="7" style="text-align: center; color: #888;">لا توجد بيانات</td>
+        <td colspan="8" style="text-align: center; color: #888;">لا توجد بيانات</td>
       </tr>
     </ng-template>
   </p-table>
@@ -98,6 +103,27 @@
         autofocus></button>
     </div>
   </form>
+</p-dialog>
+
+<p-dialog header="معاينة تقرير المأمورية" [(visible)]="previewMissionReportDialog" [modal]="true" [closable]="true"
+    [style]="missionPreviewUrl && isPdf(missionPreviewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : {}"
+    [ngStyle]="missionPreviewUrl && isPdf(missionPreviewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (missionPreviewUrl ? hasImage : noImage)" dir="rtl">
+  <div>
+    <div *ngIf="missionPreviewUrl">
+      <img *ngIf="isImage(missionPreviewUrl)" [src]="missionPreviewUrl" alt="تقرير المأمورية" style="max-width: 100%; border:1px solid #ccc;" />
+      <a *ngIf="isPdf(missionPreviewUrl)" [href]="missionPreviewUrl" target="_blank">عرض PDF</a>
+      <iframe *ngIf="isPdf(missionPreviewUrl) && safeMissionPreviewUrl"
+          [src]="safeMissionPreviewUrl"
+          frameborder="0"
+          width="100%"
+          style="height: 67vh; border:1px solid #ccc; display: block; margin: 0 auto;"></iframe>
+    </div>
+    <p-fileupload name="report" url="{{API_MISSION_REPORT_URL}}" (onBeforeUpload)="onBeforeMissionReportUpload($event)"
+        (onUpload)="onMissionReportUpload($event)" [multiple]="false" accept="image/*,application/pdf"
+        maxFileSize="1000000" mode="advanced" [style]="{'justify-items': 'center'}"
+        chooseLabel="إختر ملف" uploadLabel="رفع الملف" cancelLabel="إلغاء">
+    </p-fileupload>
+  </div>
 </p-dialog>
 
 <p-toast></p-toast>

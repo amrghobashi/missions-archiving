@@ -38,7 +38,7 @@
                             field="english_name"></p-sortIcon></th>
                     <th pSortableColumn="job_title" [style]="{'text-align': 'center'}">المسمى الوظيفي <p-sortIcon
                             field="job_title"></p-sortIcon></th>
-                    <th pSortableColumn="staff_type_id" [style]="{'text-align': 'center'}">نوع الFSR <p-sortIcon
+                    <th pSortableColumn="staff_type_id" [style]="{'text-align': 'center'}">نوع ال FSR <p-sortIcon
                             field="staff_type_id"></p-sortIcon></th>
                     <th pSortableColumn="phase_id" [style]="{'text-align': 'center'}">المرحلة <p-sortIcon
                             field="phase_id"></p-sortIcon></th>
@@ -88,7 +88,7 @@
         </ngx-spinner>
     </div>
 </div>
-<p-dialog [header]="isEditMode ? 'تعديل الFSR' : 'إضافة FSR جديد'" [(visible)]="displayDialog" [modal]="true"
+<p-dialog [header]="isEditMode ? 'تعديل ال FSR' : 'إضافة FSR جديد'" [(visible)]="displayDialog" [modal]="true"
     [closable]="true" [style]="{width: '450px', height: 'auto', 'min-height': '520px'}" dir="rtl">
     <form (ngSubmit)="saveStaff()" #staffForm="ngForm">
         <div class="flex flex-col gap-3">
@@ -115,7 +115,7 @@
                 <input pInputText [(ngModel)]="newStaff.job_title" name="job_title" class="w-full" />
             </div>
             <div class="p-field">
-                <label class="block mb-1">نوع الFSR</label>
+                <label class="block mb-1">نوع ال FSR</label>
                 <span class="p-float-label w-full">
                     <p-select [(ngModel)]="newStaff.staff_type_id" [filter]="true" filterBy="name"
                         [options]="staffTypes" optionLabel="name" optionValue="id" name="staff_type_id"

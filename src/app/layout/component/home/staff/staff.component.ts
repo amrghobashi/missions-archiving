@@ -132,12 +132,12 @@ export class StaffComponent {
           this.displayDialog = false;
           // this.spinner.show();
           this.loadStaff();
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل بيانات الFSR بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل بيانات ال FSR بنجاح' });
           // this.spinner.hide();
         },
         (error: any) => {
           this.spinner.hide();
-          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تعديل بيانات الFSR' });
+          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تعديل بيانات ال FSR' });
         }
       );
     } else {
@@ -147,11 +147,11 @@ export class StaffComponent {
           this.loadStaff();
           this.displayDialog = false;
           // this.spinner.hide();
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة الFSR بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة ال FSR بنجاح' });
         },
         (error: any) => {
           this.spinner.hide();
-          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل إضافة الFSR' });
+          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل إضافة ال FSR' });
         }
       );
     }
@@ -175,7 +175,7 @@ export class StaffComponent {
 
   confirmDeleteStaff(staff: Staff) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذا الFSR؟',
+      message: 'هل أنت متأكد أنك تريد حذف هذا ال FSR؟',
       header: 'تأكيد الحذف',
       icon: 'pi pi-info-circle',
       rejectLabel: 'إلغاء',
@@ -192,11 +192,11 @@ export class StaffComponent {
       () => {
         this.loadStaff();
         this.spinner.hide();
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الFSR' });
+        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف ال FSR' });
       },
       (error: any) => {
         this.spinner.hide();
-        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل حذف الFSR' });
+        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل حذف ال FSR' });
       }
     );
   }

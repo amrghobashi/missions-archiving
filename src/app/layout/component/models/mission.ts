@@ -7,4 +7,5 @@ export interface Mission {
   purpose_id: number;
   purpose_name?: string;
   destination_city: string;
+  report_path?: string;
 }
