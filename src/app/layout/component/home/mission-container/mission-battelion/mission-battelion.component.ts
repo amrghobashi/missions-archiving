@@ -82,30 +82,30 @@ export class MissionBattelionComponent implements OnChanges {
         () => {
           this.loadBattelionsForMission(this.missionId!);
           this.displayDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل الكتيبة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Battalion updated successfully' });
         },
-        (error: any) => { console.error('Error updating battelion:', error); }
+        (error: any) => { console.error('Error updating battalion:', error); }
       );
     } else {
       this.battelionService.addBattelion({ ...this.newBattelion, mission_id: this.missionId }).subscribe(
         () => {
           this.loadBattelionsForMission(this.missionId!);
           this.displayDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة الكتيبة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Battalion added successfully' });
         },
-        (error: any) => { console.error('Error adding battelion:', error); }
+        (error: any) => { console.error('Error adding battalion:', error); }
       );
     }
   }
 
   confirmDeleteBattelion(battelion: MissionBattelion) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذه الكتيبة؟',
-      header: 'تأكيد الحذف',
+      message: 'Are you sure you want to delete this battalion?',
+      header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
-      rejectLabel: 'إلغاء',
-      rejectButtonProps: { label: 'إلغاء', severity: 'secondary', outlined: true },
-      acceptButtonProps: { label: 'حذف', severity: 'danger' },
+      rejectLabel: 'Cancel',
+      rejectButtonProps: { label: 'Cancel', severity: 'secondary', outlined: true },
+      acceptButtonProps: { label: 'Delete', severity: 'danger' },
       accept: () => { this.onDeleteBattelion(battelion.id); },
       reject: () => {}
     });
@@ -115,9 +115,9 @@ export class MissionBattelionComponent implements OnChanges {
     this.battelionService.deleteBattelion(id).subscribe(
       () => {
         this.loadBattelionsForMission(this.missionId!);
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الكتيبة' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Battalion deleted successfully' });
       },
-      (error: any) => { console.error('Error deleting battelion:', error); }
+      (error: any) => { console.error('Error deleting battalion:', error); }
     );
   }
 

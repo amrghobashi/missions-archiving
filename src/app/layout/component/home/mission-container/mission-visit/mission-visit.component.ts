@@ -87,12 +87,21 @@ export class MissionVisitComponent implements OnChanges {
     }
   }
 
+  // Helper to parse dd/MM/yyyy to Date
+  parseDDMMYYYY(dateStr: string): Date {
+    const [day, month, year] = dateStr.split('/');
+    return new Date(+year, +month - 1, +day);
+  }
+
   loadVisitsForMission() {
     this.visitService.getVisitsByMissionId(this.missionId).subscribe(
       (data: Visit[]) => {
         this.spinner.hide();
-        this.visitList = data;
-        console.log('Visits for mission loaded:', data);
+        this.visitList = data.map((visit: Visit) => ({
+          ...visit,
+          visit_date: typeof visit.visit_date === 'string' && visit.visit_date.includes('/') ? this.parseDDMMYYYY(visit.visit_date) : visit.visit_date
+        }));
+        console.log('Visits for mission loaded:', this.visitList);
       },
       (error: any) => { console.error('Error fetching visits for mission:', error); }
     );
@@ -134,8 +143,9 @@ export class MissionVisitComponent implements OnChanges {
     // Clone and convert date/time strings to Date objects for the form
     this.newVisit = { ...visit };
     this.newVisit.unit_id = visit.unit_id;
-    console.log(this.newVisit);
-    if (this.newVisit.visit_date && typeof this.newVisit.visit_date === 'string') {
+    if (this.newVisit.visit_date && typeof this.newVisit.visit_date === 'string' && this.newVisit.visit_date.includes('/')) {
+      this.newVisit.visit_date = this.parseDDMMYYYY(this.newVisit.visit_date);
+    } else if (this.newVisit.visit_date && typeof this.newVisit.visit_date === 'string') {
       this.newVisit.visit_date = new Date(this.newVisit.visit_date);
     }
     if (this.newVisit.from_time && typeof this.newVisit.from_time === 'string') {
@@ -180,7 +190,7 @@ export class MissionVisitComponent implements OnChanges {
         () => {
           this.loadVisitsForMission();
           this.displayDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل الزيارة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Visit updated successfully' });
         },
         (error: any) => { console.error('Error updating visit:', error); }
       );
@@ -189,7 +199,7 @@ export class MissionVisitComponent implements OnChanges {
         () => {
           this.loadVisitsForMission();
           this.displayDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة الزيارة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Visit added successfully' });
         },
         (error: any) => { console.error('Error adding visit:', error); }
       );
@@ -198,12 +208,12 @@ export class MissionVisitComponent implements OnChanges {
 
   confirmDeleteVisit(visit: Visit) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذه الزيارة؟',
-      header: 'تأكيد الحذف',
+      message: 'Are you sure you want to delete this visit?',
+      header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
-      rejectLabel: 'إلغاء',
-      rejectButtonProps: { label: 'إلغاء', severity: 'secondary', outlined: true },
-      acceptButtonProps: { label: 'حذف', severity: 'danger' },
+      rejectLabel: 'Cancel',
+      rejectButtonProps: { label: 'Cancel', severity: 'secondary', outlined: true },
+      acceptButtonProps: { label: 'Delete', severity: 'danger' },
       accept: () => { this.onDeleteVisit(visit.id); },
       reject: () => {}
     });
@@ -213,7 +223,7 @@ export class MissionVisitComponent implements OnChanges {
     this.visitService.deleteVisit(id).subscribe(
       () => {
         this.loadVisitsForMission();
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الزيارة' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Visit deleted successfully' });
       },
       (error: any) => { console.error('Error deleting visit:', error); }
     );
@@ -248,7 +258,7 @@ export class MissionVisitComponent implements OnChanges {
       const file = event.files[0];
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'application/pdf'];
       if (!allowedTypes.includes(file.type)) {
-        this.fileUploadError = 'الملف يجب أن يكون صورة أو PDF فقط';
+        this.fileUploadError = 'File must be an image or PDF only';
         this.filePreviewUrl = null;
         return;
       }
@@ -280,7 +290,7 @@ export class MissionVisitComponent implements OnChanges {
       const file = event.files[0];
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg', 'application/pdf'];
       if (!allowedTypes.includes(file.type)) {
-        this.fileUploadError = 'الملف يجب أن يكون صورة أو PDF فقط';
+        this.fileUploadError = 'File must be an image or PDF only';
         return;
       }
       const formData = new FormData();
@@ -302,7 +312,7 @@ export class MissionVisitComponent implements OnChanges {
           }
         },
         () => {
-          this.fileUploadError = 'فشل رفع الملف';
+          this.fileUploadError = 'File upload failed';
         }
       );
     }
@@ -315,7 +325,7 @@ export class MissionVisitComponent implements OnChanges {
     // this.uploadedFiles.length = 0; // Clear previous uploaded files
     this.fileUploadError = null; // Reset error message
     this.loadVisitsForMission(); // Reload visits to reflect the new upload
-    this.messageService.add({ severity: 'info', summary: 'تم', detail: 'تم رفع الملف بنجاح' });
+    this.messageService.add({ severity: 'info', summary: 'Done', detail: 'File uploaded successfully' });
     // Optionally, set the uploaded file path to newVisit.report_path if your backend returns it
     if (event.files) {
       this.uploadedFiles.push(...event.files);
@@ -342,11 +352,11 @@ export class MissionVisitComponent implements OnChanges {
         this.previewUrl = null;
         this.safePreviewUrl = null;
         this.filePreviewUrl = null;
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الملف بنجاح' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'File deleted successfully' });
         this.loadVisitsForMission();
       },
       (error: any) => {
-        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل حذف الملف' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'File deletion failed' });
         console.error('Error deleting file:', error);
       }
     );

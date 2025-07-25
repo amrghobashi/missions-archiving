@@ -12,11 +12,9 @@
     transition: left var(--layout-section-transition-duration);
     display: flex;
     align-items: center;
-    flex-direction: row-reverse; // reverse the order of children
 
     .layout-topbar-logo-container {
-        margin-left: 2rem; // add spacing between logo and actions
-        margin-right: 0; // remove right margin
+        // width: 20rem;
         display: flex;
         align-items: center;
     }
@@ -75,8 +73,7 @@
     }
 
     .layout-menu-button {
-        margin-left: 0.5rem; // switch margin to left
-        margin-right: 0;
+        margin-right: 0.5rem;
     }
 
     .layout-topbar-menu-button {
@@ -84,8 +81,7 @@
     }
 
     .layout-topbar-actions {
-        margin-right: auto; // push actions to the left in row-reverse
-        margin-left: 0;
+        margin-left: auto;
         display: flex;
         gap: 1rem;
     }
@@ -104,16 +100,18 @@
 @media (max-width: 991px) {
     .layout-topbar {
         padding: 0 2rem;
-        flex-direction: row-reverse; // maintain reverse on mobile
 
         .layout-topbar-logo-container {
-            margin-left: 2rem;
-            margin-right: 0;
+            width: auto;
         }
 
         .layout-menu-button {
-            margin-right: 0;
-            margin-left: 0.5rem;
+            margin-left: 0;
+            margin-right: 0.5rem;
+        }
+
+        .layout-topbar-menu-button {
+            display: inline-flex;
         }
 
         .layout-topbar-menu {
@@ -126,8 +124,7 @@
                 0px 1px 4px rgba(0, 0, 0, 0.08);
             border-radius: var(--content-border-radius);
             padding: 1rem;
-            left: 2rem; // move menu dropdown to left side
-            right: auto;
+            right: 2rem;
             top: 4rem;
             min-width: 15rem;
             border: 1px solid var(--surface-border);

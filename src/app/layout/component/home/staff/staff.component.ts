@@ -87,7 +87,7 @@ export class StaffComponent {
       },
       (error: any) => {
         this.spinner.hide();
-        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تحميل بيانات الطاقم' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load staff data' });
       }
     );
   }
@@ -132,12 +132,12 @@ export class StaffComponent {
           this.displayDialog = false;
           // this.spinner.show();
           this.loadStaff();
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل بيانات ال FSR بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'FSR data updated successfully' });
           // this.spinner.hide();
         },
         (error: any) => {
           this.spinner.hide();
-          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تعديل بيانات ال FSR' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update FSR data' });
         }
       );
     } else {
@@ -147,11 +147,11 @@ export class StaffComponent {
           this.loadStaff();
           this.displayDialog = false;
           // this.spinner.hide();
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة ال FSR بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'FSR added successfully' });
         },
         (error: any) => {
           this.spinner.hide();
-          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل إضافة ال FSR' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add FSR' });
         }
       );
     }
@@ -164,23 +164,23 @@ export class StaffComponent {
       () => {
         this.spinner.hide();
         // this.loadStaff(); // Reload staff to reflect changes
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تحديث حالة النشاط بنجاح' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Active status updated successfully' });
       },
       (error: any) => {
         this.spinner.hide();
-        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تحديث حالة النشاط' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update active status' });
       }
     );
   }
 
   confirmDeleteStaff(staff: Staff) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذا ال FSR؟',
-      header: 'تأكيد الحذف',
+      message: 'Are you sure you want to delete this FSR?',
+      header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
-      rejectLabel: 'إلغاء',
-      rejectButtonProps: { label: 'إلغاء', severity: 'secondary', outlined: true },
-      acceptButtonProps: { label: 'حذف', severity: 'danger' },
+      rejectLabel: 'Cancel',
+      rejectButtonProps: { label: 'Cancel', severity: 'secondary', outlined: true },
+      acceptButtonProps: { label: 'Delete', severity: 'danger' },
       accept: () => { this.onDeleteStaff(staff.id); },
       reject: () => {}
     });
@@ -192,11 +192,11 @@ export class StaffComponent {
       () => {
         this.loadStaff();
         this.spinner.hide();
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف ال FSR' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'FSR deleted successfully' });
       },
       (error: any) => {
         this.spinner.hide();
-        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل حذف ال FSR' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete FSR' });
       }
     );
   }

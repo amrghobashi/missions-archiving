@@ -112,7 +112,7 @@ export class MissionCarComponent implements OnChanges {
         () => {
           this.loadCarsForMission(this.missionId!);
           this.displayDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل السيارة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Car updated successfully' });
         },
         (error: any) => { console.error('Error updating car:', error); }
       );
@@ -121,7 +121,7 @@ export class MissionCarComponent implements OnChanges {
         () => {
           this.loadCarsForMission(this.missionId!);
           this.displayDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة السيارة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Car added successfully' });
         },
         (error: any) => { console.error('Error adding car:', error); }
       );
@@ -130,12 +130,12 @@ export class MissionCarComponent implements OnChanges {
 
   confirmDeleteCar(car: MissionCar) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذه السيارة؟',
-      header: 'تأكيد الحذف',
+      message: 'Are you sure you want to delete this car?',
+      header: 'Delete Confirmation',
       icon: 'pi pi-success-circle',
-      rejectLabel: 'إلغاء',
-      rejectButtonProps: { label: 'إلغاء', severity: 'secondary', outlined: true },
-      acceptButtonProps: { label: 'حذف', severity: 'danger' },
+      rejectLabel: 'Cancel',
+      rejectButtonProps: { label: 'Cancel', severity: 'secondary', outlined: true },
+      acceptButtonProps: { label: 'Delete', severity: 'danger' },
       accept: () => { this.onDeleteCar(car.id); },
       reject: () => {}
     });
@@ -145,7 +145,7 @@ export class MissionCarComponent implements OnChanges {
     this.carService.deleteCar(id).subscribe(
       () => {
         this.loadCarsForMission(this.missionId!);
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف السيارة' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Car deleted successfully' });
       },
       (error: any) => { console.error('Error deleting car:', error); }
     );

@@ -1,6 +1,6 @@
 <div style="justify-content: space-between; display: flex;">
-  <h5 style="margin: 0;">الزيارات </h5>
-  <button pButton type="button" label="إضافة زيارة" icon="pi pi-plus" (click)="onAddVisit()"></button>
+  <h5 style="margin: 0;">Visits</h5>
+  <button pButton type="button" label="Add Visit" icon="pi pi-plus" (click)="onAddVisit()"></button>
 </div>
 <div style="position: relative;">
 <p-table [value]="visitList" dataKey="id"
@@ -9,16 +9,16 @@
     [first]="first"
     [showCurrentPageReport]="true"
     [tableStyle]="{ 'min-width': '50rem' }"
-    currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} زيارة"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} visits"
     >
   <ng-template pTemplate="header">
     <tr>
-      <th [style]="{'text-align': 'center','width': '50px'}">م</th>
-      <!-- <th pSortableColumn="visit_seq" [style]="{'text-align': 'center'}">تسلسل الزيارة <p-sortIcon field="visit_seq"></p-sortIcon></th> -->
-      <th pSortableColumn="battelion_name" [style]="{'text-align': 'center'}">الكتيبة <p-sortIcon field="battelion_name"></p-sortIcon></th>
-      <th pSortableColumn="unit_id" [style]="{'text-align': 'center'}">الوحدة <p-sortIcon field="unit_id"></p-sortIcon></th>
-      <th pSortableColumn="visit_date" [style]="{'text-align': 'center'}">التاريخ  <p-sortIcon field="visit_date"></p-sortIcon></th>
-      <th [style]="{'text-align': 'center'}">التقرير </th>
+      <th [style]="{'text-align': 'center','width': '50px'}">#</th>
+      <!-- <th pSortableColumn="visit_seq" [style]="{'text-align': 'center'}">Visit Sequence <p-sortIcon field="visit_seq"></p-sortIcon></th> -->
+      <th pSortableColumn="battelion_name" [style]="{'text-align': 'center'}">Battalion <p-sortIcon field="battelion_name"></p-sortIcon></th>
+      <th pSortableColumn="unit_id" [style]="{'text-align': 'center'}">Unit <p-sortIcon field="unit_id"></p-sortIcon></th>
+      <th pSortableColumn="visit_date" [style]="{'text-align': 'center'}">Date  <p-sortIcon field="visit_date"></p-sortIcon></th>
+      <th [style]="{'text-align': 'center'}">Report </th>
       <th></th>
     </tr>
   </ng-template>
@@ -28,7 +28,7 @@
       <td [style]="{'text-align': 'center'}">{{ visit.visit_seq }}</td>
       <td [style]="{'text-align': 'center'}">{{ visit.battelion_name }}</td>
       <td [style]="{'text-align': 'center'}">({{ visit.unit_id }}) {{ visit.unit_name }}</td>
-      <td [style]="{'text-align': 'center'}">{{ visit.visit_date | date:'yyyy/MM/dd' }}</td>
+      <td [style]="{'text-align': 'center'}">{{ visit.visit_date | date:'dd/MM/yy' }}</td>
       <td [style]="{'text-align': 'center'}">
         <button *ngIf="visit.report_path" pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path, visit.id)"></button>
         <button *ngIf="!visit.report_path" pButton icon="pi pi-upload" class="p-button-text p-button-sm p-button-danger" (click)="previewReport(visit.report_path, visit.id)"></button>
@@ -41,7 +41,7 @@
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
-      <td colspan="7" style="text-align: center; color: #888;">لا توجد بيانات</td>
+      <td colspan="7" style="text-align: center; color: #888;">No data available</td>
     </tr>
   </ng-template>
 </p-table>
@@ -53,15 +53,15 @@
 </div>
 
 
-<p-dialog [header]="isEditMode ? 'تعديل الزيارة' : 'إضافة زيارة'" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{width: '450px', height: 'auto', 'min-height': '520px'}" dir="rtl">
+<p-dialog [header]="isEditMode ? 'Edit Visit' : 'Add Visit'" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{width: '450px', height: 'auto', 'min-height': '520px'}">
   <form (ngSubmit)="saveVisit()" #visitForm="ngForm">
     <div class="flex flex-col gap-3">
       <!-- <div class="p-field">
-        <label for="battelionId" class="block mb-1">الكتيبة</label>
+        <label for="battelionId" class="block mb-1">Battalion</label>
         <p-select [(ngModel)]="newVisit.battelion_id" [filter]="true" filterBy="label" [options]="battelionOptions" optionLabel="label" optionValue="id" name="battelion_id" inputId="battelion_id" class="w-full" required></p-select>
       </div> -->
       <div class="p-field">
-        <label for="unitId" class="block mb-1">الوحدة</label>
+        <label for="unitId" class="block mb-1">Unit</label>
         <p-select
           [options]="unitOptions"
           [(ngModel)]="newVisit.unit_id"
@@ -77,51 +77,49 @@
         </p-select>
       </div>
       <div class="p-field">
-        <label for="visitDate" class="block mb-1">تاريخ الزيارة</label>
+        <label for="visitDate" class="block mb-1">Visit Date</label>
         <p-datepicker [(ngModel)]="newVisit.visit_date" [style]="{'width': '100%'}"
-          name="visit_date" inputId="visitDate" dateFormat="yy/mm/dd" class="w-full"
+          name="visit_date" inputId="visitDate" dateFormat="dd/mm/yy" class="w-full"
           required [minDate]="minDate" [maxDate]="maxDate" [defaultDate]="minDate">
         </p-datepicker>
       </div>
       <br>
       <div class="p-field flex gap-2">
         <div style="flex:1">
-          <label for="fromTime" class="block mb-1">من الساعة</label>
+          <label for="fromTime" class="block mb-1">From Time</label>
           <p-datepicker [(ngModel)]="newVisit.from_time" name="from_time" inputId="fromTime" timeOnly="true" hourFormat="12" class="w-full" required></p-datepicker>
         </div>
         <div style="flex:1">
-          <label for="toTime" class="block mb-1">إلى الساعة</label>
+          <label for="toTime" class="block mb-1">To Time</label>
           <p-datepicker [(ngModel)]="newVisit.to_time" name="to_time" inputId="toTime" timeOnly="true" hourFormat="12" class="w-full" required></p-datepicker>
         </div>
       </div>
       <br><br>
     </div>
     <div class="flex justify-end gap-2 mt-4" style="margin-top: 8rem;">
-      <button pButton type="button" label="إلغاء" class="p-button-text" (click)="cancelDialog()"></button>
-      <button pButton type="submit" [label]="isEditMode ? 'تعديل' : 'حفظ'" [disabled]="!visitForm.form.valid" autofocus></button>
+      <button pButton type="button" label="Cancel" class="p-button-text" (click)="cancelDialog()"></button>
+      <button pButton type="submit" [label]="isEditMode ? 'Edit' : 'Save'" [disabled]="!visitForm.form.valid" autofocus></button>
     </div>
   </form>
 </p-dialog>
 
-<p-dialog header="معاينة التقرير" [(visible)]="previewDialog" [modal]="true" [closable]="true"
+<p-dialog header="Preview Report" [(visible)]="previewDialog" [modal]="true" [closable]="true"
     [style]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : {}"
-    [ngStyle]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (previewUrl ? hasImage : noImage)" dir="rtl">
+    [ngStyle]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (previewUrl ? hasImage : noImage)">
   <div>
     <div *ngIf="previewUrl">
-      <img *ngIf="isImage(previewUrl)" [src]="previewUrl" alt="تقرير الزيارة" style="max-width: 100%; border:1px solid #ccc;" />
-      <a *ngIf="isPdf(previewUrl)" [href]="previewUrl" target="_blank">عرض PDF</a>
+      <img *ngIf="isImage(previewUrl)" [src]="previewUrl" alt="Visit Report" style="max-width: 100%; border:1px solid #ccc;" />
+      <a *ngIf="isPdf(previewUrl)" [href]="previewUrl" target="_blank">View PDF</a>
       <iframe *ngIf="isPdf(previewUrl) && safePreviewUrl"
           [src]="safePreviewUrl"
           frameborder="0"
           width="100%"
           style="height: 67vh; border:1px solid #ccc; display: block; margin: 0 auto;"></iframe>
-      <!-- <button *ngIf="previewUrl && newVisit.report_path" pButton type="button" label="حذف الملف" icon="pi pi-trash" class="p-button-danger mt-2" (click)="deleteVisitFile()"></button> -->
     </div>
-    <!-- <p-toast /> -->
     <p-fileupload name="report" url="{{API_URL}}" (onBeforeUpload)="onBeforeUpload($event)"
         (onUpload)="onUpload($event)" [multiple]="false" accept="image/*,application/pdf"
         maxFileSize="1000000" mode="advanced" [style]="{'justify-items': 'center'}"
-        chooseLabel="إختر ملف" uploadLabel="رفع الملف" cancelLabel="إلغاء">
+        chooseLabel="Choose File" uploadLabel="Upload File" cancelLabel="Cancel">
         <ng-template #empty>
             <!-- <div>Drag and drop files to here to upload.</div> -->
         </ng-template>

@@ -76,11 +76,21 @@ export class MissionComponent {
   selectedMissionForReport: Mission | null = null;
 
   
+  // Helper to parse dd/MM/yyyy to Date
+  parseDDMMYYYY(dateStr: string): Date {
+    const [day, month, year] = dateStr.split('/');
+    return new Date(+year, +month - 1, +day);
+  }
+
   getMissions() {
     this.spinner.show();
     this.subscription = this.missionService.getMissions().subscribe(
       (data: any) => {
-        this.missions = data;
+        this.missions = data.map((mission: Mission) => ({
+          ...mission,
+          start_date: typeof mission.start_date === 'string' && mission.start_date.includes('/') ? this.parseDDMMYYYY(mission.start_date) : mission.start_date,
+          end_date: typeof mission.end_date === 'string' && mission.end_date.includes('/') ? this.parseDDMMYYYY(mission.end_date) : mission.end_date
+        }));
         this.spinner.hide();
         console.log('Missions fetched successfully:', this.missions);
       },
@@ -166,7 +176,19 @@ export class MissionComponent {
     this.newMission = { ...mission };
     // Set date range for datepicker
     if (mission.start_date && mission.end_date) {
-      this.rangeDates = [new Date(mission.start_date), new Date(mission.end_date)];
+      let startDate: Date;
+      let endDate: Date;
+      if (typeof mission.start_date === 'string' && mission.start_date.includes('/')) {
+        startDate = this.parseDDMMYYYY(mission.start_date);
+      } else {
+        startDate = new Date(mission.start_date);
+      }
+      if (typeof mission.end_date === 'string' && mission.end_date.includes('/')) {
+        endDate = this.parseDDMMYYYY(mission.end_date);
+      } else {
+        endDate = new Date(mission.end_date);
+      }
+      this.rangeDates = [startDate, endDate];
     } else {
       this.rangeDates = [];
     }
@@ -193,7 +215,7 @@ export class MissionComponent {
           console.log('Mission updated:', data);
           this.getMissions();
           this.displayAddDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل المأمورية بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Mission updated successfully' });
         },
         (error: any) => {
           console.error('Error updating mission:', error);
@@ -205,7 +227,7 @@ export class MissionComponent {
           console.log('New mission added:', data);
           this.getMissions();
           this.displayAddDialog = false;
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة المأمورية بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Mission added successfully' });
         }
       );
     }
@@ -214,17 +236,17 @@ export class MissionComponent {
   confirmDeleteMission(mission: Mission) {
     this.confirmationService.confirm({
             // target: event.target as EventTarget,
-            message: 'هل أنت متأكد أنك تريد حذف هذه المأمورية؟',
-            header: 'تأكيد الحذف',
+            message: 'Are you sure you want to delete this mission?',
+            header: 'Delete Confirmation',
             icon: 'pi pi-info-circle',
-            rejectLabel: 'إلغاء',
+            rejectLabel: 'Cancel',
             rejectButtonProps: {
-                label: 'إلغاء',
+                label: 'Cancel',
                 severity: 'secondary',
                 outlined: true,
             },
             acceptButtonProps: {
-                label: 'حذف',
+                label: 'Delete',
                 severity: 'danger',
             },
 
@@ -243,7 +265,7 @@ export class MissionComponent {
         this.missions = this.missions.filter(m => m.id !== id);
         this.selectedMission = this.emptyMission;
         this.missionService.selectedMission.next(this.emptyMission);
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف المأمورية' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Mission deleted successfully' });
       },
       (error: any) => {
         console.error('Error deleting mission:', error);
@@ -282,7 +304,7 @@ export class MissionComponent {
 
   onMissionReportUpload(event: any) {
     this.previewMissionReportDialog = false;
-    this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم رفع التقرير بنجاح' });
+    this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Report uploaded successfully' });
     this.getMissions();
   }
 }

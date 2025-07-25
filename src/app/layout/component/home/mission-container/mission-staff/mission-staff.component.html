@@ -1,14 +1,14 @@
 <div style="justify-content: space-between; display: flex;">
-  <h5 style="margin: 0;">طاقم العمل</h5>
-  <button pButton type="button" label="إضافة FSR" icon="pi pi-plus" (click)="onAddStaff()"></button>
+  <h5 style="margin: 0;">FSR</h5>
+  <button pButton type="button" label="Add FSR" icon="pi pi-plus" (click)="onAddStaff()"></button>
 </div>
 <div style="position: relative;">
     <p-table [value]="staffList" dataKey="id" editable="true" class="p-datatable-sm"
              [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]">
       <ng-template pTemplate="header">
         <tr>
-          <th [style]="{'text-align': 'center','width': '50px'}">م</th>
-          <th pSortableColumn="arabic_name" [style]="{'text-align': 'center', 'width': '80%'}">الإسم  <p-sortIcon field="arabic_name"></p-sortIcon></th>
+          <th [style]="{'text-align': 'center','width': '50px'}">#</th>
+          <th pSortableColumn="arabic_name" [style]="{'text-align': 'center', 'width': '80%'}">Name  <p-sortIcon field="arabic_name"></p-sortIcon></th>
           <th></th>
         </tr>
       </ng-template>
@@ -23,7 +23,7 @@
       </ng-template>
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td colspan="3" style="text-align: center; color: #888;">لا توجد بيانات</td>
+          <td colspan="3" style="text-align: center; color: #888;">No data available</td>
         </tr>
       </ng-template>
     </p-table>
@@ -33,16 +33,14 @@
     </ngx-spinner>
 </div>
 
-<p-dialog [header]="isEditMode ? 'تعديل ال FSR' : 'إضافة FSR'" [(visible)]="displayDialog"
-    [modal]="true" [closable]="true" [style]="{width: '350px', height: '500px'}"
-    dir="rtl">
-  <!-- <form (ngSubmit)="saveStaff()" #staffForm="ngForm"> -->
+<p-dialog [header]="isEditMode ? 'Edit FSR' : 'Add FSR'" [(visible)]="displayDialog"
+    [modal]="true" [closable]="true" [style]="{width: '350px', height: '500px'}">
     <div class="flex flex-col gap-3">
       <div class="p-field">
-        <label for="staffSelect" class="block mb-1"> ال FSR</label>
+        <label for="staffSelect" class="block mb-1"> FSR</label>
         <span class="p-float-label w-full">
             <p-multiselect (onChange)="onStaffChange($event)" [options]="groupedStaffOptions"
-                [group]="true" [(ngModel)]="selectedStaffs" placeholder="إختر طاقم العمل"
+                [group]="true" [(ngModel)]="selectedStaffs" placeholder="Select FSR"
                 scrollHeight="250px" display="chip" styleClass="w-full md:w-80"
                 #multiSelectRef>
             </p-multiselect>
@@ -50,10 +48,9 @@
       </div>
     </div>
     <div class="flex justify-end gap-2 mt-4" style="margin-top: 23rem;">
-      <button pButton type="button" label="إلغاء" class="p-button-text" (click)="cancelDialog()"></button>
-      <button pButton type="submit" label="حفظ"  (click)="saveStaff()" [disabled]="!selectedStaffs || selectedStaffs.length === 0" autofocus></button>
+      <button pButton type="button" label="Cancel" class="p-button-text" (click)="cancelDialog()"></button>
+      <button pButton type="submit" label="Save"  (click)="saveStaff()" [disabled]="!selectedStaffs || selectedStaffs.length === 0" autofocus></button>
     </div>
-  <!-- </form> -->
 </p-dialog>
 
 <p-toast></p-toast>

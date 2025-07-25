@@ -1,22 +1,22 @@
-<div style="justify-content: space-between; display: flex; direction: rtl;">
-  <h5 *ngIf="!date" style="margin: 0;"> {{ selectedUnit? 'زيارات ' + selectedUnit.name + ' / ' + selectedUnit.parent : 'إختر وحدة لعرض التفاصيل' }}</h5>
-  <h5 *ngIf="date" style="margin: 0;"> {{ selectedUnit? 'زيارات ' + selectedUnit.name + ' / ' + selectedUnit.parent + ' خلال الفترة (' + arabicDate + ')' : 'إختر وحدة لعرض التفاصيل' }}</h5>
+<div style="justify-content: space-between; display: flex; direction: ltr;">
+  <h5 *ngIf="!date" style="margin: 0;">{{ selectedUnit ? 'Visits ' + selectedUnit.name + ' / ' + selectedUnit.parent : 'Select a unit to view details' }}</h5>
+  <h5 *ngIf="date" style="margin: 0;">{{ selectedUnit ? 'Visits ' + selectedUnit.name + ' / ' + selectedUnit.parent + ' during period (' + arabicDate + ')' : 'Select a unit to view details' }}</h5>
 </div>
-<div style="position: relative; direction: rtl;">
+<div style="position: relative; direction: ltr;">
   <p-table [value]="visitList" dataKey="id" class="p-datatable-sm"
     [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]"
     [showCurrentPageReport]="true"
     [tableStyle]="{ 'min-width': '50rem' }"
-    currentPageReportTemplate="عرض {first} إلى {last} من إجمالي {totalRecords} زيارة"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} visits"
     [loading]="loading">
     <ng-template pTemplate="header">
       <tr>
-        <th [style]="{'text-align': 'center','width': '50px'}">م</th>
-        <th pSortableColumn="mission_id" [style]="{'text-align': 'center'}">رقم المأمورية <p-sortIcon field="mission_id"></p-sortIcon></th>
-        <th pSortableColumn="visit_date" [style]="{'text-align': 'center'}">التاريخ  <p-sortIcon field="visit_date"></p-sortIcon></th>
-        <th pSortableColumn="from_time" [style]="{'text-align': 'center'}">بداية الزيارة  <p-sortIcon field="from_time"></p-sortIcon></th>
-        <th pSortableColumn="to_time" [style]="{'text-align': 'center'}">نهاية الزيارة<p-sortIcon field="to_time"></p-sortIcon></th>
-        <th [style]="{'text-align': 'center'}">التقرير</th>
+        <th [style]="{'text-align': 'center','width': '50px'}">#</th>
+        <th pSortableColumn="mission_id" [style]="{'text-align': 'center'}">Mission No. <p-sortIcon field="mission_id"></p-sortIcon></th>
+        <th pSortableColumn="visit_date" [style]="{'text-align': 'center'}">Date <p-sortIcon field="visit_date"></p-sortIcon></th>
+        <th pSortableColumn="from_time" [style]="{'text-align': 'center'}">Visit Start <p-sortIcon field="from_time"></p-sortIcon></th>
+        <th pSortableColumn="to_time" [style]="{'text-align': 'center'}">Visit End <p-sortIcon field="to_time"></p-sortIcon></th>
+        <th [style]="{'text-align': 'center'}">Report</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-visit let-rowIndex="rowIndex">
@@ -33,19 +33,19 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="5" style="text-align: center; color: #888;">لا توجد بيانات</td>
+        <td colspan="5" style="text-align: center; color: #888;">No data available</td>
       </tr>
     </ng-template>
   </p-table>
 </div>
 
-<p-dialog header="معاينة التقرير" [(visible)]="previewDialog" [modal]="true" [closable]="true"
+<p-dialog header="Report Preview" [(visible)]="previewDialog" [modal]="true" [closable]="true"
     [style]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : {}"
-    [ngStyle]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (previewUrl ? hasImage : noImage)" dir="rtl">
+    [ngStyle]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (previewUrl ? hasImage : noImage)">
   <div>
     <div *ngIf="previewUrl">
-      <img *ngIf="isImage(previewUrl)" [src]="previewUrl" alt="تقرير الزيارة" style="max-width: 100%; border:1px solid #ccc;" />
-      <a *ngIf="isPdf(previewUrl)" [href]="previewUrl" target="_blank">عرض PDF</a>
+      <img *ngIf="isImage(previewUrl)" [src]="previewUrl" alt="Visit Report" style="max-width: 100%; border:1px solid #ccc;" />
+      <a *ngIf="isPdf(previewUrl)" [href]="previewUrl" target="_blank">View PDF</a>
       <iframe *ngIf="isPdf(previewUrl) && safePreviewUrl"
           [src]="safePreviewUrl"
           frameborder="0"

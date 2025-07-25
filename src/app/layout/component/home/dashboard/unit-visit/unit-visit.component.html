@@ -1,4 +1,4 @@
-<p style="text-align: center;">{{ selectedUnit ? selectedUnit : 'إختر وحدة لعرض التفاصيل' }}</p>
+<p style="text-align: center;">{{ selectedUnit ? selectedUnit : 'Select a unit to view details' }}</p>
 <ngx-charts-bar-vertical
     [view]="view"
     [scheme]="colorScheme"
@@ -8,8 +8,8 @@
     [legend]="false"
     [showXAxisLabel]="false"
     [showYAxisLabel]="false"
-    [xAxisLabel]="'التاريخ'"
-    [yAxisLabel]="'عدد الزيارات'"
+    [xAxisLabel]="'Date'"
+    [yAxisLabel]="'Number of Visits'"
     [showDataLabel]="true"
     [showGridLines]="false"
     [roundDomains]="true"

@@ -89,7 +89,7 @@ export class MissionStaffComponent implements OnChanges {
       (data) => {
         this.getStaff();
         this.displayDialog = false;
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة عدد ' + this.selectedStaffs.length + ' FSR بنجاح' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: this.selectedStaffs.length + ' FSR added successfully' });
       },
       (error) => { console.error('Error adding staff:', error); }
     );
@@ -97,12 +97,12 @@ export class MissionStaffComponent implements OnChanges {
 
   confirmDeleteStaff(staff: Staff) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذا ال FSR؟',
-      header: 'تأكيد الحذف',
+      message: 'Are you sure you want to delete this FSR?',
+      header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
-      rejectLabel: 'إلغاء',
-      rejectButtonProps: { label: 'إلغاء', severity: 'secondary', outlined: true },
-      acceptButtonProps: { label: 'حذف', severity: 'danger' },
+      rejectLabel: 'Cancel',
+      rejectButtonProps: { label: 'Cancel', severity: 'secondary', outlined: true },
+      acceptButtonProps: { label: 'Delete', severity: 'danger' },
       accept: () => { this.onDeleteStaff(staff.id); },
       reject: () => {}
     });
@@ -112,7 +112,7 @@ export class MissionStaffComponent implements OnChanges {
     this.missionStaffService.deleteStaff(id).subscribe(
       () => {
         this.getStaff();
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف ال FSR' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'FSR deleted successfully' });
       },
       (error) => { console.error('Error deleting staff:', error); }
     );

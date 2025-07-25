@@ -57,7 +57,7 @@ export class UnitComponent {
       },
       (error: any) => {
         this.spinner.hide();
-        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تحميل بيانات الوحدات' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load units data' });
       }
     );
   }
@@ -104,10 +104,32 @@ export class UnitComponent {
     this.newUnit = this.emptyUnit();
   }
 
+  // Helper to parse dd/MM/yyyy to Date
+  parseDDMMYYYY(dateStr: string): Date {
+    const [day, month, year] = dateStr.split('/');
+    return new Date(+year, +month - 1, +day);
+  }
+
   onEditUnit(unit: Unit) {
+    this.newUnit = { ...unit };
+    // Parse warranty_start_date if in dd/MM/yyyy format
+    if (unit.warranty_start_date) {
+      if (typeof unit.warranty_start_date === 'string' && unit.warranty_start_date.includes('/')) {
+        this.newUnit.warranty_start_date = this.parseDDMMYYYY(unit.warranty_start_date);
+      } else {
+        this.newUnit.warranty_start_date = new Date(unit.warranty_start_date);
+      }
+    }
+    // Parse warranty_end_date if in dd/MM/yyyy format
+    if (unit.warranty_end_date) {
+      if (typeof unit.warranty_end_date === 'string' && unit.warranty_end_date.includes('/')) {
+        this.newUnit.warranty_end_date = this.parseDDMMYYYY(unit.warranty_end_date);
+      } else {
+        this.newUnit.warranty_end_date = new Date(unit.warranty_end_date);
+      }
+    }
     this.isEditMode = true;
     this.displayDialog = true;
-    this.newUnit = { ...unit };
   }
 
   saveUnit() {
@@ -132,11 +154,11 @@ export class UnitComponent {
           this.loadUnits();
           this.displayDialog = false;
           this.spinner.hide();
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم تعديل الوحدة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Unit updated successfully' });
         },
         (error: any) => {
           // this.spinner.hide();
-          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل تعديل الوحدة' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update unit' });
         }
       );
     } else {
@@ -146,11 +168,11 @@ export class UnitComponent {
           this.loadUnits();
           this.displayDialog = false;
           this.spinner.hide();
-          this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة الوحدة بنجاح' });
+          this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Unit added successfully' });
         },
         (error: any) => {
           // this.spinner.hide();
-          this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل إضافة الوحدة' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add unit' });
         }
       );
     }
@@ -158,12 +180,12 @@ export class UnitComponent {
 
   confirmDeleteUnit(unit: Unit) {
     this.confirmationService.confirm({
-      message: 'هل أنت متأكد أنك تريد حذف هذه الوحدة؟',
-      header: 'تأكيد الحذف',
+      message: 'Are you sure you want to delete this unit?',
+      header: 'Delete Confirmation',
       icon: 'pi pi-info-circle',
-      rejectLabel: 'إلغاء',
-      rejectButtonProps: { label: 'إلغاء', severity: 'secondary', outlined: true },
-      acceptButtonProps: { label: 'حذف', severity: 'danger' },
+      rejectLabel: 'Cancel',
+      rejectButtonProps: { label: 'Cancel', severity: 'secondary', outlined: true },
+      acceptButtonProps: { label: 'Delete', severity: 'danger' },
       accept: () => { this.onDeleteUnit(unit.id); },
       reject: () => {}
     });
@@ -175,11 +197,11 @@ export class UnitComponent {
       () => {
         this.loadUnits();
         this.spinner.hide();
-        this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تم حذف الوحدة' });
+        this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Unit deleted successfully' });
       },
       (error: any) => {
         this.spinner.hide();
-        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل حذف الوحدة' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete unit' });
       }
     );
   }

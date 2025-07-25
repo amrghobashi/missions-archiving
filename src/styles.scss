@@ -7,13 +7,13 @@
 
 body, .p-component {
     margin: 0;
-    font-family: Tajawal-Bold !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   }
   
-  @font-face {
-    font-family: Tajawal-Bold;
-    src: local("Tajawal-Bold"), url(./assets/fonts/Tajawal-Bold/Tajawal-Bold.ttf) format("truetype");
-  }
+  // @font-face {
+  //   font-family: Tajawal-Bold;
+  //   src: local("Tajawal-Bold"), url(./assets/fonts/Tajawal-Bold/Tajawal-Bold.ttf) format("truetype");
+  // }
 
 
 // :root { /* Or body, html - :root is generally preferred for global variables */

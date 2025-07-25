@@ -1,9 +1,9 @@
-<div class="grid grid-cols-12 gap-8" style="direction: rtl;">
-    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+<div class="grid grid-cols-12 gap-8" style="direction: ltr;">
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
         <div class="card mb-0">
             <div class="flex justify-between mb-4">
                 <div>
-                    <span class="block text-muted-color font-medium mb-4">المأموريات</span>
+                    <span class="block text-muted-color font-bold mb-4">Missions</span>
                     <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
                         {{ stats?.missions  }}
                     </div>
@@ -17,11 +17,11 @@
             <span class="text-muted-color">since last visit</span> -->
         </div>
     </div>
-    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
         <div class="card mb-0">
             <div class="flex justify-between mb-4">
                 <div>
-                    <span class="block text-muted-color font-medium mb-4">الزيارات</span>
+                    <span class="block text-muted-color font-bold mb-4">Visits</span>
                     <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
                         {{ stats?.visits  }}
                     </div>
@@ -35,11 +35,11 @@
             <span class="text-muted-color">since last week</span> -->
         </div>
     </div>
-    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+    <div class="col-span-12 lg:col-span-6 xl:col-span-4">
         <div class="card mb-0">
             <div class="flex justify-between mb-4">
                 <div>
-                    <span class="block text-muted-color font-medium mb-4">FSR</span>
+                    <span class="block text-muted-color font-bold mb-4">FSR</span>
                     <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
                         {{ stats?.staffs  }}
                     </div>
@@ -53,11 +53,11 @@
             <span class="text-muted-color">newly registered</span> -->
         </div>
     </div>
-    <div class="col-span-12 lg:col-span-6 xl:col-span-3">
+    <!-- <div class="col-span-12 lg:col-span-6 xl:col-span-4">
         <div class="card mb-0">
             <div class="flex justify-between mb-4">
                 <div>
-                    <span class="block text-muted-color font-medium mb-4">الوحدات</span>
+                    <span class="block text-muted-color font-medium mb-4">Units</span>
                     <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
                         {{ stats?.units  }}
                     </div>
@@ -67,10 +67,8 @@
                     <i class="pi pi-map text-green-500 !text-xl"></i>
                 </div>
             </div>
-            <!-- <span class="text-primary font-medium">85 </span>
-            <span class="text-muted-color">responded</span> -->
         </div>
-    </div>
+    </div> -->
 
 </div>
 <br>
@@ -78,17 +76,17 @@
 
 
 
-<div class="grid grid-cols-12 gap-8" style="direction: rtl;">
+<div class="grid grid-cols-12 gap-8" style="direction: ltr;">
     <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-8" style="direction: ltr;">
         <div class="card mb-0">
-            <span class="block text-muted-color font-medium mb-4" style="direction: rtl;">المأموريات طبقا للغرض</span>
+            <span class="block text-muted-color font-bold mb-4" style="direction: ltr;">Missions by Purpose</span>
             <div class="flex justify-center mb-4">
                 <div>
                     <ngx-charts-pie-grid
                         [view]="purposeView"
                         [scheme]="colorScheme"
                         [results]="purposeStats"
-                        label="الإجمالي"
+                        label="Total"
                         >
                     </ngx-charts-pie-grid>
                 </div>
@@ -99,18 +97,16 @@
     </div>
     <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-4" style="direction: ltr;">
         <div class="card mb-0">
-            <span class="block text-muted-color font-medium mb-4" style="direction: rtl;">المأموريات طبقا للمنطقة</span>
+            <span class="block text-muted-color font-bold mb-4" style="direction: ltr;">Missions by Zone</span>
             <div class="flex justify-center mb-4">
                 <div>
                     <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
-                        
                         <ngx-charts-advanced-pie-chart
                             [view]="zoneView"
                             [scheme]="colorScheme"
                             [results]="zoneStats"
                             [gradient]="gradient"
-                            label="الإجمالي"
-
+                            label="Total"
                             >
                         </ngx-charts-advanced-pie-chart>
                     </div>

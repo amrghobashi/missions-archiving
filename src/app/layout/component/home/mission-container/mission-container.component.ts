@@ -31,10 +31,10 @@ export class MissionContainerComponent {
               const d = new Date(dateStr);
               const day = String(d.getDate()).padStart(2, '0');
               const month = String(d.getMonth() + 1).padStart(2, '0');
-              const year = String(d.getFullYear()).slice(-2);
+              const year = String(d.getFullYear());
               return `${day}-${month}-${year}`;
             };
-            this.tabsHeader = 'مأمورية رقم ' + mission.id + ' في ' + mission.zone_name + ' في الفترة من ' + formatDate(mission.start_date) + ' إلى ' + formatDate(mission.end_date);
+            this.tabsHeader = 'Mission number (' + mission.id + ') in ' + mission.zone_name + ' from ' + formatDate(mission.start_date) + ' to ' + formatDate(mission.end_date);
             setTimeout(() => {
               this.activeTabValue = '1'; // Set the active tab to the first tab
             }, 1000);

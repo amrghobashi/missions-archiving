@@ -16,13 +16,13 @@ export class AppMenu {
     ngOnInit() {
         this.model = [
             {
-                label: 'القائمة الرئيسية',
+                label: 'Main Menu',
                 icon: 'pi pi-fw pi-home',
                 items: [
-                    { label: 'الإحصائيات', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/dashboard'] },
-                    { label: 'المأموريات', icon: 'pi pi-fw pi-flag', routerLink: ['/mission'] },
+                    { label: 'Statistics', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/dashboard'] },
+                    { label: 'Missions', icon: 'pi pi-fw pi-flag', routerLink: ['/mission'] },
                     { label: 'FSR', icon: 'pi pi-fw pi-users', routerLink: ['/staff'] },
-                    { label: 'الوحدات', icon: 'pi pi-fw pi-map', routerLink: ['/unit'] },
+                    { label: 'Units', icon: 'pi pi-fw pi-map', routerLink: ['/unit'] },
                 ]
             },
             // {
