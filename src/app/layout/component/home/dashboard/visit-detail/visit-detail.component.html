@@ -27,8 +27,9 @@
         <td [style]="{'text-align': 'center'}">{{ visit.from_time.slice(0,5) }}</td>
         <td [style]="{'text-align': 'center'}">{{ visit.to_time.slice(0,5) }}</td>
         <td [style]="{'text-align': 'center'}">
-          <button pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path, visit.id)"></button>
-        </td>
+        <button *ngIf="visit.report_path" pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path, visit.id)"></button>
+        <button *ngIf="!visit.report_path" pButton icon="pi pi-minus" class="p-button-text p-button-sm p-button-secondary" disabled></button>
+      </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
