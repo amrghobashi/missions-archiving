@@ -67,18 +67,18 @@ export class VisitDetailComponent implements OnInit {
 
   convertDateRangeToArabic(dateRange: string): string {
     const enToArMonths: { [key: string]: string } = {
-      'Jan': 'يناير',
-      'Feb': 'فبراير',
-      'Mar': 'مارس',
-      'Apr': 'أبريل',
-      'May': 'مايو',
-      'Jun': 'يونيو',
-      'Jul': 'يوليو',
-      'Aug': 'أغسطس',
-      'Sep': 'سبتمبر',
-      'Oct': 'أكتوبر',
-      'Nov': 'نوفمبر',
-      'Dec': 'ديسمبر'
+      'Jan': 'Jan',
+      'Feb': 'Feb',
+      'Mar': 'Mar',
+      'Apr': 'Apr',
+      'May': 'May',
+      'Jun': 'Jun',
+      'Jul': 'Jul',
+      'Aug': 'Aug',
+      'Sep': 'Sep',
+      'Oct': 'Oct',
+      'Nov': 'Nov',
+      'Dec': 'Dec'
     };
     return dateRange.replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (en) => enToArMonths[en]);
 }

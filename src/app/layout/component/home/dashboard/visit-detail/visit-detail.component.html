@@ -1,6 +1,6 @@
 <div style="justify-content: space-between; display: flex; direction: ltr;">
-  <h5 *ngIf="!date" style="margin: 0;">{{ selectedUnit ? 'Visits ' + selectedUnit.name + ' / ' + selectedUnit.parent : 'Select a unit to view details' }}</h5>
-  <h5 *ngIf="date" style="margin: 0;">{{ selectedUnit ? 'Visits ' + selectedUnit.name + ' / ' + selectedUnit.parent + ' during period (' + arabicDate + ')' : 'Select a unit to view details' }}</h5>
+  <h5 *ngIf="!date" style="margin: 0;">{{ selectedUnit ? 'Visits of (' + selectedUnit.name + ') located in (' + selectedUnit.parent + ')' : 'Select a unit to view details' }}</h5>
+  <h5 *ngIf="date" style="margin: 0;">{{ selectedUnit ? 'Visits of (' + selectedUnit.name + ') located in (' + selectedUnit.parent + ') during the period (' + arabicDate + ')' : 'Select a unit to view details' }}</h5>
 </div>
 <div style="position: relative; direction: ltr;">
   <p-table [value]="visitList" dataKey="id" class="p-datatable-sm"
