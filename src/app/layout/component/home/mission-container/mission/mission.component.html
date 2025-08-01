@@ -120,7 +120,7 @@
     </div>
     <p-fileupload name="report" url="{{API_MISSION_REPORT_URL}}" (onBeforeUpload)="onBeforeMissionReportUpload($event)"
         (onUpload)="onMissionReportUpload($event)" [multiple]="false" accept="image/*,application/pdf"
-        maxFileSize="1000000" mode="advanced" [style]="{'justify-items': 'center'}"
+        maxFileSize="5000000" mode="advanced" [style]="{'justify-items': 'center'}"
         chooseLabel="Choose File" uploadLabel="Upload File" cancelLabel="Cancel">
     </p-fileupload>
   </div>
