@@ -31,6 +31,7 @@
         <th pSortableColumn="destination_city" [style]="{'text-align': 'center'}">City <p-sortIcon
             field="destination_city"></p-sortIcon></th>
         <th [style]="{'text-align': 'center'}">Report</th>
+        <th [style]="{'text-align': 'center'}">OJT Report</th>
         <th></th>
       </tr>
     </ng-template>
@@ -46,6 +47,10 @@
         <td [style]="{'text-align': 'center'}">
           <button *ngIf="mission.report_path" pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewMissionReport(mission)"></button>
           <button *ngIf="!mission.report_path" pButton icon="pi pi-upload" class="p-button-text p-button-sm p-button-danger" (click)="previewMissionReport(mission)"></button>
+        </td>
+        <td [style]="{'text-align': 'center'}">
+          <button *ngIf="mission.ojt_report_path" pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewOjtReport(mission)"></button>
+          <button *ngIf="!mission.ojt_report_path" pButton icon="pi pi-upload" class="p-button-text p-button-sm p-button-danger" (click)="previewOjtReport(mission)"></button>
         </td>
         <td>
           <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm"
@@ -120,6 +125,27 @@
     </div>
     <p-fileupload name="report" url="{{API_MISSION_REPORT_URL}}" (onBeforeUpload)="onBeforeMissionReportUpload($event)"
         (onUpload)="onMissionReportUpload($event)" [multiple]="false" accept="image/*,application/pdf"
+        maxFileSize="5000000" mode="advanced" [style]="{'justify-items': 'center'}"
+        chooseLabel="Choose File" uploadLabel="Upload File" cancelLabel="Cancel">
+    </p-fileupload>
+  </div>
+</p-dialog>
+
+<p-dialog header="OJT Report Preview" [(visible)]="previewOjtReportDialog" [modal]="true" [closable]="true"
+    [style]="ojtPreviewUrl && isOjtPdf(ojtPreviewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : {}"
+    [ngStyle]="ojtPreviewUrl && isOjtPdf(ojtPreviewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (ojtPreviewUrl ? hasImage : noImage)">
+  <div>
+    <div *ngIf="ojtPreviewUrl">
+      <img *ngIf="isOjtImage(ojtPreviewUrl)" [src]="ojtPreviewUrl" alt="OJT Report" style="max-width: 100%; border:1px solid #ccc;" />
+      <a *ngIf="isOjtPdf(ojtPreviewUrl)" [href]="ojtPreviewUrl" target="_blank">View PDF</a>
+      <iframe *ngIf="isOjtPdf(ojtPreviewUrl) && safeOjtPreviewUrl"
+          [src]="safeOjtPreviewUrl"
+          frameborder="0"
+          width="100%"
+          style="height: 67vh; border:1px solid #ccc; display: block; margin: 0 auto;"></iframe>
+    </div>
+    <p-fileupload name="ojt_report" url="{{API_MISSION_OJT_REPORT_URL}}" (onBeforeUpload)="onBeforeOjtReportUpload($event)"
+        (onUpload)="onOjtReportUpload($event)" [multiple]="false" accept="image/*,application/pdf"
         maxFileSize="5000000" mode="advanced" [style]="{'justify-items': 'center'}"
         chooseLabel="Choose File" uploadLabel="Upload File" cancelLabel="Cancel">
     </p-fileupload>

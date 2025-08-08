@@ -8,4 +8,5 @@ export interface Mission {
   purpose_name?: string;
   destination_city: string;
   report_path?: string;
+  ojt_report_path?: string;
 }

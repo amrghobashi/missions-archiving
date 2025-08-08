@@ -70,10 +70,18 @@ export class MissionComponent {
   missionPreviewUrl: string | null = null;
   safeMissionPreviewUrl: SafeResourceUrl | null = null;
   API_MISSION_REPORT_URL = environment.API_URL + 'upload-mission-report'; // Adjust endpoint as needed
-  API_MISSION_FILES = environment.API_FILES; // Adjust as needed for file serving
+  API_MISSION_OJT_REPORT_URL = environment.API_URL + 'upload-ojt-report'; // Adjust endpoint as needed
+  API_MISSION_FILES = environment.API_FILES;
+  API_MISSION_OJT_REPORT_FILES = environment.API_FILES;
   hasImage = { 'width': '90%', 'height': '90%' };
   noImage = { 'width': '500px' };
   selectedMissionForReport: Mission | null = null;
+
+  // OJT Report dialog properties
+  previewOjtReportDialog = false;
+  ojtPreviewUrl: string | null = null;
+  safeOjtPreviewUrl: any = null;
+  selectedMissionForOjtReport: Mission | null = null;
 
   
   // Helper to parse dd/MM/yyyy to Date
@@ -292,8 +300,29 @@ export class MissionComponent {
     return !!path && (path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png') || path.endsWith('.gif'));
   }
 
+  // OJT Report dialog helpers
+  isOjtImage(path: string | null): boolean {
+    return !!path && (path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png') || path.endsWith('.gif'));
+  }
+
   isPdf(path: string | null): boolean {
     return !!path && path.endsWith('.pdf');
+  }
+
+  isOjtPdf(path: string | null): boolean {
+    return !!path && path.endsWith('.pdf');
+  }
+
+  previewOjtReport(mission: Mission) {
+    console.log('Previewing OJT report for mission:', mission);
+    this.selectedMissionForOjtReport = mission;
+    this.ojtPreviewUrl = mission.ojt_report_path ? this.API_MISSION_OJT_REPORT_FILES + mission.ojt_report_path : null;
+    this.previewOjtReportDialog = true;
+    if (this.ojtPreviewUrl && this.isOjtPdf(this.ojtPreviewUrl)) {
+      this.safeOjtPreviewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.ojtPreviewUrl);
+    } else {
+      this.safeOjtPreviewUrl = null;
+    }
   }
 
   onBeforeMissionReportUpload(event: any) {
@@ -306,5 +335,17 @@ export class MissionComponent {
     this.previewMissionReportDialog = false;
     this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Report uploaded successfully' });
     this.getMissions();
+  }
+
+  onBeforeOjtReportUpload(event: any) {
+    if (this.selectedMissionForOjtReport) {
+      event.formData.append('mission_id', this.selectedMissionForOjtReport.id);
+    }
+  }
+
+  onOjtReportUpload(event: any) {
+    this.previewOjtReportDialog = false;
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'OJT report uploaded successfully' });
+    this.getMissions(); // Reload missions to reflect the new OJT report
   }
 }

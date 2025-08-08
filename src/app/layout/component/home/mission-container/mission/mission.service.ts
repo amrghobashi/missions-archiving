@@ -44,4 +44,8 @@ export class MissionService {
   uploadMissionReport(formData: FormData): Observable<any> {
     return this.http.post<any>(this.API_URL + 'upload-mission-report', formData);
   }
+
+  uploadOjtReport(formData: FormData): Observable<any> {
+    return this.http.post<any>(this.API_URL + 'upload-ojt-report', formData);
+  }
 }
