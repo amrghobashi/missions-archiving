@@ -4,15 +4,16 @@
     [scheme]="colorScheme"
     [results]="visits"
     [xAxis]="true"
-    [yAxis]="false"
+    [yAxis]="true"
     [legend]="false"
-    [showXAxisLabel]="false"
-    [showYAxisLabel]="false"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
     [xAxisLabel]="'Date'"
-    [yAxisLabel]="'Number of Visits'"
+    [yAxisLabel]="'Visits count'"
     [showDataLabel]="true"
     [showGridLines]="false"
     [roundDomains]="true"
+    [barPadding]="80"
     (select)="onSelect($event)">
 </ngx-charts-bar-vertical>
 

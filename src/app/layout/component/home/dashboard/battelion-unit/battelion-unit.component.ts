@@ -90,18 +90,19 @@ export class BattelionUnitComponent {
   //       ]
   //   }
   // ];
-  view: [number,number] = [550, 360];
+  view: [number,number] = [1400, 360];
 
   // options
   legendPosition: LegendPosition = LegendPosition.Below;
   showXAxis: boolean = true;
   showYAxis: boolean = true;
+  ShowGridLines: boolean = false;
   gradient: boolean = false;
   showLegend: boolean = true;
-  showXAxisLabel: boolean = false;
-  xAxisLabel: string = 'الكتائب';
-  showYAxisLabel: boolean = false;
-  yAxisLabel: string = 'عدد الزيارات';
+  showXAxisLabel: boolean = true;
+  xAxisLabel: string = 'Visits count';
+  showYAxisLabel: boolean = true;
+  yAxisLabel: string = 'Battalions';
   animations: boolean = true;
 
   colorScheme = {
@@ -126,12 +127,14 @@ export class BattelionUnitComponent {
     setChartSize(width: number): void {
       console.log('Setting chart size based on window width:', width);
       if (width > 1500) {
-        this.view = [525, 400]; 
+        this.view = [1400, 400]; 
       }
       else if (width > 1300) {
-        this.view = [500, 360];
+        this.view = [1200, 360];
       } else if (width > 1200) {
-        this.view = [470, 340];
+        this.view = [1100, 340];
+      } else if (width > 1000) {
+        this.view = [900, 340];
       }
        else {
         this.view = [600, 360];
@@ -152,6 +155,7 @@ export class BattelionUnitComponent {
   }
 
   onSelect(event: any) {
+    console.log('Item clicked:', event);
     // event.name might be: "تل المخروطي - (L0-01)"
     const match = event.name.match(/\(([^)]+)\)$/);
     const code = match ? match[1] : '';

@@ -23,7 +23,7 @@
       <tr>
         <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
         <td [style]="{'text-align': 'center'}">{{ visit.mission_id }}</td>
-        <td [style]="{'text-align': 'center'}">{{ visit.visit_date | date:'yyyy/MM/dd' }}</td>
+        <td [style]="{'text-align': 'center'}">{{ visit.visit_date | date:'dd/MM/yyyy' }}</td>
         <td [style]="{'text-align': 'center'}">{{ visit.from_time.slice(0,5) }}</td>
         <td [style]="{'text-align': 'center'}">{{ visit.to_time.slice(0,5) }}</td>
         <td [style]="{'text-align': 'center'}">

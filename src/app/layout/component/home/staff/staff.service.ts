@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Staff } from '../../models/staff';
+import { Visit } from '../../models/visit';
 import { environment } from '../../../../../environments/environment';
 
 @Injectable({
@@ -30,6 +31,10 @@ export class StaffService {
 
   updateActive(id: number, active: number) {
     return this.http.patch(`${this.API_URL}/${id}`, { active });
+  }
+
+  getVisitsByStaffId(staffId: number | null): Observable<Visit[]> {
+    return this.http.get<Visit[]>(`${environment.API_URL}mission-visits-by-staff/${staffId}`);
   }
 
   getStaffTypes() {

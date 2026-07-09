@@ -60,7 +60,7 @@ export class UnitVisitComponent {
   // view: [number,number] = [1000, 400];
 
 
-    view: [number,number] = [550, 360];
+    view: [number,number] = [1400, 360];
 
   // options
   showXAxis = true;
@@ -68,9 +68,7 @@ export class UnitVisitComponent {
   gradient = false;
   showLegend = true;
   showXAxisLabel = true;
-  xAxisLabel = 'Country';
   showYAxisLabel = true;
-  yAxisLabel = 'Population';
 
 
   constructor(private dashboardService: DashboardService) {}
@@ -94,20 +92,22 @@ export class UnitVisitComponent {
   }
 
   setChartSize(width: number): void {
-    console.log('Setting chart size based on window width:', width);
-    if (width > 1500) {
-      this.view = [525, 360]; 
+      console.log('Setting chart size based on window width:', width);
+      if (width > 1500) {
+        this.view = [1400, 400]; 
+      }
+      else if (width > 1300) {
+        this.view = [1200, 360];
+      } else if (width > 1200) {
+        this.view = [1100, 340];
+      } else if (width > 1000) {
+        this.view = [900, 340];
+      }
+       else {
+        this.view = [600, 360];
+      }
+      console.log('Chart size set to:', this.view);
     }
-    else if (width > 1300) {
-      this.view = [500, 360];
-    } else if (width > 1200) {
-      this.view = [470, 340];
-    }
-     else {
-      this.view = [600, 360];
-    }
-    console.log('Chart size set to:', this.view);
-  }
 
   getVisits(id: string) {
     this.subscription = this.dashboardService.getUnitVisits(id).subscribe(data => {

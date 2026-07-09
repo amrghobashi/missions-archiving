@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { PurposeStats, Stats } from '../../models/dashboard';
 import { Visit } from '../../models/visit';
+import { Unit } from '../../models/unit';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,9 @@ export class DashboardService {
   
   getVisitsByUnitId(id: string | undefined, date: string | undefined): Observable<Visit[]> {
     return this.http.get<Visit[]>(this.API_URL + 'mission-visits-by-quarter' + (id ? '?unit_id=' + id : '') + (date ? '&date=' + date : ''))
+  }
+
+  getFilterUnits(): Observable<Unit[]> {
+      return this.http.get<Unit[]>(this.API_URL + 'units-for-filter');
   }
 }

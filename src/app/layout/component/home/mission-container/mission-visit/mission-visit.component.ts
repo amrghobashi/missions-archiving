@@ -18,6 +18,7 @@ import { environment } from '../../../../../../environments/environment';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { Mission } from '../../../models/mission';
+import { Purpose } from '../../../models/purpose';
 
 interface UploadEvent {
     originalEvent: Event;
@@ -65,6 +66,7 @@ export class MissionVisitComponent implements OnChanges {
   };
   minDate = new Date();
   maxDate = new Date();
+  purposeOptions: Purpose[] = [];
   
   constructor(private visitService: MissionVisitService, private confirmationService: ConfirmationService,
     private messageService: MessageService, private sanitizer: DomSanitizer,
@@ -76,6 +78,7 @@ export class MissionVisitComponent implements OnChanges {
     // this.loadVisitsForMission();
     // this.getBattelionOptions();
     this.getUnitOptions();
+    this.getPurposes();
     this.minDate = new Date(this.mission?.start_date || new Date());
     this.maxDate = new Date(this.mission?.end_date || new Date());
   }
@@ -129,10 +132,25 @@ export class MissionVisitComponent implements OnChanges {
     });
   }
 
+  getPurposes() {
+    this.spinner.show();
+    this.visitService.getPurposes().subscribe(
+      (data: any) => {
+        this.purposeOptions = data;
+        this.spinner.hide();
+        console.log('Purposes fetched successfully:', this.purposeOptions);
+      },
+      (error: any) => {
+        this.spinner.hide();
+        console.error('Error fetching purposes:', error);
+      }
+    );
+  }
+
   onAddVisit() {
     this.isEditMode = false;
     this.displayDialog = true;
-    this.newVisit = { id: 0, mission_id: this.missionId };
+    this.newVisit = { id: 0, mission_id: this.missionId, purpose_id: 1 };
     this.getUnitOptions();
   }
 
@@ -143,6 +161,7 @@ export class MissionVisitComponent implements OnChanges {
     // Clone and convert date/time strings to Date objects for the form
     this.newVisit = { ...visit };
     this.newVisit.unit_id = visit.unit_id;
+    this.newVisit.purpose_id = visit.purpose_id;
     if (this.newVisit.visit_date && typeof this.newVisit.visit_date === 'string' && this.newVisit.visit_date.includes('/')) {
       this.newVisit.visit_date = this.parseDDMMYYYY(this.newVisit.visit_date);
     } else if (this.newVisit.visit_date && typeof this.newVisit.visit_date === 'string') {

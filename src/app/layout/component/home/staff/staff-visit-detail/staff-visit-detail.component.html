@@ -1,0 +1,61 @@
+<div class="card" style="margin-top: 1rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+    <h5 style="margin: 0;">Visits for selected FSR</h5>
+  </div>
+
+  <div style="position: relative; direction: ltr;">
+    <p-table [value]="visitList" dataKey="id" class="p-datatable-sm"
+      [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]"
+      [showCurrentPageReport]="true"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} visits"
+      [loading]="loading">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="text-align: center; width: 50px;">#</th>
+          <th pSortableColumn="mission_id" style="text-align: center;">Mission No. <p-sortIcon field="mission_id"></p-sortIcon></th>
+          <th pSortableColumn="visit_date" style="text-align: center;">Date <p-sortIcon field="visit_date"></p-sortIcon></th>
+          <th pSortableColumn="from_time" style="text-align: center;">Visit Start <p-sortIcon field="from_time"></p-sortIcon></th>
+          <th pSortableColumn="to_time" style="text-align: center;">Visit End <p-sortIcon field="to_time"></p-sortIcon></th>
+          <th style="text-align: center;">Report</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-visit let-rowIndex="rowIndex">
+        <tr>
+          <td style="text-align: center;">{{ rowIndex + 1 }}</td>
+          <td style="text-align: center;">{{ visit.mission_id }}</td>
+          <td style="text-align: center;">{{ formatDate(visit.visit_date) }}</td>
+          <td style="text-align: center;">{{ formatTime(visit.from_time) }}</td>
+          <td style="text-align: center;">{{ formatTime(visit.to_time) }}</td>
+          <td style="text-align: center;">
+            <button *ngIf="visit.report_path" pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path)"></button>
+            <button *ngIf="!visit.report_path" pButton icon="pi pi-minus" class="p-button-text p-button-sm p-button-secondary" disabled></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" style="text-align: center; color: #888;">No visits for this FSR yet</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog header="Report Preview" [(visible)]="previewDialog" [modal]="true" [closable]="true"
+  [style]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : {}"
+  [ngStyle]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (previewUrl ? hasImage : noImage)">
+  <div>
+    <div *ngIf="previewUrl">
+      <img *ngIf="isImage(previewUrl)" [src]="previewUrl" alt="Visit Report" style="max-width: 100%; border:1px solid #ccc;" />
+      <a *ngIf="isPdf(previewUrl)" [href]="previewUrl" target="_blank">View PDF</a>
+      <iframe *ngIf="isPdf(previewUrl) && safePreviewUrl"
+        [src]="safePreviewUrl"
+        frameborder="0"
+        width="100%"
+        style="height: 67vh; border:1px solid #ccc; display: block; margin: 0 auto;"></iframe>
+    </div>
+  </div>
+</p-dialog>

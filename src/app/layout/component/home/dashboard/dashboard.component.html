@@ -6,17 +6,23 @@
 
 
 <div class="grid grid-cols-12 gap-8" style="direction: ltr;">
-    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-6" style="direction: ltr;">
+    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12" style="direction: ltr;">
         <div class="card mb-0">
             <span class="block text-muted-color font-bold mb-4" style="direction: ltr;">Visits by Battalion</span>
-            <div class="flex justify-center mb-4">
+            <div class="flex justify-center">
                 <div>
+                    <div style="width: 50%; margin: auto; text-align: center;">
+                        <p-select [options]="unitOptions" [(ngModel)]="selectedUnit" [group]="true" [filter]="true" filterBy="label" class="w-1/2 ml-auto"
+                            name="unit_id" inputId="unit_id" optionLabel="label" optionValue="value"
+                            (onChange)="onChangeUnit($event.value)">
+                        </p-select>
+                    </div>
                     <app-battelion-unit></app-battelion-unit>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-6" style="direction: ltr;">
+    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12" style="direction: ltr;">
         <div class="card mb-0">
             <span class="block text-muted-color font-bold mb-4" style="direction: ltr;">Visits by Unit</span>
             <div class="flex justify-center mb-4">

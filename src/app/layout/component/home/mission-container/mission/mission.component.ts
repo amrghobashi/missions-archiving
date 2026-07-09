@@ -21,6 +21,17 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '../../../../../../environments/environment';
 import { FileUploadModule, FileUpload, FileUploadEvent, FileBeforeUploadEvent } from 'primeng/fileupload';
 
+interface Column {
+    field: string;
+    header: string;
+    customExportHeader?: string;
+}
+
+interface ExportColumn {
+    title: string;
+    dataKey: string;
+}
+
 @Component({
   selector: 'app-mission',
   standalone: true,
@@ -43,7 +54,26 @@ export class MissionComponent {
     this.getMissions();
     this.getZones();
     this.getPurposes();
+
+    this.cols = [
+      { field: 'staff_count', header: 'عدد FSR' },
+      { field: 'visited_units', header: 'عدد المنظومات التي تم المرور عليها' },
+      { field: 'visited_battelions', header: 'الكتيبة' },
+      { field: 'purpose_name', header: 'الغرض' },
+      { field: 'period', header: 'عدد الأيام' },
+      { field: 'end_date', header: 'تاريخ النهاية' },
+      { field: 'start_date', header: 'تاريخ البداية' },
+        // { field: 'zone_id', header: 'zone_id' },
+    ];
+
+    this.exportColumns = this.cols.map(col => ({
+        title: col.customExportHeader || col.header,
+        dataKey: col.field
+    }));
   }
+
+  cols!: Column[];
+  exportColumns!: ExportColumn[];
 
   subscription: Subscription = new Subscription;
   
@@ -217,6 +247,22 @@ export class MissionComponent {
   }
 
   saveNewMission() {
+    // Always format dates before sending to backend
+    if (this.newMission.start_date instanceof Date) {
+      const d = this.newMission.start_date;
+      const year = d.getFullYear();
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      this.newMission.start_date = `${year}-${month}-${day}`;
+    }
+    if (this.newMission.end_date instanceof Date) {
+      const d = this.newMission.end_date;
+      const year = d.getFullYear();
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const day = d.getDate().toString().padStart(2, '0');
+      this.newMission.end_date = `${year}-${month}-${day}`;
+    }
+
     if (this.isEditMode) {
       this.subscription = this.missionService.updateMission(this.newMission).subscribe(
         (data: any) => {
@@ -348,4 +394,102 @@ export class MissionComponent {
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'OJT report uploaded successfully' });
     this.getMissions(); // Reload missions to reflect the new OJT report
   }
+
+  private toYMD(date: string | Date): string {
+    let d: Date;
+    if (Object.prototype.toString.call(date) === '[object Date]') {
+      d = date as Date;
+    } else if (typeof date === 'string' && date.includes('T')) {
+      d = new Date(date);
+    } else {
+      // Already in 'YYYY-MM-DD' or empty
+      return date as string;
+    }
+    const year = d.getFullYear();
+    const month = (d.getMonth() + 1).toString().padStart(2, '0');
+    const day = d.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  // Add this method to format dates before export
+  exportExcel() {
+    const formattedData = this.missions.map(mission => {
+        const formatted: any = {};
+        
+        this.cols.forEach(col => {
+            if (col.field === 'start_date' || col.field === 'end_date') {
+                if (mission[col.field]) {
+                    const date = new Date(mission[col.field]);
+                    formatted[col.field] = date.getDate().toString().padStart(2, '0') + '/' +
+                        (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                        date.getFullYear();
+                } else {
+                    formatted[col.field] = '';
+                }
+            } else {
+                formatted[col.field] = mission[col.field];
+            }
+        });
+        
+        return formatted;
+    });
+
+    // const formattedData = this.missions.map(mission => {
+    //     const formatted = { ...mission };
+        
+    //     // Format start_date
+    //     if (formatted.start_date) {
+    //         const date = new Date(formatted.start_date);
+    //         formatted.start_date = date.getDate().toString().padStart(2, '0') + '/' +
+    //             (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
+    //             date.getFullYear();
+    //     }
+        
+    //     // Format end_date
+    //     if (formatted.end_date) {
+    //         const date = new Date(formatted.end_date);
+    //         formatted.end_date = date.getDate().toString().padStart(2, '0') + '/' +
+    //             (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
+    //             date.getFullYear();
+    //     }
+        
+    //     return formatted;
+    // });
+
+    import('xlsx').then(xlsx => {
+        const worksheet = xlsx.utils.json_to_sheet(formattedData);
+        
+        // Rename the headers to use the customExportHeader or header from cols
+        const headers = this.cols.map(col => col.customExportHeader || col.header);
+        xlsx.utils.sheet_add_aoa(worksheet, [headers], { origin: 'A1' });
+
+        // Align all cells to the right
+        const range = xlsx.utils.decode_range(worksheet['!ref'] || 'A1');
+        for (let R = range.s.r; R <= range.e.r; ++R) {
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                const cell_address = xlsx.utils.encode_cell({ r: R, c: C });
+                if (!worksheet[cell_address]) continue;
+                if (!worksheet[cell_address].s) worksheet[cell_address].s = {};
+                worksheet[cell_address].s.alignment = { horizontal: 'right' };
+            }
+        }
+
+        const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+        const excelBuffer: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+        this.saveAsExcelFile(excelBuffer, "missions");
+    });
+}
+
+saveAsExcelFile(buffer: any, fileName: string): void {
+    let EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    let EXCEL_EXTENSION = '.xlsx';
+    const data: Blob = new Blob([buffer], {
+        type: EXCEL_TYPE
+    });
+    const url = window.URL.createObjectURL(data);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION;
+    link.click();
+}
 }

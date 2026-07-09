@@ -5,6 +5,7 @@ import { environment } from '../../../../../../environments/environment';
 import { Visit } from '../../../models/visit';
 import { Battelion } from '../../../models/battelion';
 import { Unit } from '../../../models/unit';
+import { Purpose } from '../../../models/purpose';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,10 @@ export class MissionVisitService {
 
   getUnits(missionId: string | undefined): Observable<Unit[]> {
     return this.http.get<Unit[]>(this.API_URL + 'units-from-battelions?mission_id=' + missionId);
+  }
+
+  getPurposes(): Observable<Purpose[]> {
+    return this.http.get<Purpose[]>(this.API_URL + 'purposes');
   }
 
   addVisit(visit: Visit): Observable<any> {

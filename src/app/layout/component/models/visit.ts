@@ -10,4 +10,5 @@ export interface Visit {
   from_time?: string | Date;
   to_time?: string | Date;
   report_path?: string;
+  purpose_id?: number;
 }

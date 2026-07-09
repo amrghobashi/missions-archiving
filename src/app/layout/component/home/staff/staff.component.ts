@@ -11,26 +11,27 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ToggleButton, ToggleButtonChangeEvent } from 'primeng/togglebutton';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+import { StaffVisitDetailComponent } from './staff-visit-detail/staff-visit-detail.component';
 
 @Component({
   selector: 'app-staff',
   standalone: true,
-  imports: [TableModule, ButtonModule, DialogModule, FormsModule, InputTextModule,
+  imports: [CommonModule, TableModule, ButtonModule, DialogModule, FormsModule, InputTextModule,
     ConfirmDialogModule, ToastModule, NgxSpinnerModule, ToggleButton, SelectModule,
-    DatePickerModule, IconFieldModule, InputIconModule],
+    DatePickerModule, IconFieldModule, InputIconModule, StaffVisitDetailComponent],
   providers: [ConfirmationService, MessageService, DatePipe ],
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.scss'
 })
 export class StaffComponent {
   staffList: Staff[] = [];
-  selectedStaff!: Staff;
+  selectedStaff: Staff | null = null;
   displayDialog = false;
   isEditMode = false;
   newStaff: Staff = this.emptyStaff();
@@ -199,6 +200,14 @@ export class StaffComponent {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete FSR' });
       }
     );
+  }
+
+  onStaffSelect(staff: Staff | Staff[] | null | undefined) {
+    this.selectedStaff = Array.isArray(staff) ? (staff[0] ?? null) : (staff ?? null);
+  }
+
+  get selectedStaffId(): number | null {
+    return this.selectedStaff?.id ?? null;
   }
 
   cancelDialog() {

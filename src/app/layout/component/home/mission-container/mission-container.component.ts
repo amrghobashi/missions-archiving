@@ -34,7 +34,7 @@ export class MissionContainerComponent {
               const year = String(d.getFullYear());
               return `${day}-${month}-${year}`;
             };
-            this.tabsHeader = 'Mission number (' + mission.id + ') in ' + mission.zone_name + ' from ' + formatDate(mission.start_date) + ' to ' + formatDate(mission.end_date);
+            this.tabsHeader = 'Mission number (' + mission.id + ') in ' + mission.zone_name + ' from ' + formatDate(String(mission.start_date)) + ' to ' + formatDate(String(mission.end_date));
             setTimeout(() => {
               this.activeTabValue = '1'; // Set the active tab to the first tab
             }, 1000);

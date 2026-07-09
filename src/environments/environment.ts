@@ -7,9 +7,10 @@ export const environment = {
   //local----------------------
   API_URL: 'http://localhost/atscApi/public/api/',
   API_FILES: 'http://localhost/atscApi/public/storage/',
+  
   //production---------------------
-  // API_URL: 'http://analysis/test_app/public/api/',
-  // API_FILES: 'http://analysis/test_app/public/images/',
+  // API_URL: 'http://72.60.188.175:8080/api',
+  // API_FILES: 'http://72.60.188.175:8080/api/files/',
 
 };
 
