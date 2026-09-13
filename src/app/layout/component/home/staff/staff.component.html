@@ -7,7 +7,7 @@
     </div> -->
     <div style="position: relative;">
         <p-table #staffs [value]="staffList" dataKey="id" editable="true" class="p-datatable-sm" [paginator]="true"
-            [rows]="10" selectionMode="single" [(selection)]="selectedStaff"
+            [rows]="5" selectionMode="single" [(selection)]="selectedStaff"
             [globalFilterFields]="['arabic_name', 'english_name', 'job_title', 'staff_type_name', 'phase_name']"
             [rowsPerPageOptions]="[5,10,20]" [first]="first" [showCurrentPageReport]="true"
             [tableStyle]="{ 'min-width': '50rem' }"

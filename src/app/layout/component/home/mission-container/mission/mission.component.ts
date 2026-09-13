@@ -12,6 +12,10 @@ import { MissionService } from './mission.service';
 import { Subscription } from 'rxjs';
 import { Zone } from '../../../models/zone';
 import { Purpose } from '../../../models/purpose';
+import { MissionBattelionService } from '../mission-battelion/mission-battelion.service';
+import { Battelion } from '../../../models/battelion';
+import { StaffService } from '../../staff/staff.service';
+import { Staff } from '../../../models/staff';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -46,14 +50,17 @@ interface ExportColumn {
 export class MissionComponent {
   constructor(private missionService: MissionService, private confirmationService: ConfirmationService,
     private messageService: MessageService, private spinner: NgxSpinnerService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer, private battelionService: MissionBattelionService,
+    private staffService: StaffService
   ) { }
 
   ngOnInit() {
     this.spinner.show();
-    this.getMissions();
+    this.getMissions(this.selectedBattalionId, this.selectedStaffId);
     this.getZones();
     this.getPurposes();
+    this.getBattalions();
+    this.getStaffs();
 
     this.cols = [
       { field: 'staff_count', header: 'عدد FSR' },
@@ -93,6 +100,10 @@ export class MissionComponent {
   emptyMission!: Mission;
   zoneOptions: Zone[] = [];
   purposeOptions: Purpose[] = [];
+  battalionOptions: Battelion[] = [];
+  selectedBattalionId: number | null = null;
+  staffOptions: Staff[] = [];
+  selectedStaffId: number | null = null;
   isEditMode = false;
   first = 0;
   rows = 10;
@@ -120,9 +131,9 @@ export class MissionComponent {
     return new Date(+year, +month - 1, +day);
   }
 
-  getMissions() {
+  getMissions(battalionId?: number | null, staffId?: number | null) {
     this.spinner.show();
-    this.subscription = this.missionService.getMissions().subscribe(
+    this.subscription = this.missionService.getMissions(battalionId, staffId).subscribe(
       (data: any) => {
         this.missions = data.map((mission: Mission) => ({
           ...mission,
@@ -142,7 +153,7 @@ export class MissionComponent {
   getZones() {
     this.spinner.show();
     this.subscription = this.missionService.getZones().subscribe(
-      (data: any) => {
+      (data: Zone[]) => {
         this.zoneOptions = data;
         this.spinner.hide();
         console.log('Zones fetched successfully:', this.zoneOptions);
@@ -157,7 +168,7 @@ export class MissionComponent {
   getPurposes() {
     this.spinner.show();
     this.subscription = this.missionService.getPurposes().subscribe(
-      (data: any) => {
+      (data: Purpose[]) => {
         this.purposeOptions = data;
         this.spinner.hide();
         console.log('Purposes fetched successfully:', this.purposeOptions);
@@ -168,6 +179,31 @@ export class MissionComponent {
       }
     );
   }
+
+  getBattalions() {
+    this.battelionService.getBattelions(undefined).subscribe(
+      (data: Battelion[]) => {
+        this.battalionOptions = data;
+      },
+      (error: any) => {
+        console.error('Error fetching battalions:', error);
+        this.battalionOptions = [];
+      }
+    );
+  }
+
+  getStaffs() {
+    this.staffService.getStaff().subscribe(
+      (data: Staff[]) => {
+        this.staffOptions = data;
+      },
+      (error: any) => {
+        console.error('Error fetching staffs:', error);
+        this.staffOptions = [];
+      }
+    );
+  }
+
 
   onPickDate(event: any) {
     const startDate = this.rangeDates?.[0];
@@ -199,6 +235,14 @@ export class MissionComponent {
     console.log('Selected mission:', event.id);
     this.selectedMission = event;
     this.missionService.selectedMission.next(event);
+  }
+
+  onBattalionChange() {
+    this.getMissions(this.selectedBattalionId, this.selectedStaffId);
+  }
+
+  onStaffChange() {
+    this.getMissions(this.selectedBattalionId, this.selectedStaffId);
   }
 
   onUnselectMission() {
@@ -267,7 +311,7 @@ export class MissionComponent {
       this.subscription = this.missionService.updateMission(this.newMission).subscribe(
         (data: any) => {
           console.log('Mission updated:', data);
-          this.getMissions();
+          this.getMissions(this.selectedBattalionId, this.selectedStaffId);
           this.displayAddDialog = false;
           this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Mission updated successfully' });
         },
@@ -279,7 +323,7 @@ export class MissionComponent {
       this.subscription = this.missionService.addMission(this.newMission).subscribe(
         (data: any) => {
           console.log('New mission added:', data);
-          this.getMissions();
+          this.getMissions(this.selectedBattalionId, this.selectedStaffId);
           this.displayAddDialog = false;
           this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Mission added successfully' });
         }
@@ -319,6 +363,7 @@ export class MissionComponent {
         this.missions = this.missions.filter(m => m.id !== id);
         this.selectedMission = this.emptyMission;
         this.missionService.selectedMission.next(this.emptyMission);
+        this.getMissions(this.selectedBattalionId, this.selectedStaffId);
         this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Mission deleted successfully' });
       },
       (error: any) => {
@@ -380,7 +425,7 @@ export class MissionComponent {
   onMissionReportUpload(event: any) {
     this.previewMissionReportDialog = false;
     this.messageService.add({ severity: 'success', summary: 'Done', detail: 'Report uploaded successfully' });
-    this.getMissions();
+    this.getMissions(this.selectedBattalionId, this.selectedStaffId);
   }
 
   onBeforeOjtReportUpload(event: any) {
@@ -392,7 +437,7 @@ export class MissionComponent {
   onOjtReportUpload(event: any) {
     this.previewOjtReportDialog = false;
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'OJT report uploaded successfully' });
-    this.getMissions(); // Reload missions to reflect the new OJT report
+    this.getMissions(this.selectedBattalionId, this.selectedStaffId); // Reload missions to reflect the new OJT report
   }
 
   private toYMD(date: string | Date): string {

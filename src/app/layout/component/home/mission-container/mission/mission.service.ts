@@ -17,8 +17,16 @@ export class MissionService {
 
   constructor(private http: HttpClient) { }
 
-  getMissions(): Observable<Mission[]> {
-    return this.http.get<Mission[]>(this.API_URL + 'missions');
+  getMissions(battalionId?: number | null, staffId?: number | null): Observable<Mission[]> {
+    const params: string[] = [];
+    if (battalionId) {
+      params.push(`battalion_id=${battalionId}`);
+    }
+    if (staffId) {
+      params.push(`staff_id=${staffId}`);
+    }
+    const url = params.length ? `${this.API_URL}missions?${params.join('&')}` : `${this.API_URL}missions`;
+    return this.http.get<Mission[]>(url);
   }
 
   getZones(): Observable<Zone[]> {

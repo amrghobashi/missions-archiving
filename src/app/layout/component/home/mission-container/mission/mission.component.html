@@ -1,13 +1,23 @@
 <div style="position: relative;">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-    <div style="position: relative; display: flex; align-items: center;">
-      <i class="pi pi-search" style="position: absolute; right: 0.75rem; color: #aaa;"></i>
-      <input pInputText type="text" style="padding-right: 2rem; min-width: 220px;"
-        (input)="missionsTable.filterGlobal($any($event.target).value, 'contains')" placeholder="Search mission" />
-      <button pButton icon="pi pi-file-excel" style="margin-left: 0.5rem;"
-        (click)="exportExcel()" label="Export Excel">
-      </button>
+    <div style="position: relative; display: flex; align-items: center; gap: 0.5rem;">
+      <div style="position: relative; display: flex; align-items: center;">
+        <i class="pi pi-search" style="position: absolute; right: 0.75rem; color: #aaa;"></i>
+        <input pInputText type="text" style="padding-right: 2rem; min-width: 220px;"
+          (input)="missionsTable.filterGlobal($any($event.target).value, 'contains')" placeholder="Search mission" />
       </div>
+      <div style="min-width: 220px;">
+        <p-select [options]="battalionOptions" optionLabel="name" optionValue="id" [(ngModel)]="selectedBattalionId"
+          placeholder="All Battalions" [showClear]="true" styleClass="w-full"
+          (onChange)="onBattalionChange()"></p-select>
+      </div>
+      <div style="min-width: 220px;">
+        <p-select [options]="staffOptions" optionLabel="arabic_name" optionValue="id" [(ngModel)]="selectedStaffId"
+          placeholder="All FSR" [showClear]="true" styleClass="w-full" (onChange)="onStaffChange()"></p-select>
+      </div>
+      <button pButton icon="pi pi-file-excel" (click)="exportExcel()" label="Export Excel">
+      </button>
+    </div>
     <div class="flex justify-end mb-3">
       <button pButton type="button" label="Add New Mission" icon="pi pi-plus" (click)="onAddMission()"></button>
     </div>
