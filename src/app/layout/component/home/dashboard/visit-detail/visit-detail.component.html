@@ -1,57 +1,135 @@
-<div style="justify-content: space-between; display: flex; direction: ltr;">
-  <h5 *ngIf="!date" style="margin: 0;">{{ selectedUnit ? 'Visits of (' + selectedUnit.name + ') located in (' + selectedUnit.parent + ')' : 'Select a unit to view details' }}</h5>
-  <h5 *ngIf="date" style="margin: 0;">{{ selectedUnit ? 'Visits of (' + selectedUnit.name + ') located in (' + selectedUnit.parent + ') during the period (' + arabicDate + ')' : 'Select a unit to view details' }}</h5>
-</div>
-<div style="position: relative; direction: ltr;">
-  <p-table [value]="visitList" dataKey="id" class="p-datatable-sm"
-    [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]"
-    [showCurrentPageReport]="true"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} visits"
-    [loading]="loading">
+<div class="flex flex-col gap-4">
+  <!-- Header with Unit context and optional active Quarter Chip -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-surface-200 dark:border-surface-700">
+    <div class="flex flex-wrap items-center gap-2">
+      <div class="flex items-center gap-2">
+        <i class="pi pi-list text-primary font-bold"></i>
+        <h4 class="text-base font-bold text-surface-900 dark:text-surface-0 m-0">
+          Inspection Visits Log
+        </h4>
+      </div>
+
+      <div *ngIf="selectedUnit" class="flex flex-wrap items-center gap-2 ml-2">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800">
+          <i class="pi pi-shield mr-1"></i>{{ selectedUnit.name }}
+        </span>
+        <span *ngIf="selectedUnit.parent" class="px-2.5 py-1 rounded-full text-xs bg-surface-100 dark:bg-surface-800 text-surface-700 dark:text-surface-300">
+          {{ selectedUnit.parent }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Active Quarter Filter Badge with Reset button -->
+    <div *ngIf="date" class="flex items-center gap-2">
+      <span class="text-xs text-muted-color">Period:</span>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-primary-100 dark:bg-primary-950 text-primary-800 dark:text-primary-200 border border-primary-300">
+        <i class="pi pi-calendar"></i>
+        {{ arabicDate || date }}
+        <button
+          type="button"
+          (click)="clearDateFilter()"
+          pTooltip="Clear quarter filter"
+          class="ml-1 hover:text-red-500 transition-colors"
+        >
+          <i class="pi pi-times-circle text-xs"></i>
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <p-table
+    [value]="visitList"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 25]"
+    [loading]="loading"
+    responsiveLayout="scroll"
+    styleClass="p-datatable-sm"
+  >
     <ng-template pTemplate="header">
       <tr>
-        <th [style]="{'text-align': 'center','width': '50px'}">#</th>
-        <th pSortableColumn="mission_id" [style]="{'text-align': 'center'}">Mission No. <p-sortIcon field="mission_id"></p-sortIcon></th>
-        <th pSortableColumn="visit_date" [style]="{'text-align': 'center'}">Date <p-sortIcon field="visit_date"></p-sortIcon></th>
-        <th pSortableColumn="from_time" [style]="{'text-align': 'center'}">Visit Start <p-sortIcon field="from_time"></p-sortIcon></th>
-        <th pSortableColumn="to_time" [style]="{'text-align': 'center'}">Visit End <p-sortIcon field="to_time"></p-sortIcon></th>
-        <th [style]="{'text-align': 'center'}">Report</th>
+        <th style="width: 70px" class="text-center">#</th>
+        <th pSortableColumn="mission_id" style="width: 160px" class="text-center">
+          Mission No. <p-sortIcon field="mission_id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="visit_date" class="text-center">
+          Date <p-sortIcon field="visit_date"></p-sortIcon>
+        </th>
+        <th pSortableColumn="from_time" class="text-center">
+          Visit Start <p-sortIcon field="from_time"></p-sortIcon>
+        </th>
+        <th pSortableColumn="to_time" class="text-center">
+          Visit End <p-sortIcon field="to_time"></p-sortIcon>
+        </th>
+        <th style="width: 120px" class="text-center">Report</th>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="body" let-visit let-rowIndex="rowIndex">
       <tr>
-        <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
-        <td [style]="{'text-align': 'center'}">{{ visit.mission_id }}</td>
-        <td [style]="{'text-align': 'center'}">{{ visit.visit_date | date:'dd/MM/yyyy' }}</td>
-        <td [style]="{'text-align': 'center'}">{{ visit.from_time.slice(0,5) }}</td>
-        <td [style]="{'text-align': 'center'}">{{ visit.to_time.slice(0,5) }}</td>
-        <td [style]="{'text-align': 'center'}">
-        <button *ngIf="visit.report_path" pButton icon="pi pi-image" class="p-button-text p-button-sm" (click)="previewReport(visit.report_path, visit.id)"></button>
-        <button *ngIf="!visit.report_path" pButton icon="pi pi-minus" class="p-button-text p-button-sm p-button-secondary" disabled></button>
-      </td>
+        <td class="text-center font-medium text-muted-color">{{ rowIndex + 1 }}</td>
+        <td class="text-center">
+          <span class="font-bold text-xs px-2.5 py-1 rounded-lg bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-surface-0 border border-surface-200 dark:border-surface-700">
+            <i class="pi pi-flag text-primary text-xs mr-1"></i>{{ visit.mission_id }}
+          </span>
+        </td>
+        <td class="text-center font-medium">
+          <i class="pi pi-calendar text-muted-color text-xs mr-1.5"></i>
+          {{ visit.visit_date | date: 'dd/MM/yyyy' }}
+        </td>
+        <td class="text-center text-muted-color">
+          <i class="pi pi-clock text-xs mr-1"></i>
+          {{ visit.from_time ? visit.from_time.slice(0, 5) : '—' }}
+        </td>
+        <td class="text-center text-muted-color">
+          <i class="pi pi-clock text-xs mr-1"></i>
+          {{ visit.to_time ? visit.to_time.slice(0, 5) : '—' }}
+        </td>
+        <td class="text-center">
+          <p-button
+            *ngIf="visit.report_path"
+            icon="pi pi-file-pdf"
+            label="View"
+            [text]="true"
+            size="small"
+            severity="success"
+            pTooltip="Preview mission report"
+            (onClick)="previewReport(visit.report_path, visit.id)"
+          />
+          <span *ngIf="!visit.report_path" class="text-xs text-muted-color italic">No file</span>
+        </td>
       </tr>
     </ng-template>
+
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="5" style="text-align: center; color: #888;">No data available</td>
+        <td colspan="6" class="text-center py-8 text-muted-color">
+          <i class="pi pi-inbox text-2xl mb-1 block"></i>
+          {{ selectedUnit ? 'No inspection records found for this selection.' : 'Select a border unit to inspect its visits archive.' }}
+        </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
 
-<p-dialog header="Report Preview" [(visible)]="previewDialog" [modal]="true" [closable]="true"
-    [style]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : {}"
-    [ngStyle]="previewUrl && isPdf(previewUrl) ? {'width': '98vw', 'max-width': '98vw', 'min-width': '98vw', 'height': '90vh'} : (previewUrl ? hasImage : noImage)">
-  <div>
-    <div *ngIf="previewUrl">
-      <img *ngIf="isImage(previewUrl)" [src]="previewUrl" alt="Visit Report" style="max-width: 100%; border:1px solid #ccc;" />
-      <a *ngIf="isPdf(previewUrl)" [href]="previewUrl" target="_blank">View PDF</a>
-      <iframe *ngIf="isPdf(previewUrl) && safePreviewUrl"
-          [src]="safePreviewUrl"
-          frameborder="0"
-          width="100%"
-          style="height: 67vh; border:1px solid #ccc; display: block; margin: 0 auto;"></iframe>
-    </div>
+<!-- Report Preview Dialog -->
+<p-dialog
+  header="Mission Report Preview"
+  [(visible)]="previewDialog"
+  [modal]="true"
+  [closable]="true"
+  [style]="previewUrl && isPdf(previewUrl) ? { width: '90vw', height: '90vh' } : { width: '500px' }"
+>
+  <div *ngIf="previewUrl" class="h-full">
+    <img *ngIf="isImage(previewUrl)" [src]="previewUrl" alt="Visit Report" class="max-w-full rounded border" />
+    <iframe
+      *ngIf="isPdf(previewUrl) && safePreviewUrl"
+      [src]="safePreviewUrl"
+      frameborder="0"
+      width="100%"
+      style="height: 75vh; border: 1px solid #cbd5e1; border-radius: 8px;"
+    ></iframe>
   </div>
 </p-dialog>

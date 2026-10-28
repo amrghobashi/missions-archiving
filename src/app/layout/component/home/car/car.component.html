@@ -1,1 +1,60 @@
-<p-toggleswitch [(ngModel)]="checked" />
+<div style="justify-content: space-between; display: flex;">
+  <h5 style="margin: 0;">Cars</h5>
+  <button pButton type="button" label="Add Car" icon="pi pi-plus" (click)="onAddCar()"></button>
+</div>
+<div style="position: relative;">
+    <p-table [value]="carOptions" dataKey="id" editable="true" class="p-datatable-sm"
+             [paginator]="true" [rows]="5" [rowsPerPageOptions]="[5,10,20]">
+      <ng-template pTemplate="header">
+        <tr>
+          <th [style]="{'text-align': 'center','width': '50px'}">#</th>
+          <th pSortableColumn="car_id" [style]="{'text-align': 'center'}"> Car number <p-sortIcon field="car_id"></p-sortIcon></th>
+          <th pSortableColumn="car_id" [style]="{'text-align': 'center'}"> Car name <p-sortIcon field="car_name"></p-sortIcon></th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-car let-rowIndex="rowIndex">
+        <tr>
+          <td [style]="{'text-align': 'center'}">{{ rowIndex + 1 }}</td>
+          <td [style]="{'text-align': 'center'}">{{ car.id }} </td>
+          <td [style]="{'text-align': 'center'}">{{ car.name }} </td>
+          <td>
+            <button pButton icon="pi pi-pencil" class="p-button-text p-button-sm" (click)="onEditCar(car)"></button>
+            <button pButton icon="pi pi-trash" class="p-button-text p-button-sm p-button-danger" (click)="confirmDeleteCar(car)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" style="text-align: center; color: #888;">No data available</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    
+    <ngx-spinner bdColor="rgb(51 51 51 / 45%)" size="medium" color="#fff" 
+        type="ball-scale-multiple" [fullScreen]="false">
+    </ngx-spinner>
+</div>
+
+<p-dialog [header]="isEditMode ? 'Edit Car' : 'Add Car'" [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{width: '350px'}">
+  <form (ngSubmit)="saveCar()" #carForm="ngForm">
+    <div class="flex flex-col gap-3">
+      <div class="p-field">
+        <label for="carId" class="block mb-1">Car ID </label>
+        <b *ngIf="isEditMode">{{ newCar.id }}</b>
+        <input *ngIf="!isEditMode" pInputText type="text" [(ngModel)]="newCar.id" name="id" id="id" class="w-full"  />
+      </div>
+      <div class="p-field">
+        <label for="carName" class="block mb-1">Car Name</label>
+        <input pInputText type="text" [(ngModel)]="newCar.name" name="name" id="name" class="w-full"  />
+      </div>
+    </div>
+    <div class="flex justify-end gap-2 mt-4">
+      <button pButton type="button" label="Cancel" class="p-button-text" (click)="cancelDialog()"></button>
+      <button pButton type="submit" [label]="isEditMode ? 'Edit' : 'Save'" [disabled]="!carForm.form.valid" autofocus></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

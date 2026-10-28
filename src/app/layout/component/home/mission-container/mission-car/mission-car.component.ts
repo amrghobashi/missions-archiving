@@ -32,7 +32,7 @@ export class MissionCarComponent implements OnChanges {
   isEditMode = false;
   newCar: MissionCar = { id: 0, mission_id: '' };
   subscription: Subscription = new Subscription;
-  carOptions: { id: number; name: string; label: string }[] = [];
+  carOptions: { id: string; name: string; label: string }[] = [];
 
   constructor(private carService: MissionCarService, private confirmationService: ConfirmationService, private messageService: MessageService, private spinner: NgxSpinnerService) {}
 

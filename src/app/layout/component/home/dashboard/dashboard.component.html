@@ -1,54 +1,88 @@
+<!-- Top Executive KPI Summary & Missions Distribution Charts -->
 <app-stats></app-stats>
-<!-- <app-battelion-unit></app-battelion-unit>
-<app-unit-visit></app-unit-visit> -->
 
-
-
-
-<div class="grid grid-cols-12 gap-8" style="direction: ltr;">
-    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12" style="direction: ltr;">
-        <div class="card mb-0">
-            <span class="block text-muted-color font-bold mb-4" style="direction: ltr;">Visits by Battalion</span>
-            <div class="flex justify-center">
-                <div>
-                    <div style="width: 50%; margin: auto; text-align: center;">
-                        <p-select [options]="unitOptions" [(ngModel)]="selectedUnit" [group]="true" [filter]="true" filterBy="label" class="w-1/2 ml-auto"
-                            name="unit_id" inputId="unit_id" optionLabel="label" optionValue="value"
-                            (onChange)="onChangeUnit($event.value)">
-                        </p-select>
-                    </div>
-                    <app-battelion-unit></app-battelion-unit>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12" style="direction: ltr;">
-        <div class="card mb-0">
-            <span class="block text-muted-color font-bold mb-4" style="direction: ltr;">Visits by Unit</span>
-            <div class="flex justify-center mb-4">
-                <div>
-                    <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">
-                        <app-unit-visit></app-unit-visit>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Sector & Unit Inspection Explorer Control Card -->
+<div class="card mb-6 p-5">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h3 class="text-base font-bold text-surface-900 dark:text-surface-0 flex items-center gap-2 m-0">
+        <i class="pi pi-shield text-emerald-600 dark:text-emerald-400"></i>
+        <span>Sector & Unit Inspection Explorer</span>
+      </h3>
+      <p class="text-xs text-muted-color m-0 mt-1">
+        Select a border surveillance unit to inspect quarterly trends, or click directly on any battalion bar to filter
+      </p>
     </div>
 
-</div>
-<br>
-
-<div class="grid grid-cols-12 gap-12" style="direction: ltr;">
-    <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-12" style="direction: ltr;">
-        <div class="card mb-0">
-            <!-- <span class="block text-muted-color font-medium mb-4" style="direction: ltr;">Visits by Battalion</span> -->
-            <div class="flex justify-center">
-                <div style="width: 100%;">
-                    <app-visit-detail></app-visit-detail>
-                </div>
-            </div>
-        </div>
+    <!-- Dropdown Selector -->
+    <div class="w-full md:w-96">
+      <label class="block text-xs font-semibold text-muted-color mb-1">
+        <i class="pi pi-filter mr-1 text-emerald-600"></i> Filter by Unit
+      </label>
+      <p-select
+        [options]="unitOptions"
+        [(ngModel)]="selectedUnit"
+        [group]="true"
+        [filter]="true"
+        filterBy="label"
+        placeholder="Search and select unit..."
+        [showClear]="true"
+        styleClass="w-full"
+        name="unit_id"
+        inputId="unit_id"
+        optionLabel="label"
+        optionValue="value"
+        (onChange)="onChangeUnit($event.value)"
+      >
+      </p-select>
     </div>
+  </div>
 </div>
 
-<!-- <app-visit-detail></app-visit-detail> -->
+<!-- Side-by-Side Visualizations (Battalion Volume & Unit Quarterly Breakdown) -->
+<div class="grid grid-cols-12 gap-6 mb-6">
+  <!-- Left Chart: Visits by Battalion (Vertical Bar Chart) -->
+  <div class="col-span-12 xl:col-span-6">
+    <div class="card mb-0 p-5 flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-surface-200 dark:border-surface-700 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center text-emerald-600">
+            <i class="pi pi-building text-base"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-surface-800 dark:text-surface-100 m-0 text-base">Visits by Battalion</h4>
+            <span class="text-xs text-muted-color">Total inspection visits per battalion (Click bar to select top unit)</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <app-battelion-unit></app-battelion-unit>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Chart: Visits by Unit across Quarters (Vertical Bar Chart) -->
+  <div class="col-span-12 xl:col-span-6">
+    <div class="card mb-0 p-5 flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-surface-200 dark:border-surface-700 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-lg bg-sky-100 dark:bg-sky-950/60 flex items-center justify-center text-sky-600">
+            <i class="pi pi-chart-bar text-base"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-surface-800 dark:text-surface-100 m-0 text-base">Quarterly Visits by Unit</h4>
+            <span class="text-xs text-muted-color">Quarterly breakdown of visits (Click bar to filter visit logs)</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <app-unit-visit></app-unit-visit>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detailed Visits Log Table Card -->
+<div class="card mb-6">
+  <app-visit-detail></app-visit-detail>
+</div>

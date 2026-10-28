@@ -1,14 +1,14 @@
-<!-- <div class="card" style="width: 500px;">
-    <div style="width: 90%; height: 100%;"> -->
+<div class="relative w-full" style="height: 280px;">
+  <p-chart
+    *ngIf="chartData"
+    type="bar"
+    [data]="chartData"
+    [options]="chartOptions"
+    (onDataSelect)="onChartSelect($event)"
+    height="280px"
+  ></p-chart>
 
-        <ngx-charts-bar-horizontal-stacked roundEdges="true" legendTitle="Units" [legendPosition]="legendPosition"
-            [scheme]="colorScheme" [results]="visits" [gradient]="gradient" [xAxis]="showXAxis" [yAxis]="showYAxis"
-            [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel"
-            [yAxisLabel]="yAxisLabel" [animations]="animations" [showDataLabel]="true" (select)="onSelect($event)"
-            [maxXAxisTickLength]="20" [barPadding]="40" [roundDomains]="true" [view]="view" [showGridLines]="ShowGridLines">
-        </ngx-charts-bar-horizontal-stacked>
-    <!-- </div>
-
-</div> -->
-
-
+  <div *ngIf="loading" class="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-surface-900/60 z-10">
+    <i class="pi pi-spin pi-spinner text-3xl text-primary"></i>
+  </div>
+</div>

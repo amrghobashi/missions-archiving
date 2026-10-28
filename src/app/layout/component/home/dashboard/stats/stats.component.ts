@@ -1,65 +1,186 @@
-import { Component } from '@angular/core';
-import { DashboardService } from '../dashboard.service';
-import { Subscription } from 'rxjs';
-import { PurposeStats, Stats } from '../../../models/dashboard';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { ScaleType } from '@swimlane/ngx-charts';
+import { ChartModule } from 'primeng/chart';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { Subscription } from 'rxjs';
+import { DashboardService } from '../dashboard.service';
+import { PurposeStats, Stats } from '../../../models/dashboard';
 
 @Component({
   selector: 'app-stats',
-  imports: [NgxChartsModule, CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, ChartModule, ProgressBarModule],
   templateUrl: './stats.component.html',
   styleUrl: './stats.component.scss'
 })
-export class StatsComponent {
+export class StatsComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
-  visits = [];
   stats: Stats | null = null;
-  purposeStats: PurposeStats[] | null = null;
-  zoneStats: PurposeStats[] | null = null;
-  purposeView: [number, number] = [700, 200];
-  zoneView: [number, number] = [400, 200];
-  gradient: boolean = true;
-  showLegend: boolean = true;
-  showLabels: boolean = true;
-  isDoughnut: boolean = false;
+  purposeStats: PurposeStats[] = [];
+  zoneStats: PurposeStats[] = [];
 
-  colorScheme = {
-    name: 'customScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: ['#b7e4c7', '#95d5b2', '#74c69d', '#2d6a4f', '#081c15', '#1b4332', '#52b788', '#40916c', '#d8f3dc']
-  };
+  purposeChartData: any;
+  purposeChartOptions: any;
 
-  constructor(private dashboardService: DashboardService) { }
+  zoneChartData: any;
+  zoneChartOptions: any;
 
-  ngOnInit() {
+  totalPurposeMissions = 0;
+  totalZoneMissions = 0;
+
+  readonly purposeColors = [
+    '#10b981', // emerald
+    '#0ea5e9', // sky
+    '#8b5cf6', // purple
+    '#f59e0b', // amber
+    '#ec4899', // pink
+    '#14b8a6', // teal
+    '#64748b'  // slate
+  ];
+
+  readonly zoneColors = [
+    '#10b981', // emerald
+    '#0ea5e9', // sky
+    '#8b5cf6', // purple
+    '#f59e0b'  // amber
+  ];
+
+  constructor(private dashboardService: DashboardService) {}
+
+  ngOnInit(): void {
+    this.initChartOptions();
     this.getStats();
     this.getPurposeStats();
     this.getZoneStats();
   }
 
-  getStats() {
-    this.subscription = this.dashboardService.getStats().subscribe(data => {
-      this.stats = data;
-      console.log('Stats:', this.stats);
-    });
+  private initChartOptions(): void {
+    this.purposeChartOptions = {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      cutout: '72%',
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.92)',
+          titleFont: { size: 13, weight: 'bold' },
+          bodyFont: { size: 12 },
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: {
+            label: (context: any) => {
+              const val = context.raw || 0;
+              const total = this.totalPurposeMissions || 1;
+              const pct = ((val / total) * 100).toFixed(1);
+              return ` ${val} Missions (${pct}%)`;
+            }
+          }
+        }
+      }
+    };
+
+    this.zoneChartOptions = {
+      responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1,
+      cutout: '72%',
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.92)',
+          titleFont: { size: 13, weight: 'bold' },
+          bodyFont: { size: 12 },
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: {
+            label: (context: any) => {
+              const val = context.raw || 0;
+              const total = this.totalZoneMissions || 1;
+              const pct = ((val / total) * 100).toFixed(1);
+              return ` ${val} Missions (${pct}%)`;
+            }
+          }
+        }
+      }
+    };
   }
 
-  getPurposeStats() {
-    this.subscription = this.dashboardService.getPurposeStats().subscribe(data => {
-      this.purposeStats = data;
-      console.log('Purpose Stats:', this.purposeStats);
-    });
+  getStats(): void {
+    this.subscription.add(
+      this.dashboardService.getStats().subscribe({
+        next: (data) => (this.stats = data),
+        error: (err) => console.error('Error fetching stats:', err)
+      })
+    );
   }
 
-  getZoneStats() {
-    this.subscription = this.dashboardService.getZoneStats().subscribe(data => {
-      this.zoneStats = data;
-      console.log('Zone Stats:', this.zoneStats);
-    });
+  getPurposeStats(): void {
+    this.subscription.add(
+      this.dashboardService.getPurposeStats().subscribe({
+        next: (data) => {
+          this.purposeStats = data || [];
+          this.totalPurposeMissions = this.purposeStats.reduce((sum, item) => sum + (item.value || 0), 0);
+          this.purposeChartData = {
+            labels: this.purposeStats.map((item) => item.name),
+            datasets: [
+              {
+                data: this.purposeStats.map((item) => item.value),
+                backgroundColor: this.purposeColors.slice(0, this.purposeStats.length),
+                hoverOffset: 4,
+                borderWidth: 0,
+                spacing: 2,
+                borderRadius: 4
+              }
+            ]
+          };
+        },
+        error: (err) => console.error('Error fetching purpose stats:', err)
+      })
+    );
   }
 
+  getZoneStats(): void {
+    this.subscription.add(
+      this.dashboardService.getZoneStats().subscribe({
+        next: (data) => {
+          this.zoneStats = data || [];
+          this.totalZoneMissions = this.zoneStats.reduce((sum, item) => sum + (item.value || 0), 0);
+          this.zoneChartData = {
+            labels: this.zoneStats.map((item) => item.name),
+            datasets: [
+              {
+                data: this.zoneStats.map((item) => item.value),
+                backgroundColor: this.zoneColors.slice(0, this.zoneStats.length),
+                hoverOffset: 4,
+                borderWidth: 0,
+                spacing: 2,
+                borderRadius: 4
+              }
+            ]
+          };
+        },
+        error: (err) => console.error('Error fetching zone stats:', err)
+      })
+    );
+  }
+
+  getPurposePercentage(value?: number): number {
+    if (!this.totalPurposeMissions || !value) return 0;
+    return Math.round((value / this.totalPurposeMissions) * 100);
+  }
+
+  getZonePercentage(value?: number): number {
+    if (!this.totalZoneMissions || !value) return 0;
+    return Math.round((value / this.totalZoneMissions) * 100);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

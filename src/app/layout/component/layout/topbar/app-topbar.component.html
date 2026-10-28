@@ -17,40 +17,37 @@
             <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                 <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
             </button>
-            <!-- <div class="relative">
-                <button
-                    class="layout-topbar-action layout-topbar-action-highlight"
-                    pStyleClass="@next"
-                    enterFromClass="hidden"
-                    enterActiveClass="animate-scalein"
-                    leaveToClass="hidden"
-                    leaveActiveClass="animate-fadeout"
-                    [hideOnOutsideClick]="true"
-                >
-                    <i class="pi pi-palette"></i>
-                </button>
-                <app-configurator />
-            </div> -->
         </div>
 
+        <!-- User menu trigger (mobile) -->
         <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
             <i class="pi pi-ellipsis-v"></i>
         </button>
 
+        <!-- Desktop user area -->
         <div class="layout-topbar-menu hidden lg:block">
             <div class="layout-topbar-menu-content">
-                <!-- <button type="button" class="layout-topbar-action">
-                    <i class="pi pi-calendar"></i>
-                    <span>Calendar</span>
-                </button>
-                <button type="button" class="layout-topbar-action">
-                    <i class="pi pi-inbox"></i>
-                    <span>Messages</span>
-                </button> -->
-                <button type="button" class="layout-topbar-action">
-                    <i class="pi pi-user"></i>
-                    <span>Profile</span>
-                </button>
+                <!-- Current user info + logout -->
+                <div class="flex items-center gap-3">
+                    <div class="flex flex-col items-end leading-tight">
+                        <span class="text-sm font-semibold">{{ authService.currentUser()?.name }}</span>
+                        <span class="text-xs text-muted-color">{{ authService.currentUser()?.email }}</span>
+                    </div>
+                    <p-menu #userMenu [model]="userMenuItems" [popup]="true" appendTo="body" />
+                    <button
+                        type="button"
+                        class="layout-topbar-action"
+                        (click)="userMenu.toggle($event)"
+                        pTooltip="Account"
+                        tooltipPosition="bottom"
+                    >
+                        <p-avatar
+                            [label]="userInitials"
+                            shape="circle"
+                            [style]="{'background-color': '#10b981', 'color': 'white', 'font-size': '0.75rem', 'width': '2rem', 'height': '2rem'}"
+                        />
+                    </button>
+                </div>
             </div>
         </div>
     </div>

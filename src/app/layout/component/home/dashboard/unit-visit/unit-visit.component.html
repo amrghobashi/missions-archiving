@@ -1,36 +1,37 @@
-<p style="text-align: center;">{{ selectedUnit ? selectedUnit : 'Select a unit to view details' }}</p>
-<ngx-charts-bar-vertical
-    [view]="view"
-    [scheme]="colorScheme"
-    [results]="visits"
-    [xAxis]="true"
-    [yAxis]="true"
-    [legend]="false"
-    [showXAxisLabel]="true"
-    [showYAxisLabel]="true"
-    [xAxisLabel]="'Date'"
-    [yAxisLabel]="'Visits count'"
-    [showDataLabel]="true"
-    [showGridLines]="false"
-    [roundDomains]="true"
-    [barPadding]="80"
-    (select)="onSelect($event)">
-</ngx-charts-bar-vertical>
+<div class="flex flex-col">
+  <!-- Unit Title & Status -->
+  <div *ngIf="selectedUnit" class="text-center mb-3">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-sky-800 dark:text-sky-200">
+      <i class="pi pi-compass text-sky-600"></i>
+      <span class="font-bold text-sm">{{ selectedUnit }}</span>
+    </div>
+  </div>
 
+  <!-- Chart Container -->
+  <div *ngIf="chartData" class="relative w-full" [style.height]="selectedUnit ? '236px' : '280px'">
+    <p-chart
+      type="bar"
+      [data]="chartData"
+      [options]="chartOptions"
+      (onDataSelect)="onChartSelect($event)"
+      [height]="selectedUnit ? '236px' : '280px'"
+    ></p-chart>
 
+    <div *ngIf="loading" class="absolute inset-0 flex items-center justify-center bg-white/60 dark:bg-surface-900/60 z-10">
+      <i class="pi pi-spin pi-spinner text-3xl text-primary"></i>
+    </div>
+  </div>
 
-
-<!-- <ngx-charts-bar-vertical
-  [view]="view"
-  [scheme]="colorScheme"
-  [results]="visits"
-  [gradient]="gradient"
-  [xAxis]="showXAxis"
-  [yAxis]="showYAxis"
-  [legend]="showLegend"
-  [showXAxisLabel]="showXAxisLabel"
-  [showYAxisLabel]="showYAxisLabel"
-  [xAxisLabel]="xAxisLabel"
-  [yAxisLabel]="yAxisLabel"
-  (select)="onSelect($event)">
-</ngx-charts-bar-vertical> -->
+  <!-- Empty State (No Unit Selected or No Visits Found) -->
+  <div *ngIf="!chartData && !loading" class="flex flex-col items-center justify-center py-12 text-center text-muted-color">
+    <div class="w-14 h-14 rounded-full bg-surface-100 dark:bg-surface-800 flex items-center justify-center mb-2">
+      <i class="pi pi-search text-xl text-muted-color"></i>
+    </div>
+    <h4 class="font-bold text-surface-800 dark:text-surface-100 text-sm mb-1">
+      {{ selectedUnit ? 'No inspection visits recorded for this unit' : 'Select a Border Unit' }}
+    </h4>
+    <p class="text-xs max-w-sm m-0">
+      {{ selectedUnit ? 'No quarterly visits data found in the archive for ' + selectedUnit : 'Use the search dropdown above or click on any battalion in the chart to explore unit visits.' }}
+    </p>
+  </div>
+</div>

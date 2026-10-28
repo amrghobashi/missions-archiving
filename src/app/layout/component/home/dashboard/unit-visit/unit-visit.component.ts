@@ -1,126 +1,180 @@
-import { Component, HostListener } from '@angular/core';
-import { DashboardService } from '../dashboard.service';
-import { LegendPosition, NgxChartsModule } from '@swimlane/ngx-charts';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ScaleType } from '@swimlane/ngx-charts';
+import { ChartModule } from 'primeng/chart';
 import { Subscription } from 'rxjs';
+import { DashboardService } from '../dashboard.service';
 import { PurposeStats } from '../../../models/dashboard';
 
 @Component({
   selector: 'app-unit-visit',
-  imports: [NgxChartsModule, CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, ChartModule],
   templateUrl: './unit-visit.component.html',
   styleUrl: './unit-visit.component.scss'
 })
-export class UnitVisitComponent {
+export class UnitVisitComponent implements OnInit, OnDestroy {
   subscription: Subscription = new Subscription();
   selectedUnit: string | null = null;
   visits: PurposeStats[] = [];
-  // visits: PurposeStats[] = [{
-  //       "name": "September 2025",
-  //       "value": 10
-  //   },{
-  //       "name": "September 2024",
-  //       "value": 12
-  //   },{
-  //       "name": "September 2023",
-  //       "value": 17
-  //   },{
-  //       "name": "September 2022",
-  //       "value": 5
-  //   },{
-  //       "name": "September 2021",
-  //       "value": 3
-  //   },{
-  //       "name": "September 2020",
-  //       "value": 10
-  //   },{
-  //       "name": "September 2019",
-  //       "value": 1
-  //   },{
-  //       "name": "September 2018",
-  //       "value": 6
-  //   },{
-  //       "name": "September 2017",
-  //       "value": 1
-  //   },{
-  //       "name": "September 2016",
-  //       "value": 3
-  //   },{
-  //       "name": "September 2015",
-  //       "value": 1
-  //   }];
-  colorScheme = {
-    name: 'customScheme',
-    selectable: true,
-    group: ScaleType.Ordinal,
-    domain: ['#b7e4c7', '#95d5b2', '#74c69d', '#2d6a4f', '#081c15', '#1b4332', '#52b788', '#40916c', '#d8f3dc']
-  };
-  // view: [number,number] = [1000, 400];
+  loading = false;
 
+  chartData: any;
+  chartOptions: any;
 
-    view: [number,number] = [1400, 360];
-
-  // options
-  showXAxis = true;
-  showYAxis = true;
-  gradient = false;
-  showLegend = true;
-  showXAxisLabel = true;
-  showYAxisLabel = true;
-
-
+  // readonly colors = [
+  //   // '#012A4A',
+  //   '#013A63',
+  //   // '#01497C',
+  //   '#014F86',
+  //   // '#2A6F97',
+  //   '#2C7DA0',
+  //   // '#468FAF',
+  //   '#61A5C2',
+  //   // '#89C2D9',
+  //   '#A9D6E5'
+  // ];
+  readonly colors = [
+    // "#03045e", 
+    "#023e8a", 
+    "#0077b6", 
+    "#0096c7",
+    "#00b4d8",
+    "#48cae4",
+    "#90e0ef",
+    "#ade8f4",
+    // "#caf0f8"
+  ];
   constructor(private dashboardService: DashboardService) {}
-  ngOnInit() {
-    this.setChartSize(window.innerWidth);
-    this.subscription = this.dashboardService.selectedUnit.subscribe(data => {
-      if (data) {
-        console.log('Selected Unit:', data);
-        this.selectedUnit = data.name;
-        this.getVisits(data.code);
-      } else {
-        // this.visits = null; // Reset visits if no unit is selected
-      }
-    });
-    // this.getVisits();
+
+  ngOnInit(): void {
+    this.initChartOptions();
+
+    this.subscription.add(
+      this.dashboardService.selectedUnit.subscribe((data) => {
+        if (data && data.code) {
+          this.selectedUnit = data.name;
+          this.getVisits(data.code);
+        } else {
+          this.selectedUnit = null;
+          this.visits = [];
+          this.chartData = null;
+        }
+      })
+    );
   }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any): void {
-    this.setChartSize(event.target.innerWidth);
+  private initChartOptions(): void {
+    this.chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15, 23, 42, 0.92)',
+          titleFont: { size: 13, weight: 'bold' },
+          bodyFont: { size: 12 },
+          padding: 12,
+          cornerRadius: 8,
+          callbacks: {
+            title: (items: any[]) => {
+              if (!items.length) return '';
+              return items[0].label;
+            },
+            label: (context: any) => {
+              const val = context.raw || 0;
+              return [
+                ` Visits: ${val}`,
+                ` (Click to filter table below for this quarter)`
+              ];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            color: '#475569',
+            font: { size: 12, weight: '600' }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            precision: 0,
+            color: '#64748b',
+            font: { size: 12 }
+          },
+          grid: {
+            color: 'rgba(148, 163, 184, 0.15)'
+          },
+          title: {
+            display: true,
+            text: 'Number of Visits',
+            color: '#64748b',
+            font: { size: 12, weight: '600' }
+          }
+        }
+      }
+    };
   }
 
-  setChartSize(width: number): void {
-      console.log('Setting chart size based on window width:', width);
-      if (width > 1500) {
-        this.view = [1400, 400]; 
-      }
-      else if (width > 1300) {
-        this.view = [1200, 360];
-      } else if (width > 1200) {
-        this.view = [1100, 340];
-      } else if (width > 1000) {
-        this.view = [900, 340];
-      }
-       else {
-        this.view = [600, 360];
-      }
-      console.log('Chart size set to:', this.view);
+  getVisits(id: string): void {
+    this.loading = true;
+    this.subscription.add(
+      this.dashboardService.getUnitVisits(id).subscribe({
+        next: (data) => {
+          this.loading = false;
+          this.visits = data || [];
+          this.updateChart();
+        },
+        error: (err) => {
+          this.loading = false;
+          console.error('Error fetching unit visits:', err);
+        }
+      })
+    );
+  }
+
+  private updateChart(): void {
+    if (!this.visits || this.visits.length === 0) {
+      this.chartData = null;
+      return;
     }
 
-  getVisits(id: string) {
-    this.subscription = this.dashboardService.getUnitVisits(id).subscribe(data => {
-      this.visits = data;
-      console.log('Visits:', this.visits);
-    });
-  }
-  onSelect(event: any) {
-    console.log('Chart item selected', event.name);
-    this.dashboardService.selectedUnitByDate.next(event.name);
+    const bgColors = this.visits.map((_, i) => this.colors[i % this.colors.length]);
+
+    this.chartData = {
+      labels: this.visits.map((v) => v.name),
+      datasets: [
+        {
+          label: 'Visits',
+          data: this.visits.map((v) => v.value),
+          backgroundColor: bgColors,
+          borderRadius: 8,
+          borderSkipped: false,
+          maxBarThickness: 50
+        }
+      ]
+    };
   }
 
-    ngOnDestroy() {
+  onChartSelect(event: any): void {
+    if (!event || event.element === undefined) return;
+    const idx = event.element.index;
+    const selected = this.visits[idx];
+    if (selected && selected.name) {
+      this.dashboardService.selectedUnitByDate.next(selected.name);
+    }
+  }
+
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }
